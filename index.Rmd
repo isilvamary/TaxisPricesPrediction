@@ -1,14 +1,14 @@
 ---
 title: "Determinantes del precio de las carreras de taxi"
 subtitle: "Avance de proyecto de investigación: análisis descriptivo e inferencial"
-author: "Escribe aquí tu nombre y el de tu institución"
+author: "Danna De La Hoz y Mary Silva Barbosa"
 date: "`r format(Sys.Date(), '%d/%m/%Y')`"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib]
 biblio-style: apalike
 link-citations: yes
-description: "Avance de investigación sobre los determinantes del precio de las carreras de taxi mediante estadística descriptiva e inferencial, sin modelos de regresión."
+description: "Avance de investigación sobre los determinantes del precio de las carreras de taxi mediante estadística descriptiva e inferencial."
 ---
 
 # Presentación {-}
