@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Determinantes del precio de las carreras de taxi</title>
+  <title>Referencias | Determinantes del precio de las carreras de taxi</title>
   <meta name="description" content="Avance de investigación sobre los determinantes del precio de las carreras de taxi mediante estadística descriptiva e inferencial, sin modelos de regresión." />
   <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Determinantes del precio de las carreras de taxi" />
+  <meta property="og:title" content="Referencias | Determinantes del precio de las carreras de taxi" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="Avance de investigación sobre los determinantes del precio de las carreras de taxi mediante estadística descriptiva e inferencial, sin modelos de regresión." />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Determinantes del precio de las carreras de taxi" />
+  <meta name="twitter:title" content="Referencias | Determinantes del precio de las carreras de taxi" />
   
   <meta name="twitter:description" content="Avance de investigación sobre los determinantes del precio de las carreras de taxi mediante estadística descriptiva e inferencial, sin modelos de regresión." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
+<link rel="prev" href="discusion.html"/>
 
-<link rel="next" href="marco.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -194,149 +194,79 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Determinantes del precio de las carreras de taxi</h1>
-<h2 class="subtitle"><em>Avance de proyecto de investigación: análisis descriptivo e inferencial</em></h2>
-<p class="author"><em>Escribe aquí tu nombre y el de tu institución</em></p>
-<p class="date"><em>02/10/2026</em></p>
-</div>
-<div id="presentación" class="section level1 unnumbered hasAnchor">
-<h1>Presentación<a href="index.html#presentaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>Este documento constituye el <strong>avance</strong> del proyecto de investigación y reporta de manera
-reproducible el trabajo estadístico realizado hasta la fecha sobre una base de
-1.000 carreras de taxi. Fue elaborado íntegramente en <strong>R</strong>
-<span class="citation">(<a href="#ref-rcore">R Core Team 2024</a>)</span> con el paquete <strong>bookdown</strong> <span class="citation">(<a href="#ref-bookdown">Xie 2016</a>)</span>: cada tabla, cada gráfico y cada valor
-numérico que aparece en el texto se recalcula automáticamente a partir del archivo de datos
-original cada vez que el documento se compila. No hay resultados copiados a mano.</p>
-<div id="problema-de-investigación" class="section level2 unnumbered hasAnchor">
-<h2>Problema de investigación<a href="index.html#problema-de-investigaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El precio de una carrera de taxi es el resultado de una estructura tarifaria explícita —un
-cargo fijo de partida más componentes proporcionales a la distancia y al tiempo— sobre la que
-pueden actuar factores de contexto: la congestión vehicular, las condiciones meteorológicas,
-la franja horaria o el día de la semana. La literatura sobre tarificación en transporte
-urbano sostiene que estos factores encarecen el servicio, ya sea de forma mecánica (una
-carrera congestionada dura más y acumula más cargo por minuto) o deliberada (mecanismos de
-precio dinámico que elevan la tarifa cuando la demanda supera a la oferta).</p>
-<p>El problema que motiva este avance es determinar <strong>cuáles de esos factores producen realmente
-una variación detectable en el precio final</strong> de una carrera, y con qué magnitud. La
-distinción no es trivial: un factor puede parecer influyente en una comparación simple y
-resultar irrelevante cuando se controla la heterogeneidad de varianzas o la presencia de
-valores extremos.</p>
-</div>
-<div id="preguntas-de-investigación" class="section level2 unnumbered hasAnchor">
-<h2>Preguntas de investigación<a href="index.html#preguntas-de-investigaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<ol style="list-style-type: decimal">
-<li>¿Qué intensidad tiene la asociación entre el precio de la carrera y sus dos determinantes
-técnicos, la distancia recorrida y la duración del trayecto?</li>
-<li>¿Difiere el precio medio de las carreras entre días hábiles y fines de semana?</li>
-<li>¿Influyen las condiciones de tráfico, el clima y la franja horaria en el precio de la
-carrera?</li>
-<li>¿Se reproduce el precio observado a partir de la estructura tarifaria declarada, o existen
-carreras con recargos no explicados por ella?</li>
-<li>En caso de existir tales recargos, ¿están asociados a alguna condición de operación?</li>
-</ol>
-</div>
-<div id="objetivos" class="section level2 unnumbered hasAnchor">
-<h2>Objetivos<a href="index.html#objetivos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><strong>Objetivo general.</strong> Identificar y cuantificar, mediante técnicas estadísticas descriptivas e
-inferenciales, los factores asociados al precio de las carreras de taxi registradas en la base
-de datos analizada.</p>
-<p><strong>Objetivos específicos.</strong></p>
-<ol style="list-style-type: lower-alpha">
-<li>Caracterizar la distribución del precio y de sus componentes tarifarios, evaluando
-simetría, dispersión y presencia de valores atípicos.</li>
-<li>Diagnosticar el patrón de datos faltantes y justificar el procedimiento de tratamiento
-adoptado.</li>
-<li>Estimar la intensidad y significación de las asociaciones entre el precio y las variables
-cuantitativas del trayecto.</li>
-<li>Contrastar la igualdad de precios medios entre los niveles de las variables de contexto.</li>
-<li>Evaluar la robustez de cada conclusión mediante pruebas no paramétricas, correcciones para
-varianzas desiguales y análisis de sensibilidad frente a valores extremos.</li>
-<li>Verificar la consistencia interna entre el precio observado y la estructura tarifaria
-declarada.</li>
-</ol>
-</div>
-<div id="hipótesis" class="section level2 unnumbered hasAnchor">
-<h2>Hipótesis<a href="index.html#hip%C3%B3tesis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<table>
-<colgroup>
-<col width="4%" />
-<col width="44%" />
-<col width="50%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="left">Hipótesis nula (<span class="math inline">\(H_0\)</span>)</th>
-<th align="left">Hipótesis alterna (<span class="math inline">\(H_1\)</span>)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left"><strong>H1</strong></td>
-<td align="left"><span class="math inline">\(\rho_{\text{distancia, precio}} = 0\)</span></td>
-<td align="left"><span class="math inline">\(\rho \neq 0\)</span></td>
-</tr>
-<tr class="even">
-<td align="left"><strong>H2</strong></td>
-<td align="left"><span class="math inline">\(\rho_{\text{duración, precio}} = 0\)</span></td>
-<td align="left"><span class="math inline">\(\rho \neq 0\)</span></td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>H3</strong></td>
-<td align="left"><span class="math inline">\(\mu_{\text{hábil}} = \mu_{\text{finde}}\)</span></td>
-<td align="left"><span class="math inline">\(\mu_{\text{hábil}} \neq \mu_{\text{finde}}\)</span></td>
-</tr>
-<tr class="even">
-<td align="left"><strong>H4</strong></td>
-<td align="left"><span class="math inline">\(\mu_{\text{bajo}} = \mu_{\text{medio}} = \mu_{\text{alto}}\)</span> (tráfico)</td>
-<td align="left">Al menos una media difiere</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>H5</strong></td>
-<td align="left"><span class="math inline">\(\mu_{\text{despejado}} = \mu_{\text{lluvia}} = \mu_{\text{nieve}}\)</span></td>
-<td align="left">Al menos una media difiere</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>H6</strong></td>
-<td align="left">Las cuatro franjas horarias tienen igual precio medio</td>
-<td align="left">Al menos una difiere</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>H7</strong></td>
-<td align="left">La presencia de recargo es independiente del tráfico</td>
-<td align="left">Existe asociación</td>
-</tr>
-</tbody>
-</table>
-<p>Todas las pruebas se realizan con un nivel de significancia <span class="math inline">\(\alpha = 0{,}05\)</span>.</p>
-</div>
-<div id="alcance-del-avance" class="section level2 unnumbered hasAnchor">
-<h2>Alcance del avance<a href="index.html#alcance-del-avance" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Conforme al alcance definido para esta entrega, el análisis se limita a <strong>estadística
-descriptiva e inferencia clásica</strong>: estimación por intervalos, correlación, pruebas de
-hipótesis paramétricas y no paramétricas, análisis de varianza y pruebas de asociación entre
-variables categóricas. <strong>No se incluyen modelos de regresión</strong>; su formulación queda planteada
-como línea de trabajo posterior en el Capítulo <a href="discusion.html#discusion">5</a>.</p>
-
-</div>
-</div>
-<h3>References</h3>
+<div id="referencias" class="section level1 unnumbered hasAnchor">
+<h1>Referencias<a href="referencias.html#referencias" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
-<div id="ref-rcore" class="csl-entry">
+<div class="csl-entry">
+Brodeur, Abel, and Kerry Nield. 2018. <span>“An Empirical Analysis of Taxi, <span>L</span>yft and <span>U</span>ber Rides: Evidence from Weather Shocks in <span>NYC</span>.”</span> <em>Journal of Economic Behavior &amp; Organization</em> 152: 1–16.
+</div>
+<div class="csl-entry">
+Brown, Morton B., and Alan B. Forsythe. 1974. <span>“Robust Tests for the Equality of Variances.”</span> <em>Journal of the American Statistical Association</em> 69 (346): 364–67.
+</div>
+<div class="csl-entry">
+Cachon, Gérard P., Kaitlin M. Daniels, and Ruben Lobel. 2017. <span>“The Role of Surge Pricing on a Service Platform with Self-Scheduling Capacity.”</span> <em>Manufacturing &amp; Service Operations Management</em> 19 (3): 368–84.
+</div>
+<div class="csl-entry">
+Chen, Le, Alan Mislove, and Christo Wilson. 2015. <span>“Peeking Beneath the Hood of <span>U</span>ber.”</span> In <em>Proceedings of the 2015 Internet Measurement Conference</em>, 495–508. ACM.
+</div>
+<div class="csl-entry">
+Cohen, Jacob. 1988. <em>Statistical Power Analysis for the Behavioral Sciences</em>. 2nd ed. Hillsdale, NJ: Lawrence Erlbaum Associates.
+</div>
+<div class="csl-entry">
+Cramér, Harald. 1946. <em>Mathematical Methods of Statistics</em>. Princeton: Princeton University Press.
+</div>
+<div class="csl-entry">
+Efron, Bradley. 1979. <span>“Bootstrap Methods: Another Look at the Jackknife.”</span> <em>The Annals of Statistics</em> 7 (1): 1–26.
+</div>
+<div class="csl-entry">
+Fisher, Ronald A. 1925. <em>Statistical Methods for Research Workers</em>. Edinburgh: Oliver; Boyd.
+</div>
+<div class="csl-entry">
+Kruskal, William H., and W. Allen Wallis. 1952. <span>“Use of Ranks in One-Criterion Variance Analysis.”</span> <em>Journal of the American Statistical Association</em> 47 (260): 583–621.
+</div>
+<div class="csl-entry">
+Mann, H. B., and D. R. Whitney. 1947. <span>“On a Test of Whether One of Two Random Variables Is Stochastically Larger Than the Other.”</span> <em>The Annals of Mathematical Statistics</em> 18 (1): 50–60.
+</div>
+<div class="csl-entry">
+Oi, Walter Y. 1971. <span>“A <span>D</span>isneyland Dilemma: Two-Part Tariffs for a <span>M</span>ickey <span>M</span>ouse Monopoly.”</span> <em>The Quarterly Journal of Economics</em> 85 (1): 77–96.
+</div>
+<div class="csl-entry">
 R Core Team. 2024. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
 </div>
-<div id="ref-bookdown" class="csl-entry">
+<div class="csl-entry">
+Rubin, Donald B. 1976. <span>“Inference and Missing Data.”</span> <em>Biometrika</em> 63 (3): 581–92.
+</div>
+<div class="csl-entry">
+Shapiro, S. S., and M. B. Wilk. 1965. <span>“An Analysis of Variance Test for Normality (Complete Samples).”</span> <em>Biometrika</em> 52 (3-4): 591–611.
+</div>
+<div class="csl-entry">
+Small, Kenneth A., and Erik T. Verhoef. 2007. <em>The Economics of Urban Transportation</em>. London: Routledge.
+</div>
+<div class="csl-entry">
+Tukey, John W. 1949. <span>“Comparing Individual Means in the Analysis of Variance.”</span> <em>Biometrics</em> 5 (2): 99–114.
+</div>
+<div class="csl-entry">
+———. 1977. <em>Exploratory Data Analysis</em>. Reading, MA: Addison-Wesley.
+</div>
+<div class="csl-entry">
+Welch, B. L. 1947. <span>“The Generalization of <span>S</span>tudent’s Problem When Several Different Population Variances Are Involved.”</span> <em>Biometrika</em> 34 (1-2): 28–35.
+</div>
+<div class="csl-entry">
+Wickham, Hadley. 2016. <em>Ggplot2: Elegant Graphics for Data Analysis</em>. New York: Springer-Verlag.
+</div>
+<div class="csl-entry">
 Xie, Yihui. 2016. <em>Bookdown: Authoring Books and Technical Documents with r Markdown</em>. Boca Raton, Florida: Chapman; Hall/CRC. <a href="https://bookdown.org/yihui/bookdown">https://bookdown.org/yihui/bookdown</a>.
 </div>
+</div>
+
 </div>
             </section>
 
           </div>
         </div>
       </div>
+<a href="discusion.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
-<a href="marco.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

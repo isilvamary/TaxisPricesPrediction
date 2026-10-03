@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 4 Análisis inferencial | Determinantes del precio de las carreras de taxi</title>
+  <meta name="description" content="Avance de investigación sobre los determinantes del precio de las carreras de taxi mediante estadística descriptiva e inferencial, sin modelos de regresión." />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 4 Análisis inferencial | Determinantes del precio de las carreras de taxi" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Avance de investigación sobre los determinantes del precio de las carreras de taxi mediante estadística descriptiva e inferencial, sin modelos de regresión." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 4 Análisis inferencial | Determinantes del precio de las carreras de taxi" />
+  
+  <meta name="twitter:description" content="Avance de investigación sobre los determinantes del precio de las carreras de taxi mediante estadística descriptiva e inferencial, sin modelos de regresión." />
+  
+
+<meta name="author" content="Escribe aquí tu nombre y el de tu institución" />
+
+
+<meta name="date" content="2026-02-10" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="descriptivo.html"/>
+<link rel="next" href="discusion.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="toc-logo"><strong>Precio de las carreras de taxi</strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Presentación</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#problema-de-investigaci%C3%B3n"><i class="fa fa-check"></i>Problema de investigación</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#preguntas-de-investigaci%C3%B3n"><i class="fa fa-check"></i>Preguntas de investigación</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#objetivos"><i class="fa fa-check"></i>Objetivos</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#hip%C3%B3tesis"><i class="fa fa-check"></i>Hipótesis</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#alcance-del-avance"><i class="fa fa-check"></i>Alcance del avance</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="marco.html"><a href="marco.html"><i class="fa fa-check"></i><b>1</b> Marco teórico</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="marco.html"><a href="marco.html#fundamento-econ%C3%B3mico-y-operativo"><i class="fa fa-check"></i><b>1.1</b> Fundamento económico y operativo</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="marco.html"><a href="marco.html#la-estructura-tarifaria-del-servicio-de-taxi"><i class="fa fa-check"></i><b>1.1.1</b> La estructura tarifaria del servicio de taxi</a></li>
+<li class="chapter" data-level="1.1.2" data-path="marco.html"><a href="marco.html#congesti%C3%B3n-valor-del-tiempo-y-costo-social"><i class="fa fa-check"></i><b>1.1.2</b> Congestión, valor del tiempo y costo social</a></li>
+<li class="chapter" data-level="1.1.3" data-path="marco.html"><a href="marco.html#precio-din%C3%A1mico-y-recargos"><i class="fa fa-check"></i><b>1.1.3</b> Precio dinámico y recargos</a></li>
+<li class="chapter" data-level="1.1.4" data-path="marco.html"><a href="marco.html#determinantes-contextuales"><i class="fa fa-check"></i><b>1.1.4</b> Determinantes contextuales</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="marco.html"><a href="marco.html#fundamento-estad%C3%ADstico"><i class="fa fa-check"></i><b>1.2</b> Fundamento estadístico</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="marco.html"><a href="marco.html#estad%C3%ADstica-descriptiva"><i class="fa fa-check"></i><b>1.2.1</b> Estadística descriptiva</a></li>
+<li class="chapter" data-level="1.2.2" data-path="marco.html"><a href="marco.html#identificaci%C3%B3n-de-valores-at%C3%ADpicos"><i class="fa fa-check"></i><b>1.2.2</b> Identificación de valores atípicos</a></li>
+<li class="chapter" data-level="1.2.3" data-path="marco.html"><a href="marco.html#datos-faltantes"><i class="fa fa-check"></i><b>1.2.3</b> Datos faltantes</a></li>
+<li class="chapter" data-level="1.2.4" data-path="marco.html"><a href="marco.html#correlaci%C3%B3n"><i class="fa fa-check"></i><b>1.2.4</b> Correlación</a></li>
+<li class="chapter" data-level="1.2.5" data-path="marco.html"><a href="marco.html#contraste-de-hip%C3%B3tesis"><i class="fa fa-check"></i><b>1.2.5</b> Contraste de hipótesis</a></li>
+<li class="chapter" data-level="1.2.6" data-path="marco.html"><a href="marco.html#pruebas-empleadas-en-este-avance"><i class="fa fa-check"></i><b>1.2.6</b> Pruebas empleadas en este avance</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="metodologia.html"><a href="metodologia.html"><i class="fa fa-check"></i><b>2</b> Metodología</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="metodologia.html"><a href="metodologia.html#tipo-y-dise%C3%B1o-de-estudio"><i class="fa fa-check"></i><b>2.1</b> Tipo y diseño de estudio</a></li>
+<li class="chapter" data-level="2.2" data-path="metodologia.html"><a href="metodologia.html#unidad-de-an%C3%A1lisis-y-fuente-de-datos"><i class="fa fa-check"></i><b>2.2</b> Unidad de análisis y fuente de datos</a></li>
+<li class="chapter" data-level="2.3" data-path="metodologia.html"><a href="metodologia.html#operacionalizaci%C3%B3n-de-las-variables"><i class="fa fa-check"></i><b>2.3</b> Operacionalización de las variables</a></li>
+<li class="chapter" data-level="2.4" data-path="metodologia.html"><a href="metodologia.html#tratamiento-de-los-datos-faltantes"><i class="fa fa-check"></i><b>2.4</b> Tratamiento de los datos faltantes</a></li>
+<li class="chapter" data-level="2.5" data-path="metodologia.html"><a href="metodologia.html#plan-de-an%C3%A1lisis-estad%C3%ADstico"><i class="fa fa-check"></i><b>2.5</b> Plan de análisis estadístico</a></li>
+<li class="chapter" data-level="2.6" data-path="metodologia.html"><a href="metodologia.html#criterios-de-decisi%C3%B3n"><i class="fa fa-check"></i><b>2.6</b> Criterios de decisión</a></li>
+<li class="chapter" data-level="2.7" data-path="metodologia.html"><a href="metodologia.html#herramientas-y-reproducibilidad"><i class="fa fa-check"></i><b>2.7</b> Herramientas y reproducibilidad</a></li>
+<li class="chapter" data-level="2.8" data-path="metodologia.html"><a href="metodologia.html#consideraciones-%C3%A9ticas"><i class="fa fa-check"></i><b>2.8</b> Consideraciones éticas</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="descriptivo.html"><a href="descriptivo.html"><i class="fa fa-check"></i><b>3</b> Análisis descriptivo</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="descriptivo.html"><a href="descriptivo.html#caracterizaci%C3%B3n-global-del-precio"><i class="fa fa-check"></i><b>3.1</b> Caracterización global del precio</a></li>
+<li class="chapter" data-level="3.2" data-path="descriptivo.html"><a href="descriptivo.html#valores-at%C3%ADpicos"><i class="fa fa-check"></i><b>3.2</b> Valores atípicos</a></li>
+<li class="chapter" data-level="3.3" data-path="descriptivo.html"><a href="descriptivo.html#las-variables-del-trayecto"><i class="fa fa-check"></i><b>3.3</b> Las variables del trayecto</a></li>
+<li class="chapter" data-level="3.4" data-path="descriptivo.html"><a href="descriptivo.html#el-precio-seg%C3%BAn-los-factores-de-contexto"><i class="fa fa-check"></i><b>3.4</b> El precio según los factores de contexto</a></li>
+<li class="chapter" data-level="3.5" data-path="descriptivo.html"><a href="descriptivo.html#relaci%C3%B3n-entre-el-precio-y-las-variables-del-trayecto"><i class="fa fa-check"></i><b>3.5</b> Relación entre el precio y las variables del trayecto</a></li>
+<li class="chapter" data-level="3.6" data-path="descriptivo.html"><a href="descriptivo.html#consistencia-con-la-estructura-tarifaria"><i class="fa fa-check"></i><b>3.6</b> Consistencia con la estructura tarifaria</a></li>
+<li class="chapter" data-level="3.7" data-path="descriptivo.html"><a href="descriptivo.html#s%C3%ADntesis-descriptiva"><i class="fa fa-check"></i><b>3.7</b> Síntesis descriptiva</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="inferencial.html"><a href="inferencial.html"><i class="fa fa-check"></i><b>4</b> Análisis inferencial</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="inferencial.html"><a href="inferencial.html#verificaci%C3%B3n-de-supuestos"><i class="fa fa-check"></i><b>4.1</b> Verificación de supuestos</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="inferencial.html"><a href="inferencial.html#normalidad"><i class="fa fa-check"></i><b>4.1.1</b> Normalidad</a></li>
+<li class="chapter" data-level="4.1.2" data-path="inferencial.html"><a href="inferencial.html#homogeneidad-de-varianzas"><i class="fa fa-check"></i><b>4.1.2</b> Homogeneidad de varianzas</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="inferencial.html"><a href="inferencial.html#hip%C3%B3tesis-1-y-2-asociaci%C3%B3n-del-precio-con-distancia-y-duraci%C3%B3n"><i class="fa fa-check"></i><b>4.2</b> Hipótesis 1 y 2: asociación del precio con distancia y duración</a></li>
+<li class="chapter" data-level="4.3" data-path="inferencial.html"><a href="inferencial.html#hip%C3%B3tesis-3-d%C3%ADa-h%C3%A1bil-frente-a-fin-de-semana"><i class="fa fa-check"></i><b>4.3</b> Hipótesis 3: día hábil frente a fin de semana</a></li>
+<li class="chapter" data-level="4.4" data-path="inferencial.html"><a href="inferencial.html#hip%C3%B3tesis-4-5-y-6-los-factores-de-contexto"><i class="fa fa-check"></i><b>4.4</b> Hipótesis 4, 5 y 6: los factores de contexto</a></li>
+<li class="chapter" data-level="4.5" data-path="inferencial.html"><a href="inferencial.html#sensibilidad"><i class="fa fa-check"></i><b>4.5</b> Análisis de sensibilidad</a></li>
+<li class="chapter" data-level="4.6" data-path="inferencial.html"><a href="inferencial.html#hip%C3%B3tesis-7-asociaci%C3%B3n-entre-el-recargo-y-las-condiciones-de-operaci%C3%B3n"><i class="fa fa-check"></i><b>4.6</b> Hipótesis 7: asociación entre el recargo y las condiciones de operación</a></li>
+<li class="chapter" data-level="4.7" data-path="inferencial.html"><a href="inferencial.html#independencia-entre-los-factores-de-contexto"><i class="fa fa-check"></i><b>4.7</b> Independencia entre los factores de contexto</a></li>
+<li class="chapter" data-level="4.8" data-path="inferencial.html"><a href="inferencial.html#s%C3%ADntesis-inferencial"><i class="fa fa-check"></i><b>4.8</b> Síntesis inferencial</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="discusion.html"><a href="discusion.html"><i class="fa fa-check"></i><b>5</b> Discusión y conclusiones del avance</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="discusion.html"><a href="discusion.html#discusi%C3%B3n-de-los-resultados"><i class="fa fa-check"></i><b>5.1</b> Discusión de los resultados</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="discusion.html"><a href="discusion.html#el-mecanismo-de-formaci%C3%B3n-del-precio"><i class="fa fa-check"></i><b>5.1.1</b> El mecanismo de formación del precio</a></li>
+<li class="chapter" data-level="5.1.2" data-path="discusion.html"><a href="discusion.html#la-ausencia-de-efectos-contextuales"><i class="fa fa-check"></i><b>5.1.2</b> La ausencia de efectos contextuales</a></li>
+<li class="chapter" data-level="5.1.3" data-path="discusion.html"><a href="discusion.html#la-fragilidad-de-la-significaci%C3%B3n-estad%C3%ADstica"><i class="fa fa-check"></i><b>5.1.3</b> La fragilidad de la significación estadística</a></li>
+<li class="chapter" data-level="5.1.4" data-path="discusion.html"><a href="discusion.html#los-casos-con-recargo"><i class="fa fa-check"></i><b>5.1.4</b> Los casos con recargo</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="discusion.html"><a href="discusion.html#conclusiones"><i class="fa fa-check"></i><b>5.2</b> Conclusiones</a></li>
+<li class="chapter" data-level="5.3" data-path="discusion.html"><a href="discusion.html#limitaciones"><i class="fa fa-check"></i><b>5.3</b> Limitaciones</a></li>
+<li class="chapter" data-level="5.4" data-path="discusion.html"><a href="discusion.html#l%C3%ADneas-de-trabajo-para-la-siguiente-fase"><i class="fa fa-check"></i><b>5.4</b> Líneas de trabajo para la siguiente fase</a></li>
+<li class="chapter" data-level="5.5" data-path="discusion.html"><a href="discusion.html#nota-de-reproducibilidad"><i class="fa fa-check"></i><b>5.5</b> Nota de reproducibilidad</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="referencias.html"><a href="referencias.html"><i class="fa fa-check"></i>Referencias</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Determinantes del precio de las carreras de taxi</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="inferencial" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Capítulo 4</span> Análisis inferencial<a href="inferencial.html#inferencial" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="verificación-de-supuestos" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Verificación de supuestos<a href="inferencial.html#verificaci%C3%B3n-de-supuestos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="normalidad" class="section level3 hasAnchor" number="4.1.1">
+<h3><span class="header-section-number">4.1.1</span> Normalidad<a href="inferencial.html#normalidad" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<caption><span id="tab:sw">Table 4.1: </span>Prueba de Shapiro-Wilk de normalidad sobre el precio y su transformación logarítmica.</caption>
+<colgroup>
+<col width="29%" />
+<col width="19%" />
+<col width="11%" />
+<col width="40%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Estadístico W</th>
+<th align="left">Valor p</th>
+<th align="left">Decisión</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Precio</td>
+<td align="left">0.6509</td>
+<td align="left">&lt; 0,001</td>
+<td align="left">se rechaza la hipótesis nula</td>
+</tr>
+<tr class="even">
+<td align="left">Logaritmo del precio</td>
+<td align="left">0.9731</td>
+<td align="left">&lt; 0,001</td>
+<td align="left">se rechaza la hipótesis nula</td>
+</tr>
+</tbody>
+</table>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-qq"></span>
+<img src="bookdown-demo_files/figure-html/fig-qq-1.png" alt="Gráficos cuantil-cuantil del precio en escala original y logarítmica." width="92%" />
+<p class="caption">
+Figure 4.1: Gráficos cuantil-cuantil del precio en escala original y logarítmica.
+</p>
+</div>
+<p><strong>Interpretación.</strong> La prueba de Shapiro–Wilk rechaza la normalidad del precio de forma
+categórica, con un estadístico <span class="math inline">\(W = 0.651\)</span> muy alejado de la unidad. La
+transformación logarítmica mejora sustancialmente el ajuste —<span class="math inline">\(W\)</span> asciende hasta
+0.973—, aunque el rechazo persiste.</p>
+<p>Este resultado debe interpretarse con criterio y no de forma mecánica. Con
+<span class="math inline">\(n = 562\)</span> observaciones, la prueba de Shapiro–Wilk alcanza una potencia tan elevada que
+detecta desviaciones de la normalidad irrelevantes en la práctica. El panel izquierdo de la
+Figura <a href="inferencial.html#fig:fig-qq">4.1</a> muestra que la desviación se concentra casi por completo en el
+extremo superior —los mismos valores atípicos de larga distancia ya identificados—, mientras
+que el cuerpo central de la distribución se ajusta razonablemente a la recta teórica. Además,
+el <strong>teorema central del límite</strong> garantiza la normalidad asintótica de la media muestral con
+tamaños de muestra como el disponible.</p>
+<p>La decisión metodológica que se adopta, en consecuencia, no es descartar las pruebas
+paramétricas sino <strong>acompañar cada una de ellas con su equivalente no paramétrico</strong>, y
+considerar sólida únicamente la conclusión en que ambas coincidan.</p>
+</div>
+<div id="homogeneidad-de-varianzas" class="section level3 hasAnchor" number="4.1.2">
+<h3><span class="header-section-number">4.1.2</span> Homogeneidad de varianzas<a href="inferencial.html#homogeneidad-de-varianzas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<caption><span id="tab:bf">Table 4.2: </span>Prueba de Brown-Forsythe de homogeneidad de varianzas del precio en cada factor.</caption>
+<colgroup>
+<col width="21%" />
+<col width="8%" />
+<col width="11%" />
+<col width="12%" />
+<col width="45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Factor</th>
+<th align="left">F</th>
+<th align="left">gl</th>
+<th align="left">Valor p</th>
+<th align="left">Decisión</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Tráfico</td>
+<td align="left">6.489</td>
+<td align="left">2 ; 559</td>
+<td align="left">= 0.0016</td>
+<td align="left">se rechaza la hipótesis nula</td>
+</tr>
+<tr class="even">
+<td align="left">Clima</td>
+<td align="left">0.318</td>
+<td align="left">2 ; 559</td>
+<td align="left">= 0.7275</td>
+<td align="left">no se rechaza la hipótesis nula</td>
+</tr>
+<tr class="odd">
+<td align="left">Franja horaria</td>
+<td align="left">0.051</td>
+<td align="left">3 ; 558</td>
+<td align="left">= 0.9849</td>
+<td align="left">no se rechaza la hipótesis nula</td>
+</tr>
+<tr class="even">
+<td align="left">Día</td>
+<td align="left">0.640</td>
+<td align="left">1 ; 560</td>
+<td align="left">= 0.4242</td>
+<td align="left">no se rechaza la hipótesis nula</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Interpretación.</strong> El supuesto de homocedasticidad se cumple para el clima, la franja horaria
+y el día de la semana, pero <strong>se rechaza para el tráfico</strong> (<span class="math inline">\(p\)</span> = 0.0016). Las
+varianzas del precio difieren significativamente entre condiciones de circulación, tal como
+anticipaba la Tabla <a href="descriptivo.html#tab:desc-factores">3.4</a>.</p>
+<p>Esta violación tiene una consecuencia práctica precisa: el ANOVA clásico aplicado al factor
+tráfico <strong>no es válido</strong> en su forma estándar, porque su estadístico <span class="math inline">\(F\)</span> presupone un
+cuadrado medio del error común a todos los grupos. Para ese factor se emplearán, además del
+ANOVA clásico con fines comparativos, la versión de Welch del ANOVA y la prueba de
+Kruskal–Wallis.</p>
+</div>
+</div>
+<div id="hipótesis-1-y-2-asociación-del-precio-con-distancia-y-duración" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Hipótesis 1 y 2: asociación del precio con distancia y duración<a href="inferencial.html#hip%C3%B3tesis-1-y-2-asociaci%C3%B3n-del-precio-con-distancia-y-duraci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><span class="math display">\[H_0: \rho = 0 \qquad \text{frente a} \qquad H_1: \rho \neq 0\]</span></p>
+<table style="width:100%;">
+<caption><span id="tab:correlaciones">Table 4.3: </span>Correlaciones del precio con las variables cuantitativas del trayecto.</caption>
+<colgroup>
+<col width="18%" />
+<col width="13%" />
+<col width="17%" />
+<col width="11%" />
+<col width="9%" />
+<col width="16%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">r de Pearson</th>
+<th align="left">IC 95% de r</th>
+<th align="left">r cuadrado</th>
+<th align="left">Valor p</th>
+<th align="left">rho de Spearman</th>
+<th align="left">Intensidad</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Distancia (km)</td>
+<td align="left">0.863</td>
+<td align="left">[0.840 ; 0.883]</td>
+<td align="left">0.745</td>
+<td align="left">&lt; 0,001</td>
+<td align="left">0.715</td>
+<td align="left">fuerte</td>
+</tr>
+<tr class="even">
+<td align="left">Duración (min)</td>
+<td align="left">0.222</td>
+<td align="left">[0.142 ; 0.299]</td>
+<td align="left">0.049</td>
+<td align="left">&lt; 0,001</td>
+<td align="left">0.363</td>
+<td align="left">débil</td>
+</tr>
+<tr class="odd">
+<td align="left">Pasajeros</td>
+<td align="left">0.016</td>
+<td align="left">[-0.067 ; 0.098]</td>
+<td align="left">0.000</td>
+<td align="left">= 0.7087</td>
+<td align="left">0.063</td>
+<td align="left">despreciable</td>
+</tr>
+<tr class="even">
+<td align="left">Tarifa base</td>
+<td align="left">0.031</td>
+<td align="left">[-0.052 ; 0.113]</td>
+<td align="left">0.001</td>
+<td align="left">= 0.4648</td>
+<td align="left">0.079</td>
+<td align="left">despreciable</td>
+</tr>
+<tr class="odd">
+<td align="left">Tarifa por km</td>
+<td align="left">0.278</td>
+<td align="left">[0.200 ; 0.353]</td>
+<td align="left">0.077</td>
+<td align="left">&lt; 0,001</td>
+<td align="left">0.420</td>
+<td align="left">débil</td>
+</tr>
+<tr class="even">
+<td align="left">Tarifa por minuto</td>
+<td align="left">0.111</td>
+<td align="left">[0.029 ; 0.192]</td>
+<td align="left">0.012</td>
+<td align="left">= 0.0085</td>
+<td align="left">0.245</td>
+<td align="left">débil</td>
+</tr>
+</tbody>
+</table>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-boot-r"></span>
+<img src="bookdown-demo_files/figure-html/fig-boot-r-1.png" alt="Distribución bootstrap del coeficiente de correlación entre distancia y precio (B = 10.000)." width="92%" />
+<p class="caption">
+Figure 4.2: Distribución bootstrap del coeficiente de correlación entre distancia y precio (B = 10.000).
+</p>
+</div>
+<p><strong>Interpretación de H1.</strong> La correlación entre distancia y precio alcanza
+<span class="math inline">\(r = 0.863\)</span>, con un valor <span class="math inline">\(p\)</span> &lt; 0,001. Se
+<strong>se rechaza la hipótesis nula</strong>: la asociación es fuerte y
+estadísticamente significativa. El coeficiente de determinación,
+<span class="math inline">\(r^2 = 0.745\)</span>, indica que la distancia comparte el
+<strong>74.5 %</strong> de la varianza del precio. El intervalo de confianza
+teórico <span class="math inline">\([0.840;\ 0.883]\)</span> y el intervalo
+bootstrap <span class="math inline">\([0.807;\ 0.898]\)</span> prácticamente coinciden (Figura
+<a href="inferencial.html#fig:fig-boot-r">4.2</a>), lo que confirma que la estimación no depende de los supuestos
+distribucionales.</p>
+<p>Resulta informativo el contraste entre el coeficiente de Pearson y el de Spearman,
+<span class="math inline">\(\rho = 0.715\)</span>: el primero supera al segundo de forma apreciable. La
+diferencia se explica por las carreras de larga distancia y precio muy alto, que refuerzan la
+asociación lineal más de lo que refuerzan la asociación por rangos. Ambos coeficientes
+coinciden, no obstante, en calificar la relación como fuerte y significativa.</p>
+<p><strong>Interpretación de H2.</strong> La correlación entre duración y precio es de solo
+<span class="math inline">\(r = 0.222\)</span>, intensidad débil, aunque
+significativa (<span class="math inline">\(p\)</span> &lt; 0,001). La duración explica apenas el
+4.9 % de la varianza del precio, frente al
+74.5 % de la distancia.</p>
+<p>Este contraste constituye un resultado sustantivo de primer orden. La estructura tarifaria
+contempla explícitamente un cargo por minuto, de modo que la duración <strong>debería</strong> incidir en
+el precio; y de hecho incide, como demuestra la significación del contraste. Pero su peso
+relativo es marginal frente al del cargo por distancia. La razón es aritmética y puede
+verificarse en los propios datos: la tarifa por kilómetro multiplica una variable con un
+recorrido muy amplio, mientras que la tarifa por minuto, de magnitud sensiblemente menor,
+multiplica una variable más acotada. En este sistema tarifario <strong>el precio lo fijan los
+kilómetros, no los minutos</strong>.</p>
+<p>Por último, el número de pasajeros no presenta asociación alguna con el precio
+(<span class="math inline">\(r = 0.016\)</span>, <span class="math inline">\(p\)</span> = 0.7087), resultado plenamente
+coherente con un esquema de tarifa regulada en el que la ocupación del vehículo no altera el
+importe de la carrera.</p>
+</div>
+<div id="hipótesis-3-día-hábil-frente-a-fin-de-semana" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Hipótesis 3: día hábil frente a fin de semana<a href="inferencial.html#hip%C3%B3tesis-3-d%C3%ADa-h%C3%A1bil-frente-a-fin-de-semana" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><span class="math display">\[H_0: \mu_{\text{hábil}} = \mu_{\text{finde}} \qquad \text{frente a} \qquad
+H_1: \mu_{\text{hábil}} \neq \mu_{\text{finde}}\]</span></p>
+<table>
+<caption><span id="tab:h3">Table 4.4: </span>Comparación del precio entre días hábiles y fines de semana.</caption>
+<thead>
+<tr class="header">
+<th align="left">Elemento</th>
+<th align="left">Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">n (día hábil)</td>
+<td align="left">381</td>
+</tr>
+<tr class="even">
+<td align="left">n (fin de semana)</td>
+<td align="left">181</td>
+</tr>
+<tr class="odd">
+<td align="left">Media día hábil</td>
+<td align="left">59.69</td>
+</tr>
+<tr class="even">
+<td align="left">Media fin de semana</td>
+<td align="left">53.41</td>
+</tr>
+<tr class="odd">
+<td align="left">Diferencia de medias</td>
+<td align="left">6.28</td>
+</tr>
+<tr class="even">
+<td align="left">Estadístico t de Welch</td>
+<td align="left">1.6858</td>
+</tr>
+<tr class="odd">
+<td align="left">Grados de libertad</td>
+<td align="left">415.6</td>
+</tr>
+<tr class="even">
+<td align="left">Valor p</td>
+<td align="left">= 0.0926</td>
+</tr>
+<tr class="odd">
+<td align="left">IC 95% de la diferencia</td>
+<td align="left">[-1.04 ; 13.60]</td>
+</tr>
+<tr class="even">
+<td align="left">d de Cohen</td>
+<td align="left">0.143</td>
+</tr>
+<tr class="odd">
+<td align="left">Magnitud del efecto</td>
+<td align="left">prácticamente nulo</td>
+</tr>
+<tr class="even">
+<td align="left">Valor p (U de Mann-Whitney)</td>
+<td align="left">= 0.0594</td>
+</tr>
+<tr class="odd">
+<td align="left">IC 95% bootstrap de la diferencia</td>
+<td align="left">[-1.04 ; 13.36]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Interpretación.</strong> Las carreras de día hábil resultan en promedio
+6.28 unidades monetarias más caras que las de fin de semana, pero
+esta diferencia no alcanza significación estadística: <span class="math inline">\(t = 1.686\)</span> con
+<span class="math inline">\(p\)</span> = 0.0926. Se <strong>no se rechaza la hipótesis nula</strong>.</p>
+<p>Las tres vías de verificación convergen. El intervalo de confianza de la diferencia contiene
+el cero, el intervalo bootstrap incluye el valor cero y la prueba <span class="math inline">\(U\)</span> de Mann–Whitney arroja <span class="math inline">\(p\)</span>
+= 0.0594. El tamaño del efecto es, además, prácticamente nulo
+(<span class="math inline">\(d = 0.143\)</span>), de modo que aunque un diseño con mayor tamaño muestral llegara a
+declarar significativa esta diferencia, su relevancia práctica seguiría siendo escasa.</p>
+<p>Conviene subrayar el matiz: el valor <span class="math inline">\(p\)</span> obtenido se sitúa por encima pero no muy lejos del
+umbral convencional. Un resultado no significativo no demuestra la igualdad de las medias;
+demuestra que la evidencia disponible es insuficiente para afirmar que difieren. La conclusión
+correcta es que <strong>no hay evidencia de que el día de la semana modifique el precio</strong>, no que se
+haya probado que no lo modifica.</p>
+</div>
+<div id="hipótesis-4-5-y-6-los-factores-de-contexto" class="section level2 hasAnchor" number="4.4">
+<h2><span class="header-section-number">4.4</span> Hipótesis 4, 5 y 6: los factores de contexto<a href="inferencial.html#hip%C3%B3tesis-4-5-y-6-los-factores-de-contexto" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><span class="math display">\[H_0: \mu_1 = \mu_2 = \dots = \mu_k \qquad \text{frente a} \qquad
+H_1: \text{al menos una media difiere}\]</span></p>
+<table>
+<caption><span id="tab:anovas">Table 4.5: </span>Contraste de igualdad de precios medios según los factores de contexto, mediante tres procedimientos con supuestos distintos.</caption>
+<colgroup>
+<col width="12%" />
+<col width="6%" />
+<col width="13%" />
+<col width="13%" />
+<col width="14%" />
+<col width="14%" />
+<col width="10%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Factor</th>
+<th align="right">Niveles</th>
+<th align="left">ANOVA clásico: F</th>
+<th align="left">ANOVA clásico: p</th>
+<th align="left">ANOVA de Welch: p</th>
+<th align="left">Kruskal-Wallis: p</th>
+<th align="left">Eta cuadrado</th>
+<th align="left">Epsilon cuadrado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Tráfico</td>
+<td align="right">3</td>
+<td align="left">4.682</td>
+<td align="left">= 0.0096</td>
+<td align="left">= 0.0993</td>
+<td align="left">= 0.3996</td>
+<td align="left">0.0165</td>
+<td align="left">0.0000</td>
+</tr>
+<tr class="even">
+<td align="left">Clima</td>
+<td align="right">3</td>
+<td align="left">0.066</td>
+<td align="left">= 0.9365</td>
+<td align="left">= 0.9354</td>
+<td align="left">= 0.8701</td>
+<td align="left">0.0002</td>
+<td align="left">0.0000</td>
+</tr>
+<tr class="odd">
+<td align="left">Franja horaria</td>
+<td align="right">4</td>
+<td align="left">0.043</td>
+<td align="left">= 0.9883</td>
+<td align="left">= 0.9880</td>
+<td align="left">= 0.9405</td>
+<td align="left">0.0002</td>
+<td align="left">0.0000</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><span id="tab:anova-traf">Table 4.6: </span>Tabla de análisis de varianza clásico para el factor tráfico.</caption>
+<colgroup>
+<col width="28%" />
+<col width="5%" />
+<col width="25%" />
+<col width="21%" />
+<col width="8%" />
+<col width="11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Fuente de variación</th>
+<th align="right">gl</th>
+<th align="left">Suma de cuadrados</th>
+<th align="left">Cuadrado medio</th>
+<th align="left">F</th>
+<th align="left">Valor p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">trafico</td>
+<td align="right">2</td>
+<td align="left">17859.41</td>
+<td align="left">8929.71</td>
+<td align="left">4.682</td>
+<td align="left">0.0096</td>
+</tr>
+<tr class="even">
+<td align="left">Residuals</td>
+<td align="right">559</td>
+<td align="left">1066200.68</td>
+<td align="left">1907.34</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><span id="tab:tukey-traf">Table 4.7: </span>Comparaciones múltiples de Tukey entre condiciones de tráfico (sobre el ANOVA clásico).</caption>
+<thead>
+<tr class="header">
+<th align="left">Comparación</th>
+<th align="left">Diferencia</th>
+<th align="left">LI 95%</th>
+<th align="left">LS 95%</th>
+<th align="left">p ajustado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Medio-Bajo</td>
+<td align="left">-1.19</td>
+<td align="left">-10.83</td>
+<td align="left">8.45</td>
+<td align="left">= 0.9550</td>
+</tr>
+<tr class="even">
+<td align="left">Alto-Bajo</td>
+<td align="left">13.63</td>
+<td align="left">1.55</td>
+<td align="left">25.70</td>
+<td align="left">= 0.0224</td>
+</tr>
+<tr class="odd">
+<td align="left">Alto-Medio</td>
+<td align="left">14.81</td>
+<td align="left">2.89</td>
+<td align="left">26.74</td>
+<td align="left">= 0.0102</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Interpretación de H5 y H6.</strong> El clima y la franja horaria arrojan resultados inequívocos y
+concordantes entre los tres procedimientos: todos los valores <span class="math inline">\(p\)</span> son muy elevados y los
+tamaños del efecto, prácticamente nulos. Ni las condiciones meteorológicas ni el momento del
+día se asocian a variación alguna en el precio de la carrera. <strong>No se rechazan <span class="math inline">\(H_0\)</span> en
+ninguno de los dos casos.</strong></p>
+<p>Este resultado contradice frontalmente la predicción teórica del Capítulo <a href="marco.html#marco">1</a>, según
+la cual la lluvia y la nieve deberían encarecer el servicio. La explicación se encontró ya en
+el análisis descriptivo: si el precio es una función determinista de la tarifa base, la
+distancia y la duración, entonces el clima solo podría afectarlo modificando alguno de esos
+componentes. Como se verá en el Capítulo <a href="discusion.html#discusion">5</a>, no lo hace.</p>
+<p><strong>Interpretación de H4: un caso de discrepancia entre procedimientos.</strong> El factor tráfico
+plantea la situación metodológicamente más interesante de todo el avance. Los tres
+procedimientos <strong>no coinciden</strong>:</p>
+<ul>
+<li>El <strong>ANOVA clásico</strong> arroja <span class="math inline">\(F = 4.682\)</span> con <span class="math inline">\(p\)</span>
+= 0.0096, resultado que llevaría a <strong>rechazar</strong> la hipótesis nula.</li>
+<li>El <strong>ANOVA de Welch</strong>, que no exige homogeneidad de varianzas, arroja <span class="math inline">\(p\)</span>
+= 0.0993: <strong>no rechaza</strong>.</li>
+<li>La prueba de <strong>Kruskal–Wallis</strong>, basada en rangos, arroja <span class="math inline">\(p\)</span> = 0.3996:
+<strong>no rechaza</strong>.</li>
+</ul>
+<p>La discrepancia no es casual ni ambigua. La prueba de Brown–Forsythe ya había establecido que
+las varianzas del precio difieren significativamente entre condiciones de tráfico, lo que
+<strong>invalida el supuesto sobre el que descansa el ANOVA clásico</strong>. De los tres procedimientos,
+el único que declara significación es precisamente el único cuyos supuestos están
+violados. Por añadidura, su tamaño del efecto es minúsculo: <span class="math inline">\(\eta^2 = 0.0165\)</span>,
+es decir, el tráfico explicaría solo el 1.6 % de la varianza del precio.
+Las comparaciones de Tukey (Tabla <a href="inferencial.html#tab:tukey-traf">4.7</a>) reflejan esa fragilidad: únicamente
+2 de las tres comparaciones por pares resulta significativa.</p>
+<p>La sección siguiente identifica el origen concreto de esta discrepancia.</p>
+</div>
+<div id="sensibilidad" class="section level2 hasAnchor" number="4.5">
+<h2><span class="header-section-number">4.5</span> Análisis de sensibilidad<a href="inferencial.html#sensibilidad" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Si la significación del ANOVA clásico procede de unas pocas observaciones extremas, excluirlas
+debería hacerla desaparecer. Se repite por ello el contraste sobre la submuestra que excluye
+las 13 carreras con recargo identificadas en el Capítulo
+<a href="descriptivo.html#descriptivo">3</a>.</p>
+<table>
+<caption><span id="tab:sensibilidad">Table 4.8: </span>Análisis de sensibilidad: valores p del efecto del tráfico sobre el precio, con y sin las carreras con recargo.</caption>
+<colgroup>
+<col width="40%" />
+<col width="20%" />
+<col width="38%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Procedimiento</th>
+<th align="left">Muestra completa</th>
+<th align="left">Excluyendo carreras con recargo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Brown-Forsythe (homocedasticidad)</td>
+<td align="left">= 0.0016</td>
+<td align="left">= 0.0099</td>
+</tr>
+<tr class="even">
+<td align="left">ANOVA clásico</td>
+<td align="left">= 0.0096</td>
+<td align="left">= 0.3654</td>
+</tr>
+<tr class="odd">
+<td align="left">ANOVA de Welch</td>
+<td align="left">= 0.0993</td>
+<td align="left">= 0.3887</td>
+</tr>
+<tr class="even">
+<td align="left">Kruskal-Wallis</td>
+<td align="left">= 0.3996</td>
+<td align="left">= 0.7611</td>
+</tr>
+</tbody>
+</table>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-sensibilidad"></span>
+<img src="bookdown-demo_files/figure-html/fig-sensibilidad-1.png" alt="Precio según tráfico, distinguiendo las carreras con recargo." width="92%" />
+<p class="caption">
+Figure 4.3: Precio según tráfico, distinguiendo las carreras con recargo.
+</p>
+</div>
+<p><strong>Interpretación: el hallazgo central del avance.</strong> La Tabla <a href="inferencial.html#tab:sensibilidad">4.8</a> resuelve
+la discrepancia de manera concluyente. Al excluir únicamente
+13 carreras de un total de 562, la significación
+del ANOVA clásico <strong>desaparece por completo</strong> y, simultáneamente, la heterogeneidad de
+varianzas deja de ser significativa. Los cuatro procedimientos pasan a coincidir.</p>
+<p>La conclusión es doble y firme:</p>
+<ol style="list-style-type: decimal">
+<li><strong>El tráfico no modifica el precio de la carrera.</strong> El aparente efecto detectado por el
+ANOVA clásico era un artefacto producido por un puñado de observaciones extremas que, por
+azar o por algún mecanismo no registrado en la base, se concentran ligeramente en la
+categoría de tráfico alto.</li>
+<li><strong>La significación estadística puede ser extraordinariamente frágil.</strong> Un resultado con
+<span class="math inline">\(p\)</span> = 0.0096 sobre 562 observaciones parece sólido; sin embargo,
+descansaba enteramente sobre el 2.3 %
+de los datos. Sin el análisis de sensibilidad, el avance habría concluido erróneamente que
+la congestión encarece las carreras.</li>
+</ol>
+<p>La Figura <a href="inferencial.html#fig:fig-sensibilidad">4.3</a> lo hace visible: las cajas de los tres niveles de
+tráfico están alineadas, y la única diferencia apreciable entre ellos es la presencia de
+puntos rojos en la parte superior.</p>
+</div>
+<div id="hipótesis-7-asociación-entre-el-recargo-y-las-condiciones-de-operación" class="section level2 hasAnchor" number="4.6">
+<h2><span class="header-section-number">4.6</span> Hipótesis 7: asociación entre el recargo y las condiciones de operación<a href="inferencial.html#hip%C3%B3tesis-7-asociaci%C3%B3n-entre-el-recargo-y-las-condiciones-de-operaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table>
+<caption><span id="tab:h7">Table 4.9: </span>Tabla de contingencia entre condiciones de tráfico y presencia de recargo.</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Sin recargo</th>
+<th align="right">Con recargo</th>
+<th align="right">Total</th>
+<th align="left">% con recargo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Bajo</td>
+<td align="right">215</td>
+<td align="right">3</td>
+<td align="right">218</td>
+<td align="left">1.4 %</td>
+</tr>
+<tr class="even">
+<td align="left">Medio</td>
+<td align="right">232</td>
+<td align="right">4</td>
+<td align="right">236</td>
+<td align="left">1.7 %</td>
+</tr>
+<tr class="odd">
+<td align="left">Alto</td>
+<td align="right">102</td>
+<td align="right">6</td>
+<td align="right">108</td>
+<td align="left">5.6 %</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><span id="tab:h7">Table 4.9: </span>Frecuencias esperadas bajo la hipótesis de independencia.</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Sin recargo</th>
+<th align="right">Con recargo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Bajo</td>
+<td align="right">212.96</td>
+<td align="right">5.04</td>
+</tr>
+<tr class="even">
+<td align="left">Medio</td>
+<td align="right">230.54</td>
+<td align="right">5.46</td>
+</tr>
+<tr class="odd">
+<td align="left">Alto</td>
+<td align="right">105.50</td>
+<td align="right">2.50</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><span id="tab:h7-pruebas">Table 4.10: </span>Contraste de independencia entre tráfico y presencia de recargo.</caption>
+<colgroup>
+<col width="9%" />
+<col width="27%" />
+<col width="11%" />
+<col width="2%" />
+<col width="8%" />
+<col width="11%" />
+<col width="29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">Prueba</th>
+<th align="left">Estadístico</th>
+<th align="left">gl</th>
+<th align="left">Valor p</th>
+<th align="left">V de Cramér</th>
+<th align="left">Decisión</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">X-squared</td>
+<td align="left">Chi-cuadrado de independencia</td>
+<td align="left">6.271</td>
+<td align="left">2</td>
+<td align="left">= 0.0435</td>
+<td align="left">0.106</td>
+<td align="left">se rechaza la hipótesis nula</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">Exacta de Fisher</td>
+<td align="left">-</td>
+<td align="left">-</td>
+<td align="left">= 0.0585</td>
+<td align="left">-</td>
+<td align="left">no se rechaza la hipótesis nula</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Interpretación.</strong> La tabla de frecuencias esperadas contiene el elemento decisivo: el valor
+mínimo es 2.50, muy por debajo del umbral de 5 que exige la aproximación
+asintótica de la prueba <span class="math inline">\(\chi^2\)</span>. En estas condiciones el valor <span class="math inline">\(p\)</span> del contraste
+chi-cuadrado <strong>no es fiable</strong>, y la referencia válida es la prueba exacta de Fisher, que
+calcula la probabilidad bajo la distribución hipergeométrica sin aproximación alguna.</p>
+<p>Atendiendo a Fisher, <span class="math inline">\(p\)</span> = 0.0585, de modo que
+<strong>no se rechaza la hipótesis nula</strong> de independencia. La intensidad de la asociación,
+medida por la <span class="math inline">\(V\)</span> de Cramér, es 0.106.</p>
+<p>La lectura honesta de este resultado exige prudencia. Los datos sugieren una mayor proporción
+de recargos bajo tráfico alto, dirección coherente con la teoría del precio dinámico expuesta
+en el Capítulo <a href="marco.html#marco">1</a>; pero el contraste descansa sobre solo
+13 casos con recargo, un número insuficiente para sostener
+una conclusión firme. Lo procedente es <strong>considerar la asociación como una hipótesis
+prometedora pendiente de confirmación</strong> con una muestra mayor, y no como un hallazgo
+establecido.</p>
+</div>
+<div id="independencia-entre-los-factores-de-contexto" class="section level2 hasAnchor" number="4.7">
+<h2><span class="header-section-number">4.7</span> Independencia entre los factores de contexto<a href="inferencial.html#independencia-entre-los-factores-de-contexto" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table>
+<caption><span id="tab:indep-factores">Table 4.11: </span>Pruebas de independencia entre los factores de contexto.</caption>
+<colgroup>
+<col width="26%" />
+<col width="13%" />
+<col width="3%" />
+<col width="9%" />
+<col width="12%" />
+<col width="34%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Par de variables</th>
+<th align="left">Chi cuadrado</th>
+<th align="right">gl</th>
+<th align="left">Valor p</th>
+<th align="left">V de Cramér</th>
+<th align="left">Decisión</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Tráfico x Clima</td>
+<td align="left">6.714</td>
+<td align="right">4</td>
+<td align="left">= 0.1518</td>
+<td align="left">0.077</td>
+<td align="left">no se rechaza la hipótesis nula</td>
+</tr>
+<tr class="even">
+<td align="left">Tráfico x Franja horaria</td>
+<td align="left">4.654</td>
+<td align="right">6</td>
+<td align="left">= 0.5889</td>
+<td align="left">0.064</td>
+<td align="left">no se rechaza la hipótesis nula</td>
+</tr>
+<tr class="odd">
+<td align="left">Clima x Franja horaria</td>
+<td align="left">5.219</td>
+<td align="right">6</td>
+<td align="left">= 0.5161</td>
+<td align="left">0.068</td>
+<td align="left">no se rechaza la hipótesis nula</td>
+</tr>
+<tr class="even">
+<td align="left">Tráfico x Día</td>
+<td align="left">0.669</td>
+<td align="right">2</td>
+<td align="left">= 0.7158</td>
+<td align="left">0.034</td>
+<td align="left">no se rechaza la hipótesis nula</td>
+</tr>
+<tr class="odd">
+<td align="left">Clima x Día</td>
+<td align="left">4.387</td>
+<td align="right">2</td>
+<td align="left">= 0.1115</td>
+<td align="left">0.088</td>
+<td align="left">no se rechaza la hipótesis nula</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Interpretación.</strong> Ninguna pareja de factores de contexto presenta asociación significativa.
+Tráfico, clima, franja horaria y día de la semana son estadísticamente <strong>independientes entre
+sí</strong> en esta base de datos.</p>
+<p>El resultado es relevante por dos motivos. En primer lugar, descarta la confusión estadística
+como explicación alternativa de los resultados anteriores: la ausencia de efecto del clima no
+puede atribuirse a que el clima esté confundido con el tráfico, porque no lo está. En segundo
+lugar, plantea una cuestión sobre la naturaleza misma de los datos: en un entorno urbano real
+cabría esperar cierta asociación entre lluvia y congestión, o entre franja horaria y tráfico.
+Su ausencia total sugiere que los factores fueron asignados de forma independiente, extremo
+que se discute en el capítulo siguiente.</p>
+</div>
+<div id="síntesis-inferencial" class="section level2 hasAnchor" number="4.8">
+<h2><span class="header-section-number">4.8</span> Síntesis inferencial<a href="inferencial.html#s%C3%ADntesis-inferencial" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table>
+<caption><span id="tab:sintesis">Table 4.12: </span>Síntesis de los contrastes de hipótesis realizados en este avance.</caption>
+<colgroup>
+<col width="27%" />
+<col width="20%" />
+<col width="7%" />
+<col width="15%" />
+<col width="28%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Hipótesis</th>
+<th align="left">Prueba principal</th>
+<th align="left">Valor p</th>
+<th align="left">Tamaño del efecto</th>
+<th align="left">Decisión</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">H1: distancia - precio</td>
+<td align="left">Correlación de Pearson</td>
+<td align="left">&lt; 0,001</td>
+<td align="left">r = 0.863</td>
+<td align="left">se rechaza la hipótesis nula</td>
+</tr>
+<tr class="even">
+<td align="left">H2: duración - precio</td>
+<td align="left">Correlación de Pearson</td>
+<td align="left">&lt; 0,001</td>
+<td align="left">r = 0.222</td>
+<td align="left">se rechaza la hipótesis nula</td>
+</tr>
+<tr class="odd">
+<td align="left">H3: día hábil vs fin de semana</td>
+<td align="left">t de Welch</td>
+<td align="left">= 0.0926</td>
+<td align="left">d = 0.143</td>
+<td align="left">no se rechaza la hipótesis nula</td>
+</tr>
+<tr class="even">
+<td align="left">H4: tráfico</td>
+<td align="left">ANOVA de Welch</td>
+<td align="left">= 0.0993</td>
+<td align="left">eta2 = 0.0165</td>
+<td align="left">no se rechaza la hipótesis nula</td>
+</tr>
+<tr class="odd">
+<td align="left">H5: clima</td>
+<td align="left">ANOVA de una vía</td>
+<td align="left">= 0.9365</td>
+<td align="left">eta2 ~ 0</td>
+<td align="left">no se rechaza la hipótesis nula</td>
+</tr>
+<tr class="even">
+<td align="left">H6: franja horaria</td>
+<td align="left">ANOVA de una vía</td>
+<td align="left">= 0.9883</td>
+<td align="left">eta2 ~ 0</td>
+<td align="left">no se rechaza la hipótesis nula</td>
+</tr>
+<tr class="odd">
+<td align="left">H7: recargo - tráfico</td>
+<td align="left">Exacta de Fisher</td>
+<td align="left">= 0.0585</td>
+<td align="left">V = 0.106</td>
+<td align="left">no se rechaza la hipótesis nula</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="descriptivo.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="discusion.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": false,
+    "twitter": false,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": false
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": null,
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "section",
+    "scroll_highlight": true
+  },
+  "toolbar": {
+    "position": "fixed"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

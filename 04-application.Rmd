@@ -1,7 +1,519 @@
-# Applications
+# Análisis inferencial {#inferencial}
 
-Some _significant_ applications are demonstrated in this chapter.
+## Verificación de supuestos
 
-## Example one
+### Normalidad
 
-## Example two
+```{r sw, echo=FALSE}
+sw_pr  <- shapiro.test(comp$precio)
+sw_log <- shapiro.test(log(comp$precio))
+
+tab_sw <- data.frame(
+  Variable = c("Precio", "Logaritmo del precio"),
+  `Estadístico W` = c(fnum(sw_pr$statistic, 4), fnum(sw_log$statistic, 4)),
+  `Valor p` = c(fp(sw_pr$p.value), fp(sw_log$p.value)),
+  Decisión = c(veredicto(sw_pr$p.value), veredicto(sw_log$p.value)),
+  check.names = FALSE
+)
+kable(tab_sw, caption = "Prueba de Shapiro-Wilk de normalidad sobre el precio y su transformación logarítmica.")
+```
+
+```{r fig-qq, echo=FALSE, fig.height=3.8, fig.cap="Gráficos cuantil-cuantil del precio en escala original y logarítmica."}
+qq_df <- rbind(
+  data.frame(valor = comp$precio, escala = "Precio (escala original)"),
+  data.frame(valor = log(comp$precio), escala = "Logaritmo del precio")
+)
+qq_df$escala <- factor(qq_df$escala,
+                       levels = c("Precio (escala original)", "Logaritmo del precio"))
+
+ggplot(qq_df, aes(sample = valor)) +
+  stat_qq(colour = azul, size = 1.3, alpha = 0.6) +
+  stat_qq_line(colour = naranja, linewidth = 0.9) +
+  facet_wrap(~ escala, scales = "free_y") +
+  labs(title = "Normalidad del precio",
+       x = "Cuantiles teóricos", y = "Cuantiles muestrales",
+       caption = "Fuente: elaboración propia.")
+```
+
+**Interpretación.** La prueba de Shapiro–Wilk rechaza la normalidad del precio de forma
+categórica, con un estadístico $W = `r fnum(sw_pr$statistic, 3)`$ muy alejado de la unidad. La
+transformación logarítmica mejora sustancialmente el ajuste —$W$ asciende hasta
+`r fnum(sw_log$statistic, 3)`—, aunque el rechazo persiste.
+
+Este resultado debe interpretarse con criterio y no de forma mecánica. Con
+$n = `r n_comp`$ observaciones, la prueba de Shapiro–Wilk alcanza una potencia tan elevada que
+detecta desviaciones de la normalidad irrelevantes en la práctica. El panel izquierdo de la
+Figura \@ref(fig:fig-qq) muestra que la desviación se concentra casi por completo en el
+extremo superior —los mismos valores atípicos de larga distancia ya identificados—, mientras
+que el cuerpo central de la distribución se ajusta razonablemente a la recta teórica. Además,
+el **teorema central del límite** garantiza la normalidad asintótica de la media muestral con
+tamaños de muestra como el disponible.
+
+La decisión metodológica que se adopta, en consecuencia, no es descartar las pruebas
+paramétricas sino **acompañar cada una de ellas con su equivalente no paramétrico**, y
+considerar sólida únicamente la conclusión en que ambas coincidan.
+
+### Homogeneidad de varianzas
+
+```{r bf, echo=FALSE}
+bf_lista <- list(
+  brown_forsythe(comp$precio, comp$trafico),
+  brown_forsythe(comp$precio, comp$clima),
+  brown_forsythe(comp$precio, comp$franja),
+  brown_forsythe(comp$precio, comp$dia)
+)
+nombres_bf <- c("Tráfico", "Clima", "Franja horaria", "Día")
+
+tab_bf <- data.frame(
+  Factor = nombres_bf,
+  `F` = sapply(bf_lista, function(t) fnum(t[1, "F value"], 3)),
+  `gl` = sapply(bf_lista, function(t) paste0(t[1, "Df"], " ; ", t[2, "Df"])),
+  `Valor p` = sapply(bf_lista, function(t) fp(t[1, "Pr(>F)"])),
+  Decisión = sapply(bf_lista, function(t) veredicto(t[1, "Pr(>F)"])),
+  check.names = FALSE, row.names = NULL
+)
+kable(tab_bf, caption = "Prueba de Brown-Forsythe de homogeneidad de varianzas del precio en cada factor.")
+
+p_bf_traf <- bf_lista[[1]][1, "Pr(>F)"]
+```
+
+**Interpretación.** El supuesto de homocedasticidad se cumple para el clima, la franja horaria
+y el día de la semana, pero **se rechaza para el tráfico** ($p$ `r fp(p_bf_traf)`). Las
+varianzas del precio difieren significativamente entre condiciones de circulación, tal como
+anticipaba la Tabla \@ref(tab:desc-factores).
+
+Esta violación tiene una consecuencia práctica precisa: el ANOVA clásico aplicado al factor
+tráfico **no es válido** en su forma estándar, porque su estadístico $F$ presupone un
+cuadrado medio del error común a todos los grupos. Para ese factor se emplearán, además del
+ANOVA clásico con fines comparativos, la versión de Welch del ANOVA y la prueba de
+Kruskal–Wallis.
+
+## Hipótesis 1 y 2: asociación del precio con distancia y duración
+
+$$H_0: \rho = 0 \qquad \text{frente a} \qquad H_1: \rho \neq 0$$
+
+```{r correlaciones, echo=FALSE}
+vars_cor <- c("distancia", "duracion", "pasajeros",
+              "tarifa_base", "tarifa_km", "tarifa_min")
+nom_cor <- c("Distancia (km)", "Duración (min)", "Pasajeros",
+             "Tarifa base", "Tarifa por km", "Tarifa por minuto")
+
+res_cor <- do.call(rbind, lapply(seq_along(vars_cor), function(i) {
+  v <- comp[[vars_cor[i]]]
+  ct <- cor.test(v, comp$precio, method = "pearson")
+  cs <- suppressWarnings(cor.test(v, comp$precio, method = "spearman", exact = FALSE))
+  data.frame(
+    Variable = nom_cor[i],
+    `r de Pearson` = fnum(ct$estimate, 3),
+    `IC 95% de r` = paste0("[", fnum(ct$conf.int[1], 3), " ; ", fnum(ct$conf.int[2], 3), "]"),
+    `r cuadrado` = fnum(ct$estimate^2, 3),
+    `Valor p` = fp(ct$p.value),
+    `rho de Spearman` = fnum(cs$estimate, 3),
+    `Intensidad` = interp_r(ct$estimate),
+    check.names = FALSE
+  )
+}))
+kable(res_cor, row.names = FALSE,
+      caption = "Correlaciones del precio con las variables cuantitativas del trayecto.")
+
+ct_dist <- cor.test(comp$distancia, comp$precio)
+ct_dur  <- cor.test(comp$duracion, comp$precio)
+ct_pas  <- cor.test(comp$pasajeros, comp$precio)
+cs_dist <- suppressWarnings(cor.test(comp$distancia, comp$precio,
+                                     method = "spearman", exact = FALSE))
+```
+
+```{r boot-r, echo=FALSE}
+B <- 10000
+idx_n <- nrow(comp)
+r_boot <- replicate(B, {
+  i <- sample.int(idx_n, idx_n, replace = TRUE)
+  cor(comp$distancia[i], comp$precio[i])
+})
+ic_r <- quantile(r_boot, c(0.025, 0.975))
+```
+
+```{r fig-boot-r, echo=FALSE, fig.height=3.4, fig.cap="Distribución bootstrap del coeficiente de correlación entre distancia y precio (B = 10.000)."}
+ggplot(data.frame(r = r_boot), aes(x = r)) +
+  geom_histogram(bins = 45, fill = azul, colour = "white", alpha = 0.9) +
+  geom_vline(xintercept = ic_r, linetype = "dashed", colour = naranja, linewidth = 0.9) +
+  labs(title = "Distribución bootstrap de r (distancia - precio)",
+       subtitle = "Líneas naranjas: intervalo percentil al 95%",
+       x = "Coeficiente de correlación", y = "Frecuencia",
+       caption = "Fuente: elaboración propia.")
+```
+
+**Interpretación de H1.** La correlación entre distancia y precio alcanza
+$r = `r fnum(ct_dist$estimate, 3)`$, con un valor $p$ `r fp(ct_dist$p.value)`. Se
+**`r veredicto(ct_dist$p.value)`**: la asociación es `r interp_r(ct_dist$estimate)` y
+estadísticamente significativa. El coeficiente de determinación,
+$r^2 = `r fnum(ct_dist$estimate^2, 3)`$, indica que la distancia comparte el
+**`r fnum(100*ct_dist$estimate^2, 1)` %** de la varianza del precio. El intervalo de confianza
+teórico $[`r fnum(ct_dist$conf.int[1], 3)`;\ `r fnum(ct_dist$conf.int[2], 3)`]$ y el intervalo
+bootstrap $[`r fnum(ic_r[1], 3)`;\ `r fnum(ic_r[2], 3)`]$ prácticamente coinciden (Figura
+\@ref(fig:fig-boot-r)), lo que confirma que la estimación no depende de los supuestos
+distribucionales.
+
+Resulta informativo el contraste entre el coeficiente de Pearson y el de Spearman,
+$\rho = `r fnum(cs_dist$estimate, 3)`$: el primero supera al segundo de forma apreciable. La
+diferencia se explica por las carreras de larga distancia y precio muy alto, que refuerzan la
+asociación lineal más de lo que refuerzan la asociación por rangos. Ambos coeficientes
+coinciden, no obstante, en calificar la relación como fuerte y significativa.
+
+**Interpretación de H2.** La correlación entre duración y precio es de solo
+$r = `r fnum(ct_dur$estimate, 3)`$, intensidad `r interp_r(ct_dur$estimate)`, aunque
+significativa ($p$ `r fp(ct_dur$p.value)`). La duración explica apenas el
+`r fnum(100*ct_dur$estimate^2, 1)` % de la varianza del precio, frente al
+`r fnum(100*ct_dist$estimate^2, 1)` % de la distancia.
+
+Este contraste constituye un resultado sustantivo de primer orden. La estructura tarifaria
+contempla explícitamente un cargo por minuto, de modo que la duración **debería** incidir en
+el precio; y de hecho incide, como demuestra la significación del contraste. Pero su peso
+relativo es marginal frente al del cargo por distancia. La razón es aritmética y puede
+verificarse en los propios datos: la tarifa por kilómetro multiplica una variable con un
+recorrido muy amplio, mientras que la tarifa por minuto, de magnitud sensiblemente menor,
+multiplica una variable más acotada. En este sistema tarifario **el precio lo fijan los
+kilómetros, no los minutos**.
+
+Por último, el número de pasajeros no presenta asociación alguna con el precio
+($r = `r fnum(ct_pas$estimate, 3)`$, $p$ `r fp(ct_pas$p.value)`), resultado plenamente
+coherente con un esquema de tarifa regulada en el que la ocupación del vehículo no altera el
+importe de la carrera.
+
+## Hipótesis 3: día hábil frente a fin de semana
+
+$$H_0: \mu_{\text{hábil}} = \mu_{\text{finde}} \qquad \text{frente a} \qquad
+H_1: \mu_{\text{hábil}} \neq \mu_{\text{finde}}$$
+
+```{r h3, echo=FALSE}
+hab <- comp$precio[comp$dia == "Día hábil"]
+fin <- comp$precio[comp$dia == "Fin de semana"]
+
+tt_dia <- t.test(precio ~ dia, data = comp)
+d_dia <- d_cohen(hab, fin)
+mw_dia <- suppressWarnings(wilcox.test(precio ~ dia, data = comp, exact = FALSE))
+
+dif_boot <- replicate(B, mean(sample(hab, length(hab), TRUE)) -
+                         mean(sample(fin, length(fin), TRUE)))
+ic_dif <- quantile(dif_boot, c(0.025, 0.975))
+ver_boot <- if (ic_dif[1] <= 0 && ic_dif[2] >= 0) "incluye el valor cero" else "excluye el valor cero"
+
+tab_h3 <- data.frame(
+  Elemento = c("n (día hábil)", "n (fin de semana)",
+               "Media día hábil", "Media fin de semana", "Diferencia de medias",
+               "Estadístico t de Welch", "Grados de libertad", "Valor p",
+               "IC 95% de la diferencia", "d de Cohen", "Magnitud del efecto",
+               "Valor p (U de Mann-Whitney)", "IC 95% bootstrap de la diferencia"),
+  Resultado = c(
+    as.character(length(hab)), as.character(length(fin)),
+    fnum(mean(hab)), fnum(mean(fin)), fnum(mean(hab) - mean(fin)),
+    fnum(tt_dia$statistic, 4), fnum(tt_dia$parameter, 1), fp(tt_dia$p.value),
+    paste0("[", fnum(tt_dia$conf.int[1]), " ; ", fnum(tt_dia$conf.int[2]), "]"),
+    fnum(d_dia, 3), interp_d(d_dia), fp(mw_dia$p.value),
+    paste0("[", fnum(ic_dif[1]), " ; ", fnum(ic_dif[2]), "]")
+  ),
+  check.names = FALSE
+)
+kable(tab_h3, caption = "Comparación del precio entre días hábiles y fines de semana.")
+```
+
+**Interpretación.** Las carreras de día hábil resultan en promedio
+`r fnum(mean(hab) - mean(fin))` unidades monetarias más caras que las de fin de semana, pero
+esta diferencia no alcanza significación estadística: $t = `r fnum(tt_dia$statistic, 3)`$ con
+$p$ `r fp(tt_dia$p.value)`. Se **`r veredicto(tt_dia$p.value)`**.
+
+Las tres vías de verificación convergen. El intervalo de confianza de la diferencia contiene
+el cero, el intervalo bootstrap `r ver_boot` y la prueba $U$ de Mann–Whitney arroja $p$
+`r fp(mw_dia$p.value)`. El tamaño del efecto es, además, `r interp_d(d_dia)`
+($d = `r fnum(d_dia, 3)`$), de modo que aunque un diseño con mayor tamaño muestral llegara a
+declarar significativa esta diferencia, su relevancia práctica seguiría siendo escasa.
+
+Conviene subrayar el matiz: el valor $p$ obtenido se sitúa por encima pero no muy lejos del
+umbral convencional. Un resultado no significativo no demuestra la igualdad de las medias;
+demuestra que la evidencia disponible es insuficiente para afirmar que difieren. La conclusión
+correcta es que **no hay evidencia de que el día de la semana modifique el precio**, no que se
+haya probado que no lo modifica.
+
+## Hipótesis 4, 5 y 6: los factores de contexto
+
+$$H_0: \mu_1 = \mu_2 = \dots = \mu_k \qquad \text{frente a} \qquad
+H_1: \text{al menos una media difiere}$$
+
+```{r anovas, echo=FALSE}
+analizar_factor <- function(f, nombre) {
+  fr <- as.formula(paste("precio ~", f))
+  mod <- aov(fr, data = comp)
+  tb <- summary(mod)[[1]]
+  welch <- oneway.test(fr, data = comp, var.equal = FALSE)
+  kw <- kruskal.test(fr, data = comp)
+  k <- nlevels(comp[[f]]); N <- nrow(comp)
+  eta2 <- tb[1, "Sum Sq"] / sum(tb[, "Sum Sq"])
+  eps2 <- max(0, (as.numeric(kw$statistic) - k + 1) / (N - k))
+  data.frame(
+    Factor = nombre,
+    `Niveles` = k,
+    `ANOVA clásico: F` = fnum(tb[1, "F value"], 3),
+    `ANOVA clásico: p` = fp(tb[1, "Pr(>F)"]),
+    `ANOVA de Welch: p` = fp(welch$p.value),
+    `Kruskal-Wallis: p` = fp(kw$p.value),
+    `Eta cuadrado` = fnum(eta2, 4),
+    `Epsilon cuadrado` = fnum(eps2, 4),
+    check.names = FALSE
+  )
+}
+
+tab_anovas <- rbind(
+  analizar_factor("trafico", "Tráfico"),
+  analizar_factor("clima", "Clima"),
+  analizar_factor("franja", "Franja horaria")
+)
+kable(tab_anovas, row.names = FALSE,
+      caption = "Contraste de igualdad de precios medios según los factores de contexto, mediante tres procedimientos con supuestos distintos.")
+
+mod_traf <- aov(precio ~ trafico, data = comp)
+tb_traf <- summary(mod_traf)[[1]]
+welch_traf <- oneway.test(precio ~ trafico, data = comp, var.equal = FALSE)
+kw_traf <- kruskal.test(precio ~ trafico, data = comp)
+eta2_traf <- tb_traf[1, "Sum Sq"] / sum(tb_traf[, "Sum Sq"])
+```
+
+```{r anova-traf, echo=FALSE}
+kable(tabla_anova(mod_traf),
+      caption = "Tabla de análisis de varianza clásico para el factor tráfico.")
+```
+
+```{r tukey-traf, echo=FALSE}
+tk <- TukeyHSD(mod_traf)
+tk_df <- as.data.frame(tk$trafico)
+tk_out <- data.frame(
+  `Comparación` = rownames(tk_df),
+  Diferencia = fnum(tk_df$diff),
+  `LI 95%` = fnum(tk_df$lwr),
+  `LS 95%` = fnum(tk_df$upr),
+  `p ajustado` = sapply(tk_df$`p adj`, fp),
+  check.names = FALSE, row.names = NULL
+)
+kable(tk_out, caption = "Comparaciones múltiples de Tukey entre condiciones de tráfico (sobre el ANOVA clásico).")
+n_tk_sig <- sum(tk_df$`p adj` < 0.05)
+```
+
+**Interpretación de H5 y H6.** El clima y la franja horaria arrojan resultados inequívocos y
+concordantes entre los tres procedimientos: todos los valores $p$ son muy elevados y los
+tamaños del efecto, prácticamente nulos. Ni las condiciones meteorológicas ni el momento del
+día se asocian a variación alguna en el precio de la carrera. **No se rechazan $H_0$ en
+ninguno de los dos casos.**
+
+Este resultado contradice frontalmente la predicción teórica del Capítulo \@ref(marco), según
+la cual la lluvia y la nieve deberían encarecer el servicio. La explicación se encontró ya en
+el análisis descriptivo: si el precio es una función determinista de la tarifa base, la
+distancia y la duración, entonces el clima solo podría afectarlo modificando alguno de esos
+componentes. Como se verá en el Capítulo \@ref(discusion), no lo hace.
+
+**Interpretación de H4: un caso de discrepancia entre procedimientos.** El factor tráfico
+plantea la situación metodológicamente más interesante de todo el avance. Los tres
+procedimientos **no coinciden**:
+
+- El **ANOVA clásico** arroja $F = `r fnum(tb_traf[1,"F value"], 3)`$ con $p$
+  `r fp(tb_traf[1,"Pr(>F)"])`, resultado que llevaría a **rechazar** la hipótesis nula.
+- El **ANOVA de Welch**, que no exige homogeneidad de varianzas, arroja $p$
+  `r fp(welch_traf$p.value)`: **no rechaza**.
+- La prueba de **Kruskal–Wallis**, basada en rangos, arroja $p$ `r fp(kw_traf$p.value)`:
+  **no rechaza**.
+
+La discrepancia no es casual ni ambigua. La prueba de Brown–Forsythe ya había establecido que
+las varianzas del precio difieren significativamente entre condiciones de tráfico, lo que
+**invalida el supuesto sobre el que descansa el ANOVA clásico**. De los tres procedimientos,
+el único que declara significación es precisamente el único cuyos supuestos están
+violados. Por añadidura, su tamaño del efecto es minúsculo: $\eta^2 = `r fnum(eta2_traf, 4)`$,
+es decir, el tráfico explicaría solo el `r fnum(100*eta2_traf, 1)` % de la varianza del precio.
+Las comparaciones de Tukey (Tabla \@ref(tab:tukey-traf)) reflejan esa fragilidad: únicamente
+`r n_tk_sig` de las tres comparaciones por pares resulta significativa.
+
+La sección siguiente identifica el origen concreto de esta discrepancia.
+
+## Análisis de sensibilidad {#sensibilidad}
+
+Si la significación del ANOVA clásico procede de unas pocas observaciones extremas, excluirlas
+debería hacerla desaparecer. Se repite por ello el contraste sobre la submuestra que excluye
+las `r sum(comp$recargo == "Con recargo")` carreras con recargo identificadas en el Capítulo
+\@ref(descriptivo).
+
+```{r sensibilidad, echo=FALSE}
+sin_ext <- comp[comp$recargo == "Sin recargo", ]
+
+mod_s <- aov(precio ~ trafico, data = sin_ext)
+tb_s <- summary(mod_s)[[1]]
+welch_s <- oneway.test(precio ~ trafico, data = sin_ext, var.equal = FALSE)
+kw_s <- kruskal.test(precio ~ trafico, data = sin_ext)
+bf_s <- brown_forsythe(sin_ext$precio, sin_ext$trafico)
+
+tab_sens <- data.frame(
+  Procedimiento = c("Brown-Forsythe (homocedasticidad)", "ANOVA clásico",
+                    "ANOVA de Welch", "Kruskal-Wallis"),
+  `Muestra completa` = c(fp(bf_lista[[1]][1, "Pr(>F)"]),
+                         fp(tb_traf[1, "Pr(>F)"]),
+                         fp(welch_traf$p.value),
+                         fp(kw_traf$p.value)),
+  `Excluyendo carreras con recargo` = c(fp(bf_s[1, "Pr(>F)"]),
+                                        fp(tb_s[1, "Pr(>F)"]),
+                                        fp(welch_s$p.value),
+                                        fp(kw_s$p.value)),
+  check.names = FALSE
+)
+kable(tab_sens,
+      caption = "Análisis de sensibilidad: valores p del efecto del tráfico sobre el precio, con y sin las carreras con recargo.")
+```
+
+```{r fig-sensibilidad, echo=FALSE, fig.height=4, fig.cap="Precio según tráfico, distinguiendo las carreras con recargo."}
+ggplot(comp, aes(x = trafico, y = precio)) +
+  geom_boxplot(fill = azul, alpha = 0.45, outlier.shape = NA, width = 0.55) +
+  geom_jitter(aes(colour = recargo), width = 0.16, height = 0, alpha = 0.6, size = 1.5) +
+  scale_colour_manual(values = c("Sin recargo" = "grey55", "Con recargo" = rojo)) +
+  labs(title = "Precio según condiciones de tráfico",
+       subtitle = "En rojo, las carreras cuyo precio excede la tarifa teórica",
+       x = "Condiciones de tráfico", y = "Precio de la carrera",
+       colour = NULL, caption = "Fuente: elaboración propia.")
+```
+
+**Interpretación: el hallazgo central del avance.** La Tabla \@ref(tab:sensibilidad) resuelve
+la discrepancia de manera concluyente. Al excluir únicamente
+`r sum(comp$recargo == "Con recargo")` carreras de un total de `r n_comp`, la significación
+del ANOVA clásico **desaparece por completo** y, simultáneamente, la heterogeneidad de
+varianzas deja de ser significativa. Los cuatro procedimientos pasan a coincidir.
+
+La conclusión es doble y firme:
+
+1. **El tráfico no modifica el precio de la carrera.** El aparente efecto detectado por el
+   ANOVA clásico era un artefacto producido por un puñado de observaciones extremas que, por
+   azar o por algún mecanismo no registrado en la base, se concentran ligeramente en la
+   categoría de tráfico alto.
+2. **La significación estadística puede ser extraordinariamente frágil.** Un resultado con
+   $p$ `r fp(tb_traf[1,"Pr(>F)"])` sobre `r n_comp` observaciones parece sólido; sin embargo,
+   descansaba enteramente sobre el `r fnum(100*sum(comp$recargo=="Con recargo")/n_comp, 1)` %
+   de los datos. Sin el análisis de sensibilidad, el avance habría concluido erróneamente que
+   la congestión encarece las carreras.
+
+La Figura \@ref(fig:fig-sensibilidad) lo hace visible: las cajas de los tres niveles de
+tráfico están alineadas, y la única diferencia apreciable entre ellos es la presencia de
+puntos rojos en la parte superior.
+
+## Hipótesis 7: asociación entre el recargo y las condiciones de operación
+
+```{r h7, echo=FALSE}
+tc <- table(Tráfico = comp$trafico, Recargo = comp$recargo)
+esperadas <- suppressWarnings(chisq.test(tc)$expected)
+chi_h7 <- suppressWarnings(chisq.test(tc))
+fisher_h7 <- fisher.test(tc)
+v_h7 <- v_cramer(tc)
+
+tc_df <- as.data.frame.matrix(tc)
+tc_df$Total <- rowSums(tc_df)
+tc_df$`% con recargo` <- paste0(fnum(100 * tc_df[["Con recargo"]] / tc_df$Total, 1), " %")
+kable(tc_df, caption = "Tabla de contingencia entre condiciones de tráfico y presencia de recargo.")
+
+kable(round(esperadas, 2),
+      caption = "Frecuencias esperadas bajo la hipótesis de independencia.")
+```
+
+```{r h7-pruebas, echo=FALSE}
+tab_h7 <- data.frame(
+  Prueba = c("Chi-cuadrado de independencia", "Exacta de Fisher"),
+  Estadístico = c(fnum(chi_h7$statistic, 3), "-"),
+  gl = c(as.character(chi_h7$parameter), "-"),
+  `Valor p` = c(fp(chi_h7$p.value), fp(fisher_h7$p.value)),
+  `V de Cramér` = c(fnum(v_h7, 3), "-"),
+  Decisión = c(veredicto(chi_h7$p.value), veredicto(fisher_h7$p.value)),
+  check.names = FALSE
+)
+kable(tab_h7, caption = "Contraste de independencia entre tráfico y presencia de recargo.")
+
+min_esp <- min(esperadas)
+```
+
+**Interpretación.** La tabla de frecuencias esperadas contiene el elemento decisivo: el valor
+mínimo es `r fnum(min_esp, 2)`, muy por debajo del umbral de 5 que exige la aproximación
+asintótica de la prueba $\chi^2$. En estas condiciones el valor $p$ del contraste
+chi-cuadrado **no es fiable**, y la referencia válida es la prueba exacta de Fisher, que
+calcula la probabilidad bajo la distribución hipergeométrica sin aproximación alguna.
+
+Atendiendo a Fisher, $p$ `r fp(fisher_h7$p.value)`, de modo que
+**`r veredicto(fisher_h7$p.value)`** de independencia. La intensidad de la asociación,
+medida por la $V$ de Cramér, es `r fnum(v_h7, 3)`.
+
+La lectura honesta de este resultado exige prudencia. Los datos sugieren una mayor proporción
+de recargos bajo tráfico alto, dirección coherente con la teoría del precio dinámico expuesta
+en el Capítulo \@ref(marco); pero el contraste descansa sobre solo
+`r sum(comp$recargo == "Con recargo")` casos con recargo, un número insuficiente para sostener
+una conclusión firme. Lo procedente es **considerar la asociación como una hipótesis
+prometedora pendiente de confirmación** con una muestra mayor, y no como un hallazgo
+establecido.
+
+## Independencia entre los factores de contexto
+
+```{r indep-factores, echo=FALSE}
+pares <- list(
+  c("trafico", "clima"), c("trafico", "franja"),
+  c("clima", "franja"), c("trafico", "dia"), c("clima", "dia")
+)
+nom <- c(trafico = "Tráfico", clima = "Clima", franja = "Franja horaria", dia = "Día")
+
+tab_ind <- do.call(rbind, lapply(pares, function(p) {
+  tt <- table(comp[[p[1]]], comp[[p[2]]])
+  ch <- suppressWarnings(chisq.test(tt))
+  data.frame(
+    `Par de variables` = paste(nom[p[1]], "x", nom[p[2]]),
+    `Chi cuadrado` = fnum(ch$statistic, 3),
+    gl = ch$parameter,
+    `Valor p` = fp(ch$p.value),
+    `V de Cramér` = fnum(v_cramer(tt), 3),
+    Decisión = veredicto(ch$p.value),
+    check.names = FALSE
+  )
+}))
+kable(tab_ind, row.names = FALSE,
+      caption = "Pruebas de independencia entre los factores de contexto.")
+```
+
+**Interpretación.** Ninguna pareja de factores de contexto presenta asociación significativa.
+Tráfico, clima, franja horaria y día de la semana son estadísticamente **independientes entre
+sí** en esta base de datos.
+
+El resultado es relevante por dos motivos. En primer lugar, descarta la confusión estadística
+como explicación alternativa de los resultados anteriores: la ausencia de efecto del clima no
+puede atribuirse a que el clima esté confundido con el tráfico, porque no lo está. En segundo
+lugar, plantea una cuestión sobre la naturaleza misma de los datos: en un entorno urbano real
+cabría esperar cierta asociación entre lluvia y congestión, o entre franja horaria y tráfico.
+Su ausencia total sugiere que los factores fueron asignados de forma independiente, extremo
+que se discute en el capítulo siguiente.
+
+## Síntesis inferencial
+
+```{r sintesis, echo=FALSE}
+sintesis <- data.frame(
+  Hipótesis = c("H1: distancia - precio", "H2: duración - precio",
+                "H3: día hábil vs fin de semana", "H4: tráfico",
+                "H5: clima", "H6: franja horaria",
+                "H7: recargo - tráfico"),
+  `Prueba principal` = c("Correlación de Pearson", "Correlación de Pearson",
+                         "t de Welch", "ANOVA de Welch", "ANOVA de una vía",
+                         "ANOVA de una vía", "Exacta de Fisher"),
+  `Valor p` = c(fp(ct_dist$p.value), fp(ct_dur$p.value), fp(tt_dia$p.value),
+                fp(welch_traf$p.value), fp(summary(aov(precio ~ clima, data = comp))[[1]][1, "Pr(>F)"]),
+                fp(summary(aov(precio ~ franja, data = comp))[[1]][1, "Pr(>F)"]),
+                fp(fisher_h7$p.value)),
+  `Tamaño del efecto` = c(paste0("r = ", fnum(ct_dist$estimate, 3)),
+                          paste0("r = ", fnum(ct_dur$estimate, 3)),
+                          paste0("d = ", fnum(d_dia, 3)),
+                          paste0("eta2 = ", fnum(eta2_traf, 4)),
+                          "eta2 ~ 0", "eta2 ~ 0",
+                          paste0("V = ", fnum(v_h7, 3))),
+  Decisión = c(veredicto(ct_dist$p.value), veredicto(ct_dur$p.value),
+               veredicto(tt_dia$p.value), veredicto(welch_traf$p.value),
+               veredicto(summary(aov(precio ~ clima, data = comp))[[1]][1, "Pr(>F)"]),
+               veredicto(summary(aov(precio ~ franja, data = comp))[[1]][1, "Pr(>F)"]),
+               veredicto(fisher_h7$p.value)),
+  check.names = FALSE
+)
+kable(sintesis, row.names = FALSE,
+      caption = "Síntesis de los contrastes de hipótesis realizados en este avance.")
+```

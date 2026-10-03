@@ -1,0 +1,1657 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{book}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage[]{natbib}
+\bibliographystyle{apalike}
+\usepackage{booktabs}
+\usepackage{amsthm}
+\makeatletter
+\def\thm@space@setup{%
+  \thm@preskip=8pt plus 2pt minus 4pt
+  \thm@postskip=\thm@preskip
+}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Determinantes del precio de las carreras de taxi},
+  pdfauthor={Escribe aquí tu nombre y el de tu institución},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Determinantes del precio de las carreras de taxi}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{Avance de proyecto de investigación: análisis descriptivo e inferencial}
+\author{Escribe aquí tu nombre y el de tu institución}
+\date{17/09/2026}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{1}
+\tableofcontents
+}
+\chapter*{Presentación}\label{presentaciuxf3n}
+\addcontentsline{toc}{chapter}{Presentación}
+
+Este documento constituye el \textbf{avance} del proyecto de investigación y reporta de manera
+reproducible el trabajo estadístico realizado hasta la fecha sobre una base de
+1.000 carreras de taxi. Fue elaborado íntegramente en \textbf{R}
+\citep{rcore} con el paquete \textbf{bookdown} \citep{bookdown}: cada tabla, cada gráfico y cada valor
+numérico que aparece en el texto se recalcula automáticamente a partir del archivo de datos
+original cada vez que el documento se compila. No hay resultados copiados a mano.
+
+\section*{Problema de investigación}\label{problema-de-investigaciuxf3n}
+\addcontentsline{toc}{section}{Problema de investigación}
+
+El precio de una carrera de taxi es el resultado de una estructura tarifaria explícita ---un
+cargo fijo de partida más componentes proporcionales a la distancia y al tiempo--- sobre la que
+pueden actuar factores de contexto: la congestión vehicular, las condiciones meteorológicas,
+la franja horaria o el día de la semana. La literatura sobre tarificación en transporte
+urbano sostiene que estos factores encarecen el servicio, ya sea de forma mecánica (una
+carrera congestionada dura más y acumula más cargo por minuto) o deliberada (mecanismos de
+precio dinámico que elevan la tarifa cuando la demanda supera a la oferta).
+
+El problema que motiva este avance es determinar \textbf{cuáles de esos factores producen realmente
+una variación detectable en el precio final} de una carrera, y con qué magnitud. La
+distinción no es trivial: un factor puede parecer influyente en una comparación simple y
+resultar irrelevante cuando se controla la heterogeneidad de varianzas o la presencia de
+valores extremos.
+
+\section*{Preguntas de investigación}\label{preguntas-de-investigaciuxf3n}
+\addcontentsline{toc}{section}{Preguntas de investigación}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  ¿Qué intensidad tiene la asociación entre el precio de la carrera y sus dos determinantes
+  técnicos, la distancia recorrida y la duración del trayecto?
+\item
+  ¿Difiere el precio medio de las carreras entre días hábiles y fines de semana?
+\item
+  ¿Influyen las condiciones de tráfico, el clima y la franja horaria en el precio de la
+  carrera?
+\item
+  ¿Se reproduce el precio observado a partir de la estructura tarifaria declarada, o existen
+  carreras con recargos no explicados por ella?
+\item
+  En caso de existir tales recargos, ¿están asociados a alguna condición de operación?
+\end{enumerate}
+
+\section*{Objetivos}\label{objetivos}
+\addcontentsline{toc}{section}{Objetivos}
+
+\textbf{Objetivo general.} Identificar y cuantificar, mediante técnicas estadísticas descriptivas e
+inferenciales, los factores asociados al precio de las carreras de taxi registradas en la base
+de datos analizada.
+
+\textbf{Objetivos específicos.}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  Caracterizar la distribución del precio y de sus componentes tarifarios, evaluando
+  simetría, dispersión y presencia de valores atípicos.
+\item
+  Diagnosticar el patrón de datos faltantes y justificar el procedimiento de tratamiento
+  adoptado.
+\item
+  Estimar la intensidad y significación de las asociaciones entre el precio y las variables
+  cuantitativas del trayecto.
+\item
+  Contrastar la igualdad de precios medios entre los niveles de las variables de contexto.
+\item
+  Evaluar la robustez de cada conclusión mediante pruebas no paramétricas, correcciones para
+  varianzas desiguales y análisis de sensibilidad frente a valores extremos.
+\item
+  Verificar la consistencia interna entre el precio observado y la estructura tarifaria
+  declarada.
+\end{enumerate}
+
+\section*{Hipótesis}\label{hipuxf3tesis}
+\addcontentsline{toc}{section}{Hipótesis}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0476}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4444}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5079}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Hipótesis nula (\(H_0\))
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Hipótesis alterna (\(H_1\))
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{H1} & \(\rho_{\text{distancia, precio}} = 0\) & \(\rho \neq 0\) \\
+\textbf{H2} & \(\rho_{\text{duración, precio}} = 0\) & \(\rho \neq 0\) \\
+\textbf{H3} & \(\mu_{\text{hábil}} = \mu_{\text{finde}}\) & \(\mu_{\text{hábil}} \neq \mu_{\text{finde}}\) \\
+\textbf{H4} & \(\mu_{\text{bajo}} = \mu_{\text{medio}} = \mu_{\text{alto}}\) (tráfico) & Al menos una media difiere \\
+\textbf{H5} & \(\mu_{\text{despejado}} = \mu_{\text{lluvia}} = \mu_{\text{nieve}}\) & Al menos una media difiere \\
+\textbf{H6} & Las cuatro franjas horarias tienen igual precio medio & Al menos una difiere \\
+\textbf{H7} & La presencia de recargo es independiente del tráfico & Existe asociación \\
+\end{longtable}
+
+Todas las pruebas se realizan con un nivel de significancia \(\alpha = 0{,}05\).
+
+\section*{Alcance del avance}\label{alcance-del-avance}
+\addcontentsline{toc}{section}{Alcance del avance}
+
+Conforme al alcance definido para esta entrega, el análisis se limita a \textbf{estadística
+descriptiva e inferencia clásica}: estimación por intervalos, correlación, pruebas de
+hipótesis paramétricas y no paramétricas, análisis de varianza y pruebas de asociación entre
+variables categóricas. \textbf{No se incluyen modelos de regresión}; su formulación queda planteada
+como línea de trabajo posterior en el Capítulo \ref{discusion}.
+
+\chapter{Marco teórico}\label{marco}
+
+\section{Fundamento económico y operativo}\label{fundamento-econuxf3mico-y-operativo}
+
+\subsection{La estructura tarifaria del servicio de taxi}\label{la-estructura-tarifaria-del-servicio-de-taxi}
+
+La tarificación del servicio de taxi responde históricamente a una \textbf{estructura bipartita}
+o de dos partes \citep{oi1971}: un cargo fijo de acceso al servicio, conocido como bajada de
+bandera o tarifa base, y un cargo variable proporcional al consumo del servicio. Formalmente,
+el precio de una carrera puede expresarse como
+
+\[P = B + \tau_d \cdot d + \tau_t \cdot t\]
+
+donde \(B\) es la tarifa base, \(\tau_d\) la tarifa por kilómetro, \(d\) la distancia recorrida,
+\(\tau_t\) la tarifa por minuto y \(t\) la duración del trayecto. El cargo fijo recupera los
+costos de disponibilidad del vehículo y del tiempo de espera, mientras que los componentes
+variables recuperan los costos de operación ---combustible, desgaste--- y el costo de oportunidad
+del tiempo del conductor.
+
+La coexistencia de un componente por distancia y otro por tiempo no es redundante: responde
+al hecho de que la misma distancia puede recorrerse en tiempos muy distintos según las
+condiciones de circulación. En condiciones de flujo libre domina el cargo por distancia; en
+condiciones de congestión, el cargo por tiempo compensa al conductor por la pérdida de
+productividad. Esta es la razón por la cual, desde la teoría, \textbf{la congestión debería
+encarecer las carreras} aun sin ninguna intervención tarifaria adicional \citep{small2007}.
+
+\subsection{Congestión, valor del tiempo y costo social}\label{congestiuxf3n-valor-del-tiempo-y-costo-social}
+
+La economía del transporte modela la congestión como una externalidad negativa: cada vehículo
+adicional incrementa el tiempo de viaje de todos los demás. El costo generalizado de un viaje
+integra el costo monetario y el valor monetario del tiempo empleado \citep{small2007}. Aplicado al
+servicio de taxi, este marco predice dos efectos simultáneos y de signo coincidente sobre el
+precio: un alargamiento de la duración del trayecto y, por tanto, del cargo por minuto
+acumulado. La magnitud empírica de este efecto depende críticamente del peso relativo de
+\(\tau_t\) frente a \(\tau_d\) en la estructura tarifaria vigente.
+
+\subsection{Precio dinámico y recargos}\label{precio-dinuxe1mico-y-recargos}
+
+Las plataformas de movilidad bajo demanda incorporaron un mecanismo adicional: el \textbf{precio
+dinámico} o \emph{surge pricing}, consistente en multiplicar la tarifa por un factor mayor que la
+unidad cuando la demanda local supera la oferta de vehículos disponibles \citep{cachon2017}. Su
+función declarada es doble: racionar la demanda y atraer oferta hacia la zona con escasez. La
+evidencia empírica muestra que estos multiplicadores se activan de manera concentrada en el
+tiempo y el espacio, afectando a una fracción minoritaria de los viajes pero con
+incrementos de precio muy sustanciales \citep{chen2015}. Desde el punto de vista estadístico, esto
+implica que la distribución de precios resultante será \textbf{asimétrica a la derecha y con cola
+pesada}: la mayoría de las carreras se liquida a tarifa ordinaria y una minoría, a
+tarifa multiplicada.
+
+Esta predicción teórica tiene una consecuencia metodológica directa que atraviesa todo el
+presente avance: si una fracción pequeña de observaciones concentra valores extremos, las
+técnicas basadas en la media serán vulnerables a ellas y las conclusiones deberán validarse
+con procedimientos robustos.
+
+\subsection{Determinantes contextuales}\label{determinantes-contextuales}
+
+La literatura identifica, además, un conjunto de factores de contexto potencialmente
+asociados al precio:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Franja horaria.} Las horas pico concentran demanda y congestión; la madrugada suele
+  asociarse a recargos nocturnos en las tarifas reguladas.
+\item
+  \textbf{Día de la semana.} Los patrones de movilidad laboral difieren de los de ocio, tanto en
+  volumen como en distancia típica de los desplazamientos.
+\item
+  \textbf{Clima.} La lluvia y la nieve reducen la velocidad de circulación e incrementan la demanda
+  de transporte, presionando el precio al alza por ambas vías \citep{brodeur2018}.
+\item
+  \textbf{Ocupación del vehículo.} En tarifas reguladas el número de pasajeros no suele modificar
+  el precio, a diferencia de lo que ocurre en servicios compartidos.
+\end{itemize}
+
+\section{Fundamento estadístico}\label{fundamento-estaduxedstico}
+
+\subsection{Estadística descriptiva}\label{estaduxedstica-descriptiva}
+
+La caracterización de una variable cuantitativa se organiza en tres dimensiones:
+\textbf{tendencia central} (media aritmética, sensible a valores extremos; mediana, robusta por ser
+un estadístico de orden), \textbf{dispersión} (desviación estándar, en las unidades originales;
+rango intercuartílico, robusto; coeficiente de variación \(CV = s/\bar{x}\), adimensional y
+comparable entre grupos) y \textbf{forma} (asimetría y curtosis, como momentos estandarizados de
+tercer y cuarto orden).
+
+La divergencia entre media y mediana constituye el primer diagnóstico de asimetría. En
+distribuciones con cola derecha pesada la media supera sistemáticamente a la mediana, y la
+brecha entre ambas cuantifica la influencia de los valores extremos.
+
+\subsection{Identificación de valores atípicos}\label{identificaciuxf3n-de-valores-atuxedpicos}
+
+El criterio de Tukey define como atípico todo valor situado fuera del intervalo
+\([Q_1 - 1{,}5\,RIC;\ Q_3 + 1{,}5\,RIC]\), donde \(RIC = Q_3 - Q_1\) \citep{tukey1977}. Su virtud es
+la robustez: los límites se construyen con cuartiles, que no se ven arrastrados por los
+propios valores extremos que se pretende detectar. Un valor atípico no es necesariamente un
+error: puede ser una observación legítima procedente de un régimen de operación distinto, y
+su tratamiento debe justificarse sustantivamente y no solo estadísticamente.
+
+\subsection{Datos faltantes}\label{datos-faltantes}
+
+\citet{rubin1976} clasifica los mecanismos de ausencia en tres tipos: completamente aleatorios
+(MCAR), aleatorios condicionados a variables observadas (MAR) y no aleatorios (MNAR). Bajo
+MCAR la eliminación por lista produce estimaciones insesgadas, con la única penalización de
+una pérdida de potencia. Bajo los otros mecanismos introduce sesgo. La plausibilidad del
+supuesto MCAR puede evaluarse empíricamente comparando las observaciones completas con las
+incompletas en las variables efectivamente registradas: si no difieren sistemáticamente, la
+hipótesis MCAR resulta defendible.
+
+\subsection{Correlación}\label{correlaciuxf3n}
+
+El coeficiente de correlación de Pearson mide la intensidad de la asociación \textbf{lineal} entre
+dos variables cuantitativas:
+
+\[r = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum (x_i - \bar{x})^2 \sum (y_i - \bar{y})^2}}\]
+
+Su cuadrado, \(r^2\), expresa la proporción de varianza compartida. La significación se contrasta
+mediante el estadístico \(t = r\sqrt{(n-2)/(1-r^2)}\) con \(n-2\) grados de libertad, y el
+intervalo de confianza se construye sobre la transformación \(z\) de Fisher.
+
+El coeficiente de Spearman aplica la misma fórmula sobre los rangos, con lo que mide
+asociación \textbf{monótona} y resiste tanto la no linealidad como los valores extremos. La
+comparación entre ambos coeficientes es informativa por sí misma: una discrepancia apreciable
+señala que la relación no es lineal o que unos pocos puntos extremos están inflando la
+estimación paramétrica. Conviene recordar que la correlación cuantifica covariación, no
+causalidad.
+
+\subsection{Contraste de hipótesis}\label{contraste-de-hipuxf3tesis}
+
+El esquema de Neyman--Pearson formaliza la decisión entre \(H_0\) y \(H_1\) controlando la
+probabilidad de error tipo I en un nivel \(\alpha\) prefijado \citep{fisher1925}. El valor \(p\) es la
+probabilidad de observar un estadístico al menos tan extremo como el obtenido \textbf{bajo el
+supuesto de que \(H_0\) es cierta}; no es la probabilidad de que \(H_0\) sea verdadera. Por ello
+todo contraste debe acompañarse de su \textbf{tamaño del efecto}, que informa sobre la magnitud
+práctica del fenómeno con independencia del tamaño muestral \citep{cohen1988}.
+
+\subsection{Pruebas empleadas en este avance}\label{pruebas-empleadas-en-este-avance}
+
+\textbf{Supuestos.} La normalidad se evalúa con la prueba de Shapiro--Wilk \citep{shapiro1965} y con
+gráficos cuantil--cuantil. En muestras grandes esta prueba detecta desviaciones ínfimas y
+carentes de relevancia práctica, por lo que su resultado debe ponderarse junto con la
+inspección gráfica y con el \textbf{teorema central del límite}, que garantiza la normalidad
+asintótica de la media muestral. La homogeneidad de varianzas se contrasta mediante la prueba
+de Brown--Forsythe, variante de la de Levene que emplea desviaciones respecto de la mediana y
+resulta por ello robusta frente a la asimetría \citep{brown1974}.
+
+\textbf{Comparación de dos medias.} La prueba \(t\) de Welch \citep{welch1947} contrasta
+\(H_0: \mu_1 = \mu_2\) sin exigir igualdad de varianzas, corrigiendo los grados de libertad
+mediante la aproximación de Satterthwaite. Su tamaño del efecto es la \(d\) de Cohen. La
+alternativa no paramétrica es la prueba \(U\) de Mann--Whitney--Wilcoxon \citep{mann1947}.
+
+\textbf{Comparación de más de dos medias.} El análisis de varianza descompone la variabilidad total
+y contrasta la igualdad de medias con \(F = CM_{factor}/CM_{error}\); el tamaño del efecto es
+\(\eta^2 = SC_{factor}/SC_{total}\). Cuando las varianzas son desiguales se emplea la versión de
+Welch del ANOVA, y cuando la normalidad es dudosa, la prueba de Kruskal--Wallis
+\citep{kruskal1952}, cuyo tamaño del efecto asociado es \(\epsilon^2\). Ante un resultado
+significativo, la prueba HSD de Tukey \citep{tukey1949} identifica qué pares difieren controlando
+la tasa de error por familia.
+
+\textbf{Asociación entre variables categóricas.} La prueba \(\chi^2\) de independencia compara
+frecuencias observadas y esperadas, \(\chi^2 = \sum (O_{ij}-E_{ij})^2/E_{ij}\), y su intensidad
+se mide con la \(V\) de Cramér \citep{cramer1946}. La aproximación asintótica exige frecuencias
+esperadas suficientes; cuando alguna cae por debajo de cinco se recurre a la \textbf{prueba exacta
+de Fisher}, que calcula la probabilidad bajo la distribución hipergeométrica sin aproximación
+alguna.
+
+\textbf{Remuestreo.} El \emph{bootstrap} \citep{efron1979} estima la distribución muestral de un estadístico
+remuestreando con reemplazo los datos observados, sin invocar supuestos distribucionales.
+Resulta especialmente valioso cuando la variable es asimétrica, situación en la que los
+intervalos teóricos pueden estar mal calibrados.
+
+\textbf{Análisis de sensibilidad.} Repetir un contraste excluyendo las observaciones extremas
+permite determinar si una conclusión descansa sobre el conjunto de los datos o sobre unas
+pocas observaciones influyentes. Es un procedimiento elemental y, sin embargo, decisivo: en
+este avance resulta ser el que resuelve la contradicción más importante encontrada.
+
+\chapter{Metodología}\label{metodologia}
+
+\section{Tipo y diseño de estudio}\label{tipo-y-diseuxf1o-de-estudio}
+
+La investigación es de enfoque \textbf{cuantitativo}, alcance \textbf{descriptivo-correlacional} y
+diseño \textbf{no experimental, transversal y retrospectivo}. No existe manipulación de variables
+por parte del equipo investigador: los factores de contexto ---tráfico, clima, franja horaria,
+día--- se registran tal como ocurrieron. Esta condición delimita el alcance interpretativo de
+los resultados: las asociaciones detectadas no autorizan, por sí solas, inferencias causales.
+
+\section{Unidad de análisis y fuente de datos}\label{unidad-de-anuxe1lisis-y-fuente-de-datos}
+
+La unidad de análisis es la \textbf{carrera de taxi individual}. La base contiene
+1.000 registros y 11 variables, correspondientes a
+la distancia, la duración, la ocupación, los tres componentes tarifarios, cuatro factores de
+contexto y el precio final cobrado.
+
+\section{Operacionalización de las variables}\label{operacionalizaciuxf3n-de-las-variables}
+
+\begin{table}
+
+\caption{\label{tab:tabla-variables}Matriz de operacionalización de variables.}
+\centering
+\begin{tabular}[t]{l|l|l|l}
+\hline
+Variable & Rol & Naturaleza & Escala / niveles\\
+\hline
+Precio de la carrera & Dependiente & Cuantitativa continua & Razón (unidades monetarias)\\
+\hline
+Distancia & Independiente & Cuantitativa continua & Razón (kilómetros)\\
+\hline
+Duración & Independiente & Cuantitativa continua & Razón (minutos)\\
+\hline
+Pasajeros & Independiente & Cuantitativa discreta & Razón (1 a 4)\\
+\hline
+Tarifa base & Independiente & Cuantitativa continua & Razón (unidades monetarias)\\
+\hline
+Tarifa por km & Independiente & Cuantitativa continua & Razón (por kilómetro)\\
+\hline
+Tarifa por minuto & Independiente & Cuantitativa continua & Razón (por minuto)\\
+\hline
+Tráfico & Independiente & Cualitativa ordinal & Bajo / Medio / Alto\\
+\hline
+Clima & Independiente & Cualitativa nominal & Despejado / Lluvia / Nieve\\
+\hline
+Franja horaria & Independiente & Cualitativa ordinal & Mañana / Tarde / Noche / Madrugada\\
+\hline
+Día & Independiente & Cualitativa nominal & Día hábil / Fin de semana\\
+\hline
+\end{tabular}
+\end{table}
+
+Adicionalmente se construyeron dos \textbf{variables derivadas}, necesarias para responder a las
+preguntas 4 y 5:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Tarifa teórica:} \(\hat{P} = B + \tau_d \cdot d + \tau_t \cdot t\), es decir, el precio que
+  correspondería a cada carrera aplicando estrictamente la estructura tarifaria declarada en
+  la propia base.
+\item
+  \textbf{Recargo:} variable dicotómica que clasifica cada carrera según si el precio observado
+  excede en más de un 1 \% a la tarifa teórica. El umbral del 1 \% actúa como tolerancia frente
+  al redondeo y evita clasificar como recargo lo que solo es error de precisión numérica.
+\end{itemize}
+
+\section{Tratamiento de los datos faltantes}\label{tratamiento-de-los-datos-faltantes}
+
+\begin{table}
+
+\caption{\label{tab:tabla-faltantes}Recuento de valores faltantes por variable.}
+\centering
+\begin{tabular}[t]{l|r|l}
+\hline
+Variable & Casos faltantes & Porcentaje\\
+\hline
+distancia & 50 & 5.0 \%\\
+\hline
+franja & 50 & 5.0 \%\\
+\hline
+dia & 50 & 5.0 \%\\
+\hline
+pasajeros & 50 & 5.0 \%\\
+\hline
+trafico & 50 & 5.0 \%\\
+\hline
+clima & 50 & 5.0 \%\\
+\hline
+tarifa\_base & 50 & 5.0 \%\\
+\hline
+tarifa\_km & 50 & 5.0 \%\\
+\hline
+tarifa\_min & 50 & 5.0 \%\\
+\hline
+duracion & 50 & 5.0 \%\\
+\hline
+precio & 49 & 4.9 \%\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}
+
+\caption{\label{tab:tabla-faltantes}Distribución del número de valores faltantes por registro.}
+\centering
+\begin{tabular}[t]{l|r}
+\hline
+Número de valores faltantes en el registro & Cantidad de registros\\
+\hline
+0 & 562\\
+\hline
+1 & 341\\
+\hline
+2 & 83\\
+\hline
+3 & 14\\
+\hline
+\end{tabular}
+\end{table}
+
+La ausencia de información afecta a todas las variables en una proporción muy similar,
+cercana al 5 \% en cada una, y se distribuye de forma dispersa entre los registros: la mayoría
+de los casos incompletos presenta un único valor ausente. Este patrón ---uniforme entre
+variables y sin concentración en registros concretos--- es el que cabría esperar de un mecanismo
+\textbf{completamente aleatorio (MCAR)} en el sentido de \citet{rubin1976}.
+
+Para someter esa presunción a prueba se comparan los casos completos con los incompletos en
+las variables efectivamente observadas:
+
+\begin{table}
+
+\caption{\label{tab:prueba-mcar}Comparación entre casos completos e incompletos como diagnóstico del mecanismo de ausencia.}
+\centering
+\begin{tabular}[t]{l|l|l|l|l}
+\hline
+Variable & Prueba & Media casos completos & Media casos incompletos & Valor p\\
+\hline
+Precio & t de Welch & 57.66 & 55.74 & = 0.4517\\
+\hline
+Precio & U de Mann-Whitney & - & - & = 0.7680\\
+\hline
+Distancia & t de Welch & 27.77 & 26.05 & = 0.1775\\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Interpretación.} Ninguna de las comparaciones alcanza significación estadística: los
+registros incompletos no difieren de los completos ni en precio ni en distancia. La evidencia
+es por tanto compatible con un mecanismo MCAR, bajo el cual la \textbf{eliminación por lista}
+produce estimaciones insesgadas. Se adopta en consecuencia ese procedimiento, trabajando con
+los 562 casos completos (56.2 \% de la base original).
+
+Debe reconocerse el costo de esta decisión: se descarta cerca del
+44 \% de los registros, con la consiguiente pérdida de
+potencia estadística. La alternativa ---imputar los valores ausentes mediante métodos múltiples---
+se plantea como línea de trabajo para la siguiente fase del proyecto.
+
+\section{Plan de análisis estadístico}\label{plan-de-anuxe1lisis-estaduxedstico}
+
+El análisis se ejecuta en cuatro fases encadenadas:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Exploración descriptiva.} Medidas de tendencia central, dispersión y forma; detección de
+  valores atípicos por el criterio de Tukey; caracterización gráfica global y por grupos.
+\item
+  \textbf{Verificación de supuestos.} Shapiro--Wilk y gráficos cuantil--cuantil para la normalidad;
+  Brown--Forsythe para la homogeneidad de varianzas.
+\item
+  \textbf{Inferencia.} Correlaciones de Pearson y Spearman con sus intervalos de confianza;
+  prueba \(t\) de Welch; ANOVA de una vía, ANOVA de Welch y Kruskal--Wallis; comparaciones
+  múltiples de Tukey; pruebas \(\chi^2\) y exacta de Fisher.
+\item
+  \textbf{Robustez.} Intervalos bootstrap con \(B = 10\,000\) remuestreos y análisis de sensibilidad
+  mediante exclusión de las observaciones extremas.
+\end{enumerate}
+
+\section{Criterios de decisión}\label{criterios-de-decisiuxf3n}
+
+Se fija \(\alpha = 0{,}05\). Toda conclusión se acompaña del tamaño del efecto correspondiente
+(\(r\), \(d\) de Cohen, \(\eta^2\), \(\epsilon^2\) o \(V\) de Cramér) y, cuando procede, de su intervalo
+de confianza. Una conclusión se considera \textbf{sólida} únicamente cuando la prueba paramétrica,
+la no paramétrica y el análisis de sensibilidad coinciden.
+
+\section{Herramientas y reproducibilidad}\label{herramientas-y-reproducibilidad}
+
+El análisis se ejecutó en R \citep{rcore}; los gráficos se construyeron con la gramática de
+gráficos implementada en \textbf{ggplot2} \citep{ggplot2} y el informe se generó con \textbf{bookdown}
+\citep{bookdown}. La semilla aleatoria se fijó en 2024, de modo que los procedimientos basados en
+remuestreo producen resultados idénticos en cualquier ejecución posterior. El código fuente
+completo y la base de datos original acompañan a este documento en el repositorio del
+proyecto.
+
+\section{Consideraciones éticas}\label{consideraciones-uxe9ticas}
+
+La base de datos analizada contiene registros operativos agregados de carreras de taxi y \textbf{no
+incluye información que permita identificar a personas}: no hay nombres, documentos,
+coordenadas de origen o destino, ni identificadores de conductor o pasajero. El trabajo
+constituye un análisis secundario de datos de acceso público, por lo que no requiere
+consentimiento informado ni aprobación de un comité de ética en investigación.
+
+\chapter{Análisis descriptivo}\label{descriptivo}
+
+A partir de este capítulo se trabaja con la submuestra de 562 carreras completas
+justificada en el Capítulo \ref{metodologia}.
+
+\section{Caracterización global del precio}\label{caracterizaciuxf3n-global-del-precio}
+
+\begin{table}
+
+\caption{\label{tab:desc-global}Estadísticos descriptivos del precio de la carrera.}
+\centering
+\begin{tabular}[t]{l|l}
+\hline
+Estadístico & Valor\\
+\hline
+n & 562\\
+\hline
+Media & 57.66\\
+\hline
+Error estándar & 1.854\\
+\hline
+IC 95\% de la media & [54.02 ; 61.31]\\
+\hline
+Mediana & 50.16\\
+\hline
+Desviación estándar & 43.96\\
+\hline
+Coeficiente de variación & 76.2 \%\\
+\hline
+Mínimo & 6.13\\
+\hline
+Máximo & 332.04\\
+\hline
+Q1 & 33.58\\
+\hline
+Q3 & 69.15\\
+\hline
+Rango intercuartílico & 35.56\\
+\hline
+Asimetría & 3.761\\
+\hline
+Curtosis (exceso) & 18.599\\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Interpretación.} El precio medio de una carrera es de 57.66 unidades
+monetarias, pero ese valor describe mal a la carrera típica. La mediana, 50.16,
+es sensiblemente inferior, y la distancia entre ambas medidas es el primer indicio de una
+\textbf{asimetría positiva pronunciada}: la media está siendo arrastrada al alza por un grupo
+reducido de carreras muy caras.
+
+Los coeficientes de forma confirman el diagnóstico de manera contundente. La asimetría alcanza
+3.76 ---frente al valor 0 de una distribución simétrica--- y la curtosis en
+exceso llega a 18.6, muy por encima del 0 correspondiente a una normal.
+Se trata de una distribución \textbf{fuertemente asimétrica a la derecha y leptocúrtica}, con una
+cola derecha larga y pesada. El coeficiente de variación de
+76.2 \% ratifica una heterogeneidad muy elevada.
+
+Este perfil no es una anomalía inesperada: es exactamente el que predice el marco teórico del
+Capítulo \ref{marco} para un mercado donde la mayoría de las carreras se liquida a tarifa
+ordinaria y una minoría incorpora recargos o corresponde a trayectos excepcionalmente largos.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.92\linewidth]{bookdown-demo_files/figure-latex/fig-hist-1} 
+
+}
+
+\caption{Distribución del precio de la carrera. La línea discontinua marca la media y la punteada la mediana.}\label{fig:fig-hist}
+\end{figure}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.92\linewidth]{bookdown-demo_files/figure-latex/fig-hist-log-1} 
+
+}
+
+\caption{El mismo histograma en escala logarítmica, donde la forma se aproxima a la campana.}\label{fig:fig-hist-log}
+\end{figure}
+
+La comparación entre las Figuras \ref{fig:fig-hist} y \ref{fig:fig-hist-log} es
+metodológicamente relevante. En escala original la distribución es claramente asimétrica; en
+escala logarítmica recupera una forma acampanada y razonablemente simétrica. Esto indica que
+la asimetría es de naturaleza \textbf{multiplicativa}, característica de las variables de precio:
+los factores que encarecen una carrera actúan proporcionalmente y no por adición de una
+cantidad fija. Es la firma estadística de un mecanismo tarifario basado en tasas y
+multiplicadores.
+
+\section{Valores atípicos}\label{valores-atuxedpicos}
+
+\begin{table}
+
+\caption{\label{tab:atipicos}Identificación de valores atípicos mediante el criterio de Tukey.}
+\centering
+\begin{tabular}[t]{l|l}
+\hline
+Elemento & Valor\\
+\hline
+Q1 & 33.58\\
+\hline
+Q3 & 69.15\\
+\hline
+Rango intercuartílico & 35.56\\
+\hline
+Límite inferior de Tukey & -19.76\\
+\hline
+Límite superior de Tukey & 122.49\\
+\hline
+Atípicos por exceso & 17\\
+\hline
+Atípicos por defecto & 0\\
+\hline
+Porcentaje de atípicos & 3.0 \%\\
+\hline
+Precio máximo observado & 332.04\\
+\hline
+Distancia media de los atípicos & 111.07\\
+\hline
+Distancia media del resto & 25.17\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.92\linewidth]{bookdown-demo_files/figure-latex/fig-box-global-1} 
+
+}
+
+\caption{Diagrama de caja del precio. Los puntos situados a la derecha del bigote son los atípicos por exceso.}\label{fig:fig-box-global}
+\end{figure}
+
+\textbf{Interpretación.} El criterio de Tukey identifica 17 carreras atípicas, todas ellas
+por exceso, que representan apenas el 3.0 \% de la submuestra. Su
+característica más llamativa no es el precio sino la \textbf{distancia}: estas carreras recorren en
+promedio 111.07 kilómetros, frente a
+25.17 kilómetros del resto.
+
+La conclusión descriptiva es importante y condiciona todo el capítulo siguiente: los valores
+extremos \textbf{no parecen errores de registro}, sino trayectos de larga distancia que constituyen
+un régimen de operación distinto. Por tratarse de observaciones legítimas no se eliminan del
+análisis, pero su influencia potencial sobre las pruebas basadas en medias obliga a un
+análisis de sensibilidad específico, que se desarrolla en la Sección
+\ref{sensibilidad}.
+
+\section{Las variables del trayecto}\label{las-variables-del-trayecto}
+
+\begin{table}
+
+\caption{\label{tab:desc-numericas}Estadísticos descriptivos de las variables cuantitativas del trayecto.}
+\centering
+\begin{tabular}[t]{l|r|r|r|r|r|r|r|r}
+\hline
+Variable & n & Media & Desv. est. & CV (\%) & Mediana & Mínimo & Máximo & Asimetría\\
+\hline
+Distancia (km) & 562 & 27.77 & 21.15 & 76.16 & 26.42 & 1.27 & 146.07 & 2.46\\
+\hline
+Duración (min) & 562 & 61.83 & 32.13 & 51.97 & 61.21 & 5.01 & 119.84 & 0.01\\
+\hline
+Pasajeros & 562 & 2.53 & 1.11 & 43.76 & 3.00 & 1.00 & 4.00 & -0.02\\
+\hline
+Tarifa base & 562 & 3.51 & 0.87 & 24.82 & 3.54 & 2.01 & 5.00 & -0.01\\
+\hline
+Tarifa por km & 562 & 1.22 & 0.43 & 35.28 & 1.20 & 0.50 & 2.00 & 0.14\\
+\hline
+Tarifa por minuto & 562 & 0.29 & 0.11 & 39.84 & 0.28 & 0.10 & 0.50 & 0.12\\
+\hline
+Precio & 562 & 57.66 & 43.96 & 76.23 & 50.16 & 6.13 & 332.04 & 3.76\\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Interpretación.} La lectura conjunta de la Tabla \ref{tab:desc-numericas} revela una
+asimetría muy desigual entre variables. Los \textbf{componentes tarifarios} ---tarifa base, tarifa
+por kilómetro y tarifa por minuto--- presentan coeficientes de asimetría próximos a cero y
+recorridos acotados, lo que sugiere que fueron asignados de manera aproximadamente uniforme
+dentro de rangos administrativos predefinidos. La \textbf{duración} y el número de \textbf{pasajeros}
+muestran igualmente perfiles simétricos.
+
+En contraste, la \textbf{distancia} y el \textbf{precio} son las dos únicas variables con asimetría
+positiva apreciable, y lo son en grados similares. Esta coincidencia es la primera señal, aún
+descriptiva, de que ambas variables comparten un mismo mecanismo generador: el precio hereda
+la forma de la distribución de la distancia. El Capítulo \ref{inferencial} contrasta
+formalmente esta relación.
+
+\section{El precio según los factores de contexto}\label{el-precio-seguxfan-los-factores-de-contexto}
+
+\begin{table}
+
+\caption{\label{tab:desc-factores}Precio de la carrera según cada factor de contexto.}
+\centering
+\begin{tabular}[t]{l|l|r|r|r|r|r}
+\hline
+Factor & Nivel & n & Media & Desv. est. & Mediana & CV (\%)\\
+\hline
+Tráfico & Bajo & 218 & 55.54 & 36.06 & 47.83 & 64.92\\
+\hline
+Tráfico & Medio & 236 & 54.36 & 35.82 & 49.72 & 65.90\\
+\hline
+Tráfico & Alto & 108 & 69.17 & 67.15 & 55.14 & 97.08\\
+\hline
+Clima & Despejado & 386 & 57.34 & 44.55 & 49.82 & 77.69\\
+\hline
+Clima & Lluvia & 134 & 58.84 & 44.72 & 50.86 & 76.00\\
+\hline
+Clima & Nieve & 42 & 56.85 & 36.17 & 49.33 & 63.62\\
+\hline
+Franja horaria & Mañana & 157 & 56.67 & 42.97 & 50.50 & 75.82\\
+\hline
+Franja horaria & Tarde & 220 & 57.83 & 45.15 & 49.85 & 78.07\\
+\hline
+Franja horaria & Noche & 124 & 58.13 & 42.69 & 49.82 & 73.44\\
+\hline
+Franja horaria & Madrugada & 61 & 58.66 & 45.67 & 54.37 & 77.86\\
+\hline
+Día & Día hábil & 381 & 59.69 & 46.16 & 52.10 & 77.33\\
+\hline
+Día & Fin de semana & 181 & 53.41 & 38.70 & 46.18 & 72.47\\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Interpretación.} La Tabla \ref{tab:desc-factores} ofrece un resultado que contradice la
+expectativa teórica. Las medias de precio son notablemente \textbf{similares} entre los niveles de
+casi todos los factores: las cuatro franjas horarias difieren entre sí en menos de dos
+unidades monetarias, y lo mismo ocurre entre condiciones climáticas. Si la congestión y el
+clima encarecieran las carreras según predice la literatura, las diferencias deberían ser
+visibles ya en esta tabla.
+
+La única excepción aparente es el \textbf{tráfico alto}, cuya media supera a la de los otros dos
+niveles. Sin embargo, la propia tabla contiene el elemento que obliga a la cautela: la
+desviación estándar del grupo de tráfico alto casi duplica a la de los demás, y su \textbf{mediana}
+no se aparta de la de los otros niveles del mismo modo que su media. Cuando la media se
+desplaza pero la mediana no lo hace, la explicación habitual es la presencia de unas pocas
+observaciones extremas dentro de ese grupo. Retengamos esta observación: reaparecerá como el
+hallazgo central del análisis inferencial.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.92\linewidth]{bookdown-demo_files/figure-latex/fig-box-factores-1} 
+
+}
+
+\caption{Distribución del precio según cada factor de contexto (escala logarítmica para facilitar la comparación).}\label{fig:fig-box-factores}
+\end{figure}
+
+La Figura \ref{fig:fig-box-factores} confirma visualmente la impresión anterior: las cajas
+están prácticamente alineadas dentro de cada panel. No se aprecia el desplazamiento sistemático
+que evidenciaría un efecto de contexto sobre el precio. Los puntos rojos ---los atípicos---
+aparecen distribuidos entre todos los niveles.
+
+\section{Relación entre el precio y las variables del trayecto}\label{relaciuxf3n-entre-el-precio-y-las-variables-del-trayecto}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.92\linewidth]{bookdown-demo_files/figure-latex/fig-matriz-cor-1} 
+
+}
+
+\caption{Matriz de correlaciones de Pearson entre las variables cuantitativas.}\label{fig:fig-matriz-cor}
+\end{figure}
+
+\textbf{Interpretación.} La matriz de la Figura \ref{fig:fig-matriz-cor} concentra el hallazgo
+descriptivo más importante del capítulo. La fila del precio muestra una correlación muy
+elevada con la \textbf{distancia} y correlaciones sustancialmente menores con todas las demás
+variables. Igualmente revelador es lo que ocurre fuera de esa fila: las variables explicativas
+entre sí presentan correlaciones próximas a cero. Distancia y duración, en particular, son
+prácticamente \textbf{ortogonales}, lo cual es llamativo desde el punto de vista sustantivo ---cabría
+esperar que los trayectos más largos duraran más--- y constituye una característica de la base
+que se discutirá en el Capítulo \ref{discusion}.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.92\linewidth]{bookdown-demo_files/figure-latex/fig-dispersion-1} 
+
+}
+
+\caption{Relación del precio con la distancia y con la duración del trayecto.}\label{fig:fig-dispersion}
+\end{figure}
+
+El contraste entre los dos paneles de la Figura \ref{fig:fig-dispersion} es nítido. Frente a
+la distancia los puntos se ordenan siguiendo una pauta ascendente clara, con una dispersión
+que se abre a medida que crece la distancia. Frente a la duración, en cambio, la nube es
+esencialmente \textbf{amorfa}: no se distingue tendencia alguna. El precio aumenta con los
+kilómetros recorridos, no con los minutos transcurridos.
+
+\section{Consistencia con la estructura tarifaria}\label{consistencia-con-la-estructura-tarifaria}
+
+\begin{table}
+
+\caption{\label{tab:tarifa-teorica}Comparación entre el precio observado y la tarifa teórica derivada de la estructura declarada.}
+\centering
+\begin{tabular}[t]{l|l}
+\hline
+Elemento & Valor\\
+\hline
+Carreras analizadas & 562\\
+\hline
+Carreras cuyo precio coincide con la tarifa teórica & 548\\
+\hline
+Porcentaje de coincidencia exacta & 97.5 \%\\
+\hline
+Carreras con recargo (razón > 1,01) & 13\\
+\hline
+Razón mediana & 1.000\\
+\hline
+Razón máxima & 3.273\\
+\hline
+Precio medio de las carreras con recargo & 287.86\\
+\hline
+Precio medio de las carreras sin recargo & 52.21\\
+\hline
+Distancia media de las carreras con recargo & 125.92\\
+\hline
+Distancia media de las carreras sin recargo & 25.45\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.92\linewidth]{bookdown-demo_files/figure-latex/fig-tarifa-1} 
+
+}
+
+\caption{Precio observado frente a tarifa teórica. La línea discontinua es la diagonal de coincidencia perfecta.}\label{fig:fig-tarifa}
+\end{figure}
+
+\textbf{Interpretación: el mecanismo de formación del precio.} La Tabla \ref{tab:tarifa-teorica} y
+la Figura \ref{fig:fig-tarifa} resuelven la cuarta pregunta de investigación de manera casi
+definitiva. En 97.5 \% de las carreras el precio observado \textbf{coincide
+exactamente} con la tarifa teórica calculada a partir de la estructura bipartita declarada.
+La razón mediana entre precio observado y tarifa teórica es 1.000.
+
+El precio no es, por tanto, una variable con componente aleatorio apreciable: es una función
+determinista de la tarifa base, la distancia y la duración. Esto explica de manera inmediata
+por qué los factores de contexto no aparecían asociados al precio en la Tabla
+\ref{tab:desc-factores}: \textbf{no pueden estarlo}, salvo que modifiquen alguno de los
+componentes de esa fórmula.
+
+Existe, sin embargo, una excepción cuantitativamente pequeña pero conceptualmente decisiva:
+13 carreras se apartan de la diagonal, con razones que
+llegan hasta 3.27. Son precisamente las carreras que aparecen en rojo en la
+parte superior de la Figura \ref{fig:fig-tarifa} y coinciden en buena medida con los valores
+atípicos detectados antes: trayectos muy largos cuyo precio excede a la tarifa teórica. La
+quinta pregunta de investigación ---si estos recargos se asocian a alguna condición de
+operación--- se responde mediante la prueba de asociación del Capítulo \ref{inferencial}.
+
+\section{Síntesis descriptiva}\label{suxedntesis-descriptiva}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  El precio presenta una distribución fuertemente asimétrica a la derecha, con
+  17 valores atípicos correspondientes a trayectos de larga distancia.
+\item
+  La asimetría es de naturaleza multiplicativa: la transformación logarítmica restituye la
+  simetría.
+\item
+  La distancia es la única variable del trayecto fuertemente asociada al precio; la duración
+  apenas lo está.
+\item
+  Los factores de contexto no muestran diferencias descriptivas apreciables en el precio.
+\item
+  El precio se reproduce exactamente a partir de la estructura tarifaria declarada en
+  97.5 \% de los casos.
+\end{enumerate}
+
+\chapter{Análisis inferencial}\label{inferencial}
+
+\section{Verificación de supuestos}\label{verificaciuxf3n-de-supuestos}
+
+\subsection{Normalidad}\label{normalidad}
+
+\begin{table}
+
+\caption{\label{tab:sw}Prueba de Shapiro-Wilk de normalidad sobre el precio y su transformación logarítmica.}
+\centering
+\begin{tabular}[t]{l|l|l|l}
+\hline
+Variable & Estadístico W & Valor p & Decisión\\
+\hline
+Precio & 0.6509 & < 0,001 & se rechaza la hipótesis nula\\
+\hline
+Logaritmo del precio & 0.9731 & < 0,001 & se rechaza la hipótesis nula\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.92\linewidth]{bookdown-demo_files/figure-latex/fig-qq-1} 
+
+}
+
+\caption{Gráficos cuantil-cuantil del precio en escala original y logarítmica.}\label{fig:fig-qq}
+\end{figure}
+
+\textbf{Interpretación.} La prueba de Shapiro--Wilk rechaza la normalidad del precio de forma
+categórica, con un estadístico \(W = 0.651\) muy alejado de la unidad. La
+transformación logarítmica mejora sustancialmente el ajuste ---\(W\) asciende hasta
+0.973---, aunque el rechazo persiste.
+
+Este resultado debe interpretarse con criterio y no de forma mecánica. Con
+\(n = 562\) observaciones, la prueba de Shapiro--Wilk alcanza una potencia tan elevada que
+detecta desviaciones de la normalidad irrelevantes en la práctica. El panel izquierdo de la
+Figura \ref{fig:fig-qq} muestra que la desviación se concentra casi por completo en el
+extremo superior ---los mismos valores atípicos de larga distancia ya identificados---, mientras
+que el cuerpo central de la distribución se ajusta razonablemente a la recta teórica. Además,
+el \textbf{teorema central del límite} garantiza la normalidad asintótica de la media muestral con
+tamaños de muestra como el disponible.
+
+La decisión metodológica que se adopta, en consecuencia, no es descartar las pruebas
+paramétricas sino \textbf{acompañar cada una de ellas con su equivalente no paramétrico}, y
+considerar sólida únicamente la conclusión en que ambas coincidan.
+
+\subsection{Homogeneidad de varianzas}\label{homogeneidad-de-varianzas}
+
+\begin{table}
+
+\caption{\label{tab:bf}Prueba de Brown-Forsythe de homogeneidad de varianzas del precio en cada factor.}
+\centering
+\begin{tabular}[t]{l|l|l|l|l}
+\hline
+Factor & F & gl & Valor p & Decisión\\
+\hline
+Tráfico & 6.489 & 2 ; 559 & = 0.0016 & se rechaza la hipótesis nula\\
+\hline
+Clima & 0.318 & 2 ; 559 & = 0.7275 & no se rechaza la hipótesis nula\\
+\hline
+Franja horaria & 0.051 & 3 ; 558 & = 0.9849 & no se rechaza la hipótesis nula\\
+\hline
+Día & 0.640 & 1 ; 560 & = 0.4242 & no se rechaza la hipótesis nula\\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Interpretación.} El supuesto de homocedasticidad se cumple para el clima, la franja horaria
+y el día de la semana, pero \textbf{se rechaza para el tráfico} (\(p\) = 0.0016). Las
+varianzas del precio difieren significativamente entre condiciones de circulación, tal como
+anticipaba la Tabla \ref{tab:desc-factores}.
+
+Esta violación tiene una consecuencia práctica precisa: el ANOVA clásico aplicado al factor
+tráfico \textbf{no es válido} en su forma estándar, porque su estadístico \(F\) presupone un
+cuadrado medio del error común a todos los grupos. Para ese factor se emplearán, además del
+ANOVA clásico con fines comparativos, la versión de Welch del ANOVA y la prueba de
+Kruskal--Wallis.
+
+\section{Hipótesis 1 y 2: asociación del precio con distancia y duración}\label{hipuxf3tesis-1-y-2-asociaciuxf3n-del-precio-con-distancia-y-duraciuxf3n}
+
+\[H_0: \rho = 0 \qquad \text{frente a} \qquad H_1: \rho \neq 0\]
+
+\begin{table}
+
+\caption{\label{tab:correlaciones}Correlaciones del precio con las variables cuantitativas del trayecto.}
+\centering
+\begin{tabular}[t]{l|l|l|l|l|l|l}
+\hline
+Variable & r de Pearson & IC 95\% de r & r cuadrado & Valor p & rho de Spearman & Intensidad\\
+\hline
+Distancia (km) & 0.863 & [0.840 ; 0.883] & 0.745 & < 0,001 & 0.715 & fuerte\\
+\hline
+Duración (min) & 0.222 & [0.142 ; 0.299] & 0.049 & < 0,001 & 0.363 & débil\\
+\hline
+Pasajeros & 0.016 & [-0.067 ; 0.098] & 0.000 & = 0.7087 & 0.063 & despreciable\\
+\hline
+Tarifa base & 0.031 & [-0.052 ; 0.113] & 0.001 & = 0.4648 & 0.079 & despreciable\\
+\hline
+Tarifa por km & 0.278 & [0.200 ; 0.353] & 0.077 & < 0,001 & 0.420 & débil\\
+\hline
+Tarifa por minuto & 0.111 & [0.029 ; 0.192] & 0.012 & = 0.0085 & 0.245 & débil\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.92\linewidth]{bookdown-demo_files/figure-latex/fig-boot-r-1} 
+
+}
+
+\caption{Distribución bootstrap del coeficiente de correlación entre distancia y precio (B = 10.000).}\label{fig:fig-boot-r}
+\end{figure}
+
+\textbf{Interpretación de H1.} La correlación entre distancia y precio alcanza
+\(r = 0.863\), con un valor \(p\) \textless{} 0,001. Se
+\textbf{se rechaza la hipótesis nula}: la asociación es fuerte y
+estadísticamente significativa. El coeficiente de determinación,
+\(r^2 = 0.745\), indica que la distancia comparte el
+\textbf{74.5 \%} de la varianza del precio. El intervalo de confianza
+teórico \([0.840;\ 0.883]\) y el intervalo
+bootstrap \([0.807;\ 0.898]\) prácticamente coinciden (Figura
+\ref{fig:fig-boot-r}), lo que confirma que la estimación no depende de los supuestos
+distribucionales.
+
+Resulta informativo el contraste entre el coeficiente de Pearson y el de Spearman,
+\(\rho = 0.715\): el primero supera al segundo de forma apreciable. La
+diferencia se explica por las carreras de larga distancia y precio muy alto, que refuerzan la
+asociación lineal más de lo que refuerzan la asociación por rangos. Ambos coeficientes
+coinciden, no obstante, en calificar la relación como fuerte y significativa.
+
+\textbf{Interpretación de H2.} La correlación entre duración y precio es de solo
+\(r = 0.222\), intensidad débil, aunque
+significativa (\(p\) \textless{} 0,001). La duración explica apenas el
+4.9 \% de la varianza del precio, frente al
+74.5 \% de la distancia.
+
+Este contraste constituye un resultado sustantivo de primer orden. La estructura tarifaria
+contempla explícitamente un cargo por minuto, de modo que la duración \textbf{debería} incidir en
+el precio; y de hecho incide, como demuestra la significación del contraste. Pero su peso
+relativo es marginal frente al del cargo por distancia. La razón es aritmética y puede
+verificarse en los propios datos: la tarifa por kilómetro multiplica una variable con un
+recorrido muy amplio, mientras que la tarifa por minuto, de magnitud sensiblemente menor,
+multiplica una variable más acotada. En este sistema tarifario \textbf{el precio lo fijan los
+kilómetros, no los minutos}.
+
+Por último, el número de pasajeros no presenta asociación alguna con el precio
+(\(r = 0.016\), \(p\) = 0.7087), resultado plenamente
+coherente con un esquema de tarifa regulada en el que la ocupación del vehículo no altera el
+importe de la carrera.
+
+\section{Hipótesis 3: día hábil frente a fin de semana}\label{hipuxf3tesis-3-duxeda-huxe1bil-frente-a-fin-de-semana}
+
+\[H_0: \mu_{\text{hábil}} = \mu_{\text{finde}} \qquad \text{frente a} \qquad
+H_1: \mu_{\text{hábil}} \neq \mu_{\text{finde}}\]
+
+\begin{table}
+
+\caption{\label{tab:h3}Comparación del precio entre días hábiles y fines de semana.}
+\centering
+\begin{tabular}[t]{l|l}
+\hline
+Elemento & Resultado\\
+\hline
+n (día hábil) & 381\\
+\hline
+n (fin de semana) & 181\\
+\hline
+Media día hábil & 59.69\\
+\hline
+Media fin de semana & 53.41\\
+\hline
+Diferencia de medias & 6.28\\
+\hline
+Estadístico t de Welch & 1.6858\\
+\hline
+Grados de libertad & 415.6\\
+\hline
+Valor p & = 0.0926\\
+\hline
+IC 95\% de la diferencia & [-1.04 ; 13.60]\\
+\hline
+d de Cohen & 0.143\\
+\hline
+Magnitud del efecto & prácticamente nulo\\
+\hline
+Valor p (U de Mann-Whitney) & = 0.0594\\
+\hline
+IC 95\% bootstrap de la diferencia & [-1.04 ; 13.36]\\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Interpretación.} Las carreras de día hábil resultan en promedio
+6.28 unidades monetarias más caras que las de fin de semana, pero
+esta diferencia no alcanza significación estadística: \(t = 1.686\) con
+\(p\) = 0.0926. Se \textbf{no se rechaza la hipótesis nula}.
+
+Las tres vías de verificación convergen. El intervalo de confianza de la diferencia contiene
+el cero, el intervalo bootstrap incluye el valor cero y la prueba \(U\) de Mann--Whitney arroja \(p\)
+= 0.0594. El tamaño del efecto es, además, prácticamente nulo
+(\(d = 0.143\)), de modo que aunque un diseño con mayor tamaño muestral llegara a
+declarar significativa esta diferencia, su relevancia práctica seguiría siendo escasa.
+
+Conviene subrayar el matiz: el valor \(p\) obtenido se sitúa por encima pero no muy lejos del
+umbral convencional. Un resultado no significativo no demuestra la igualdad de las medias;
+demuestra que la evidencia disponible es insuficiente para afirmar que difieren. La conclusión
+correcta es que \textbf{no hay evidencia de que el día de la semana modifique el precio}, no que se
+haya probado que no lo modifica.
+
+\section{Hipótesis 4, 5 y 6: los factores de contexto}\label{hipuxf3tesis-4-5-y-6-los-factores-de-contexto}
+
+\[H_0: \mu_1 = \mu_2 = \dots = \mu_k \qquad \text{frente a} \qquad
+H_1: \text{al menos una media difiere}\]
+
+\begin{table}
+
+\caption{\label{tab:anovas}Contraste de igualdad de precios medios según los factores de contexto, mediante tres procedimientos con supuestos distintos.}
+\centering
+\begin{tabular}[t]{l|r|l|l|l|l|l|l}
+\hline
+Factor & Niveles & ANOVA clásico: F & ANOVA clásico: p & ANOVA de Welch: p & Kruskal-Wallis: p & Eta cuadrado & Epsilon cuadrado\\
+\hline
+Tráfico & 3 & 4.682 & = 0.0096 & = 0.0993 & = 0.3996 & 0.0165 & 0.0000\\
+\hline
+Clima & 3 & 0.066 & = 0.9365 & = 0.9354 & = 0.8701 & 0.0002 & 0.0000\\
+\hline
+Franja horaria & 4 & 0.043 & = 0.9883 & = 0.9880 & = 0.9405 & 0.0002 & 0.0000\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}
+
+\caption{\label{tab:anova-traf}Tabla de análisis de varianza clásico para el factor tráfico.}
+\centering
+\begin{tabular}[t]{l|r|l|l|l|l}
+\hline
+Fuente de variación & gl & Suma de cuadrados & Cuadrado medio & F & Valor p\\
+\hline
+trafico & 2 & 17859.41 & 8929.71 & 4.682 & 0.0096\\
+\hline
+Residuals & 559 & 1066200.68 & 1907.34 &  & \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}
+
+\caption{\label{tab:tukey-traf}Comparaciones múltiples de Tukey entre condiciones de tráfico (sobre el ANOVA clásico).}
+\centering
+\begin{tabular}[t]{l|l|l|l|l}
+\hline
+Comparación & Diferencia & LI 95\% & LS 95\% & p ajustado\\
+\hline
+Medio-Bajo & -1.19 & -10.83 & 8.45 & = 0.9550\\
+\hline
+Alto-Bajo & 13.63 & 1.55 & 25.70 & = 0.0224\\
+\hline
+Alto-Medio & 14.81 & 2.89 & 26.74 & = 0.0102\\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Interpretación de H5 y H6.} El clima y la franja horaria arrojan resultados inequívocos y
+concordantes entre los tres procedimientos: todos los valores \(p\) son muy elevados y los
+tamaños del efecto, prácticamente nulos. Ni las condiciones meteorológicas ni el momento del
+día se asocian a variación alguna en el precio de la carrera. \textbf{No se rechazan \(H_0\) en
+ninguno de los dos casos.}
+
+Este resultado contradice frontalmente la predicción teórica del Capítulo \ref{marco}, según
+la cual la lluvia y la nieve deberían encarecer el servicio. La explicación se encontró ya en
+el análisis descriptivo: si el precio es una función determinista de la tarifa base, la
+distancia y la duración, entonces el clima solo podría afectarlo modificando alguno de esos
+componentes. Como se verá en el Capítulo \ref{discusion}, no lo hace.
+
+\textbf{Interpretación de H4: un caso de discrepancia entre procedimientos.} El factor tráfico
+plantea la situación metodológicamente más interesante de todo el avance. Los tres
+procedimientos \textbf{no coinciden}:
+
+\begin{itemize}
+\tightlist
+\item
+  El \textbf{ANOVA clásico} arroja \(F = 4.682\) con \(p\)
+  = 0.0096, resultado que llevaría a \textbf{rechazar} la hipótesis nula.
+\item
+  El \textbf{ANOVA de Welch}, que no exige homogeneidad de varianzas, arroja \(p\)
+  = 0.0993: \textbf{no rechaza}.
+\item
+  La prueba de \textbf{Kruskal--Wallis}, basada en rangos, arroja \(p\) = 0.3996:
+  \textbf{no rechaza}.
+\end{itemize}
+
+La discrepancia no es casual ni ambigua. La prueba de Brown--Forsythe ya había establecido que
+las varianzas del precio difieren significativamente entre condiciones de tráfico, lo que
+\textbf{invalida el supuesto sobre el que descansa el ANOVA clásico}. De los tres procedimientos,
+el único que declara significación es precisamente el único cuyos supuestos están
+violados. Por añadidura, su tamaño del efecto es minúsculo: \(\eta^2 = 0.0165\),
+es decir, el tráfico explicaría solo el 1.6 \% de la varianza del precio.
+Las comparaciones de Tukey (Tabla \ref{tab:tukey-traf}) reflejan esa fragilidad: únicamente
+2 de las tres comparaciones por pares resulta significativa.
+
+La sección siguiente identifica el origen concreto de esta discrepancia.
+
+\section{Análisis de sensibilidad}\label{sensibilidad}
+
+Si la significación del ANOVA clásico procede de unas pocas observaciones extremas, excluirlas
+debería hacerla desaparecer. Se repite por ello el contraste sobre la submuestra que excluye
+las 13 carreras con recargo identificadas en el Capítulo
+\ref{descriptivo}.
+
+\begin{table}
+
+\caption{\label{tab:sensibilidad}Análisis de sensibilidad: valores p del efecto del tráfico sobre el precio, con y sin las carreras con recargo.}
+\centering
+\begin{tabular}[t]{l|l|l}
+\hline
+Procedimiento & Muestra completa & Excluyendo carreras con recargo\\
+\hline
+Brown-Forsythe (homocedasticidad) & = 0.0016 & = 0.0099\\
+\hline
+ANOVA clásico & = 0.0096 & = 0.3654\\
+\hline
+ANOVA de Welch & = 0.0993 & = 0.3887\\
+\hline
+Kruskal-Wallis & = 0.3996 & = 0.7611\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.92\linewidth]{bookdown-demo_files/figure-latex/fig-sensibilidad-1} 
+
+}
+
+\caption{Precio según tráfico, distinguiendo las carreras con recargo.}\label{fig:fig-sensibilidad}
+\end{figure}
+
+\textbf{Interpretación: el hallazgo central del avance.} La Tabla \ref{tab:sensibilidad} resuelve
+la discrepancia de manera concluyente. Al excluir únicamente
+13 carreras de un total de 562, la significación
+del ANOVA clásico \textbf{desaparece por completo} y, simultáneamente, la heterogeneidad de
+varianzas deja de ser significativa. Los cuatro procedimientos pasan a coincidir.
+
+La conclusión es doble y firme:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{El tráfico no modifica el precio de la carrera.} El aparente efecto detectado por el
+  ANOVA clásico era un artefacto producido por un puñado de observaciones extremas que, por
+  azar o por algún mecanismo no registrado en la base, se concentran ligeramente en la
+  categoría de tráfico alto.
+\item
+  \textbf{La significación estadística puede ser extraordinariamente frágil.} Un resultado con
+  \(p\) = 0.0096 sobre 562 observaciones parece sólido; sin embargo,
+  descansaba enteramente sobre el 2.3 \%
+  de los datos. Sin el análisis de sensibilidad, el avance habría concluido erróneamente que
+  la congestión encarece las carreras.
+\end{enumerate}
+
+La Figura \ref{fig:fig-sensibilidad} lo hace visible: las cajas de los tres niveles de
+tráfico están alineadas, y la única diferencia apreciable entre ellos es la presencia de
+puntos rojos en la parte superior.
+
+\section{Hipótesis 7: asociación entre el recargo y las condiciones de operación}\label{hipuxf3tesis-7-asociaciuxf3n-entre-el-recargo-y-las-condiciones-de-operaciuxf3n}
+
+\begin{table}
+
+\caption{\label{tab:h7}Tabla de contingencia entre condiciones de tráfico y presencia de recargo.}
+\centering
+\begin{tabular}[t]{l|r|r|r|l}
+\hline
+  & Sin recargo & Con recargo & Total & \% con recargo\\
+\hline
+Bajo & 215 & 3 & 218 & 1.4 \%\\
+\hline
+Medio & 232 & 4 & 236 & 1.7 \%\\
+\hline
+Alto & 102 & 6 & 108 & 5.6 \%\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}
+
+\caption{\label{tab:h7}Frecuencias esperadas bajo la hipótesis de independencia.}
+\centering
+\begin{tabular}[t]{l|r|r}
+\hline
+  & Sin recargo & Con recargo\\
+\hline
+Bajo & 212.96 & 5.04\\
+\hline
+Medio & 230.54 & 5.46\\
+\hline
+Alto & 105.50 & 2.50\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}
+
+\caption{\label{tab:h7-pruebas}Contraste de independencia entre tráfico y presencia de recargo.}
+\centering
+\begin{tabular}[t]{l|l|l|l|l|l|l}
+\hline
+  & Prueba & Estadístico & gl & Valor p & V de Cramér & Decisión\\
+\hline
+X-squared & Chi-cuadrado de independencia & 6.271 & 2 & = 0.0435 & 0.106 & se rechaza la hipótesis nula\\
+\hline
+ & Exacta de Fisher & - & - & = 0.0585 & - & no se rechaza la hipótesis nula\\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Interpretación.} La tabla de frecuencias esperadas contiene el elemento decisivo: el valor
+mínimo es 2.50, muy por debajo del umbral de 5 que exige la aproximación
+asintótica de la prueba \(\chi^2\). En estas condiciones el valor \(p\) del contraste
+chi-cuadrado \textbf{no es fiable}, y la referencia válida es la prueba exacta de Fisher, que
+calcula la probabilidad bajo la distribución hipergeométrica sin aproximación alguna.
+
+Atendiendo a Fisher, \(p\) = 0.0585, de modo que
+\textbf{no se rechaza la hipótesis nula} de independencia. La intensidad de la asociación,
+medida por la \(V\) de Cramér, es 0.106.
+
+La lectura honesta de este resultado exige prudencia. Los datos sugieren una mayor proporción
+de recargos bajo tráfico alto, dirección coherente con la teoría del precio dinámico expuesta
+en el Capítulo \ref{marco}; pero el contraste descansa sobre solo
+13 casos con recargo, un número insuficiente para sostener
+una conclusión firme. Lo procedente es \textbf{considerar la asociación como una hipótesis
+prometedora pendiente de confirmación} con una muestra mayor, y no como un hallazgo
+establecido.
+
+\section{Independencia entre los factores de contexto}\label{independencia-entre-los-factores-de-contexto}
+
+\begin{table}
+
+\caption{\label{tab:indep-factores}Pruebas de independencia entre los factores de contexto.}
+\centering
+\begin{tabular}[t]{l|l|r|l|l|l}
+\hline
+Par de variables & Chi cuadrado & gl & Valor p & V de Cramér & Decisión\\
+\hline
+Tráfico x Clima & 6.714 & 4 & = 0.1518 & 0.077 & no se rechaza la hipótesis nula\\
+\hline
+Tráfico x Franja horaria & 4.654 & 6 & = 0.5889 & 0.064 & no se rechaza la hipótesis nula\\
+\hline
+Clima x Franja horaria & 5.219 & 6 & = 0.5161 & 0.068 & no se rechaza la hipótesis nula\\
+\hline
+Tráfico x Día & 0.669 & 2 & = 0.7158 & 0.034 & no se rechaza la hipótesis nula\\
+\hline
+Clima x Día & 4.387 & 2 & = 0.1115 & 0.088 & no se rechaza la hipótesis nula\\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Interpretación.} Ninguna pareja de factores de contexto presenta asociación significativa.
+Tráfico, clima, franja horaria y día de la semana son estadísticamente \textbf{independientes entre
+sí} en esta base de datos.
+
+El resultado es relevante por dos motivos. En primer lugar, descarta la confusión estadística
+como explicación alternativa de los resultados anteriores: la ausencia de efecto del clima no
+puede atribuirse a que el clima esté confundido con el tráfico, porque no lo está. En segundo
+lugar, plantea una cuestión sobre la naturaleza misma de los datos: en un entorno urbano real
+cabría esperar cierta asociación entre lluvia y congestión, o entre franja horaria y tráfico.
+Su ausencia total sugiere que los factores fueron asignados de forma independiente, extremo
+que se discute en el capítulo siguiente.
+
+\section{Síntesis inferencial}\label{suxedntesis-inferencial}
+
+\begin{table}
+
+\caption{\label{tab:sintesis}Síntesis de los contrastes de hipótesis realizados en este avance.}
+\centering
+\begin{tabular}[t]{l|l|l|l|l}
+\hline
+Hipótesis & Prueba principal & Valor p & Tamaño del efecto & Decisión\\
+\hline
+H1: distancia - precio & Correlación de Pearson & < 0,001 & r = 0.863 & se rechaza la hipótesis nula\\
+\hline
+H2: duración - precio & Correlación de Pearson & < 0,001 & r = 0.222 & se rechaza la hipótesis nula\\
+\hline
+H3: día hábil vs fin de semana & t de Welch & = 0.0926 & d = 0.143 & no se rechaza la hipótesis nula\\
+\hline
+H4: tráfico & ANOVA de Welch & = 0.0993 & eta2 = 0.0165 & no se rechaza la hipótesis nula\\
+\hline
+H5: clima & ANOVA de una vía & = 0.9365 & eta2 \textasciitilde{} 0 & no se rechaza la hipótesis nula\\
+\hline
+H6: franja horaria & ANOVA de una vía & = 0.9883 & eta2 \textasciitilde{} 0 & no se rechaza la hipótesis nula\\
+\hline
+H7: recargo - tráfico & Exacta de Fisher & = 0.0585 & V = 0.106 & no se rechaza la hipótesis nula\\
+\hline
+\end{tabular}
+\end{table}
+
+\chapter{Discusión y conclusiones del avance}\label{discusion}
+
+\section{Discusión de los resultados}\label{discusiuxf3n-de-los-resultados}
+
+Los hallazgos de este avance convergen en una conclusión que puede enunciarse en una sola
+frase: \textbf{el precio de una carrera de taxi en esta base de datos es una función determinista de
+la estructura tarifaria, y ningún factor de contexto lo altera.} Conviene desarrollar sus
+implicaciones.
+
+\subsection{El mecanismo de formación del precio}\label{el-mecanismo-de-formaciuxf3n-del-precio}
+
+El análisis de consistencia tarifaria mostró que en aproximadamente el 97 \% de las carreras el
+precio observado coincide con la tarifa teórica \(B + \tau_d d + \tau_t t\) hasta la precisión
+del redondeo. Este resultado explica, por sí solo, prácticamente todo lo demás. Si el precio
+se obtiene aplicando una fórmula cerrada a tres insumos, entonces solo pueden influir en él
+las variables que entren en esa fórmula. Y de las dos variables del trayecto que sí entran, el
+análisis correlacional estableció una jerarquía nítida: la distancia domina de manera
+abrumadora sobre la duración.
+
+La razón es de magnitud relativa. La tarifa por kilómetro multiplica una variable con un
+recorrido amplio y asimétrico; la tarifa por minuto, de un orden de magnitud inferior,
+multiplica una variable con un recorrido más acotado. El producto \(\tau_d \cdot d\) domina así
+la suma. Desde el punto de vista de la economía del transporte esto describe un sistema
+tarifario \textbf{orientado a la distancia}, que traslada al conductor ---y no al pasajero--- el costo
+del tiempo perdido en congestión.
+
+\subsection{La ausencia de efectos contextuales}\label{la-ausencia-de-efectos-contextuales}
+
+Ni el clima, ni la franja horaria, ni el día de la semana, ni las condiciones de tráfico
+mostraron asociación con el precio una vez aplicados procedimientos robustos. Este resultado
+contradice la predicción teórica y admite dos lecturas, no excluyentes.
+
+La primera es sustantiva: el sistema tarifario analizado carece de mecanismos de ajuste
+contextual. No hay recargo nocturno, ni recargo por clima adverso, ni precio dinámico
+sistemático. Los componentes tarifarios se asignan con independencia de las condiciones de
+operación, hecho que el propio avance verificó al comprobar que tráfico, clima, franja y día
+son estadísticamente independientes entre sí.
+
+La segunda lectura es metodológica y atañe a la naturaleza de los datos. En un entorno urbano
+real cabría esperar cierta asociación entre lluvia y congestión, entre hora pico y tráfico
+denso, o entre distancia y duración del trayecto. La ausencia \textbf{total} de tales asociaciones
+---incluida la ortogonalidad entre distancia y duración, quizá el resultado más llamativo de la
+matriz de correlaciones--- sugiere que las variables de la base fueron generadas de forma
+independiente unas de otras. Reconocerlo no invalida el ejercicio analítico, pero sí acota
+con honestidad el alcance de sus conclusiones sustantivas: lo que el estudio caracteriza con
+solidez es la \textbf{estructura interna de esta base de datos}, no necesariamente el
+comportamiento de un mercado de taxis real.
+
+\subsection{La fragilidad de la significación estadística}\label{la-fragilidad-de-la-significaciuxf3n-estaduxedstica}
+
+El resultado metodológicamente más valioso del avance es la discrepancia observada en el
+factor tráfico. El ANOVA clásico declaró un efecto significativo; el ANOVA de Welch y la
+prueba de Kruskal--Wallis no lo hicieron. La prueba de Brown--Forsythe reveló que el supuesto
+de homocedasticidad, exigido únicamente por el primero de los tres, estaba violado
+precisamente en ese factor. El análisis de sensibilidad cerró el argumento: excluyendo trece
+carreras de entre quinientas sesenta y dos, la significación se desvanece por completo.
+
+Un investigador que hubiera aplicado el procedimiento estándar sin verificar supuestos ni
+someter el resultado a análisis de sensibilidad habría concluido que la congestión encarece
+las carreras, y habría respaldado esa conclusión con un valor \(p\) inferior a \(0{,}01\) sobre
+más de quinientas observaciones. El caso ilustra con claridad por qué la verificación de
+supuestos no es un trámite previo al análisis, sino parte constitutiva de él.
+
+\subsection{Los casos con recargo}\label{los-casos-con-recargo}
+
+Las trece carreras cuyo precio excede la tarifa teórica constituyen un subconjunto
+cualitativamente distinto: trayectos de distancia muy superior a la media y con razones de
+sobreprecio que llegan a triplicar la tarifa calculada. Su comportamiento es compatible con un
+mecanismo de precio dinámico como el descrito por \citet{cachon2017}, y la prueba exacta de Fisher
+sugiere una mayor concentración bajo tráfico alto. Sin embargo, con trece casos la evidencia
+es demasiado escasa para sostener una afirmación firme, y así se ha reportado.
+
+\section{Conclusiones}\label{conclusiones}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Sobre la distancia (H1).} Se rechaza la hipótesis nula. La distancia mantiene una
+  correlación fuerte, positiva y altamente significativa con el precio, explicando alrededor
+  de tres cuartas partes de su varianza. Es el determinante principal del precio.
+\item
+  \textbf{Sobre la duración (H2).} Se rechaza la hipótesis nula, pero la asociación es débil: la
+  duración explica una fracción marginal de la varianza del precio pese a estar contemplada
+  explícitamente en la estructura tarifaria.
+\item
+  \textbf{Sobre el día de la semana (H3).} No se rechaza la hipótesis nula. No hay evidencia de
+  que el precio difiera entre días hábiles y fines de semana, y el tamaño del efecto es
+  pequeño.
+\item
+  \textbf{Sobre el tráfico (H4).} No se rechaza la hipótesis nula cuando se emplean procedimientos
+  robustos. La significación obtenida por el ANOVA clásico es un artefacto derivado de la
+  heterocedasticidad y de un reducido conjunto de observaciones extremas.
+\item
+  \textbf{Sobre el clima y la franja horaria (H5 y H6).} No se rechazan las hipótesis nulas. Los
+  tamaños del efecto son prácticamente nulos bajo los tres procedimientos aplicados.
+\item
+  \textbf{Sobre los recargos (H7).} La prueba exacta de Fisher sugiere una asociación entre
+  tráfico alto y presencia de recargo, pero el escaso número de casos impide considerarla
+  establecida.
+\item
+  \textbf{Conclusión integradora.} El precio se explica por la estructura tarifaria y, dentro de
+  ella, esencialmente por la distancia recorrida. Los factores de contexto no intervienen. La
+  única huella de tarificación no lineal aparece en un 2 \% de carreras de larga distancia con
+  sobreprecio.
+\end{enumerate}
+
+\section{Limitaciones}\label{limitaciones}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Pérdida de casos.} La eliminación por lista descartó cerca del 44 \% de los registros. El
+  diagnóstico realizado respalda el supuesto MCAR y, con él, la ausencia de sesgo, pero la
+  pérdida de potencia es real.
+\item
+  \textbf{Alcance no experimental.} El diseño es observacional, de modo que las asociaciones
+  detectadas no autorizan inferencias causales.
+\item
+  \textbf{Escaso número de casos con recargo.} Trece observaciones son insuficientes para
+  caracterizar el mecanismo de precio dinámico.
+\item
+  \textbf{Ausencia de información contextual adicional.} La base no registra zona geográfica,
+  identidad del conductor ni nivel de demanda, variables que podrían explicar los recargos.
+\item
+  \textbf{Alcance analítico.} Conforme a lo definido para esta entrega no se incluyeron modelos de
+  regresión, por lo que no se estimaron los coeficientes tarifarios ni se construyó una función
+  de predicción del precio.
+\end{itemize}
+
+\section{Líneas de trabajo para la siguiente fase}\label{luxedneas-de-trabajo-para-la-siguiente-fase}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Modelado del precio.} Estimar los componentes de la estructura tarifaria y evaluar su
+  capacidad predictiva, cuantificando el aporte marginal de cada insumo.
+\item
+  \textbf{Imputación múltiple.} Recuperar los registros incompletos mediante imputación,
+  comparando los resultados con los obtenidos por eliminación por lista como prueba de
+  robustez.
+\item
+  \textbf{Caracterización de los casos con recargo.} Ampliar la muestra de carreras con
+  sobreprecio y modelar la probabilidad de recargo en función de las condiciones de
+  operación.
+\item
+  \textbf{Análisis por umbrales de distancia.} Evaluar si la relación entre distancia y precio
+  mantiene la misma intensidad a lo largo de todo el recorrido o si cambia de régimen a partir
+  de cierta distancia, lo que explicaría el comportamiento diferenciado de los trayectos
+  largos.
+\end{enumerate}
+
+\section{Nota de reproducibilidad}\label{nota-de-reproducibilidad}
+
+\begin{table}
+
+\caption{\label{tab:sesion}Entorno de ejecución en el que se compiló este documento.}
+\centering
+\begin{tabular}[t]{l|l}
+\hline
+Componente & Detalle\\
+\hline
+Versión de R & R version 4.5.3 (2026-03-11 ucrt)\\
+\hline
+Plataforma & x86\_64-w64-mingw32/x64\\
+\hline
+Paquetes adjuntos & dplyr, ggplot2, knitr, tidyr\\
+\hline
+Semilla aleatoria & 2024\\
+\hline
+Registros en la base original & 1000\\
+\hline
+Registros analizados & 562\\
+\hline
+Fecha de compilación & 2026-09-17 15:27\\
+\hline
+\end{tabular}
+\end{table}
+
+Este informe se genera por completo a partir del código fuente y del archivo
+\texttt{datos/taxi\_trip\_pricing.csv} contenidos en el repositorio del proyecto. Cualquier lector
+puede clonar el repositorio, ejecutar la compilación y obtener exactamente los mismos
+resultados, incluidos los procedimientos basados en remuestreo.
+
+\bibliography{book.bib}
+
+\end{document}

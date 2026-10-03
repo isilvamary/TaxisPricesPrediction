@@ -1,36 +1,252 @@
---- 
-title: "A Minimal Book Example"
-author: "Yihui Xie"
-date: "`r Sys.Date()`"
+---
+title: "Determinantes del precio de las carreras de taxi"
+subtitle: "Avance de proyecto de investigación: análisis descriptivo e inferencial"
+author: "Escribe aquí tu nombre y el de tu institución"
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
 site: bookdown::bookdown_site
-output: bookdown::gitbook
 documentclass: book
-bibliography: [book.bib, packages.bib]
+bibliography: [book.bib]
 biblio-style: apalike
 link-citations: yes
-github-repo: rstudio/bookdown-demo
-description: "This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook."
+description: "Avance de investigación sobre los determinantes del precio de las carreras de taxi mediante estadística descriptiva e inferencial, sin modelos de regresión."
 ---
 
-# Prerequisites
+# Presentación {-}
 
-This is a _sample_ book written in **Markdown**. You can use anything that Pandoc's Markdown supports, e.g., a math equation $a^2 + b^2 = c^2$.
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  fig.width = 7,
+  fig.height = 4.4,
+  out.width = "92%"
+)
 
-The **bookdown** package can be installed from CRAN or Github:
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(knitr)
 
-```{r eval=FALSE}
-install.packages("bookdown")
-# or the development version
-# devtools::install_github("rstudio/bookdown")
+set.seed(2024)
+
+# ---- Paleta y tema gráfico ------------------------------------------------
+azul <- "#1B6CA8"; naranja <- "#E08A1E"; oscuro <- "#0C3D63"; rojo <- "#C0392B"
+paleta3 <- c("#9EC5E8", "#1B6CA8", "#0C3D63")
+paleta4 <- c("#9EC5E8", "#4A93C9", "#1B6CA8", "#0C3D63")
+
+tema_tesis <- theme_minimal(base_size = 12) +
+  theme(
+    plot.title    = element_text(face = "bold", size = 13, colour = oscuro),
+    plot.subtitle = element_text(colour = "grey35", size = 10),
+    plot.caption  = element_text(colour = "grey45", size = 8, hjust = 0),
+    legend.position = "bottom",
+    panel.grid.minor = element_blank()
+  )
+theme_set(tema_tesis)
+
+# ---- Carga de la base de datos -------------------------------------------
+crudos <- read.csv("datos/taxi_trip_pricing.csv",
+                   header = TRUE,
+                   stringsAsFactors = FALSE,
+                   na.strings = c("", " ", "NA", "N/A"))
+
+# ---- Renombrado y codificación en español --------------------------------
+datos <- crudos
+names(datos) <- c("distancia", "franja", "dia", "pasajeros", "trafico",
+                  "clima", "tarifa_base", "tarifa_km", "tarifa_min",
+                  "duracion", "precio")
+
+datos$franja <- factor(datos$franja,
+                       levels = c("Morning", "Afternoon", "Evening", "Night"),
+                       labels = c("Mañana", "Tarde", "Noche", "Madrugada"))
+
+datos$dia <- factor(datos$dia,
+                    levels = c("Weekday", "Weekend"),
+                    labels = c("Día hábil", "Fin de semana"))
+
+datos$trafico <- factor(datos$trafico,
+                        levels = c("Low", "Medium", "High"),
+                        labels = c("Bajo", "Medio", "Alto"),
+                        ordered = FALSE)
+
+datos$clima <- factor(datos$clima,
+                      levels = c("Clear", "Rain", "Snow"),
+                      labels = c("Despejado", "Lluvia", "Nieve"))
+
+# ---- Variables derivadas --------------------------------------------------
+# Tarifa teórica según la estructura bipartita declarada en la propia base
+datos$tarifa_teorica <- datos$tarifa_base +
+                        datos$tarifa_km * datos$distancia +
+                        datos$tarifa_min * datos$duracion
+
+datos$razon <- datos$precio / datos$tarifa_teorica
+
+datos$recargo <- factor(ifelse(datos$razon > 1.01, "Con recargo", "Sin recargo"),
+                        levels = c("Sin recargo", "Con recargo"))
+
+# ---- Submuestra de casos completos ---------------------------------------
+comp <- na.omit(datos)
+comp$recargo <- droplevels(comp$recargo)
+
+n_total <- nrow(datos)
+n_comp  <- nrow(comp)
+
+# ---- Funciones auxiliares -------------------------------------------------
+fp <- function(p) {
+  if (length(p) == 0 || is.na(p)) return("NA")
+  if (p < 0.001) "< 0,001" else paste0("= ", formatC(p, format = "f", digits = 4))
+}
+
+fnum <- function(x, d = 2) formatC(x, format = "f", digits = d)
+
+veredicto <- function(p, alfa = 0.05) {
+  if (p < alfa) "se rechaza la hipótesis nula" else "no se rechaza la hipótesis nula"
+}
+
+asimetria <- function(x) {
+  x <- x[!is.na(x)]; n <- length(x); m <- mean(x)
+  s <- sqrt(sum((x - m)^2) / n); sum((x - m)^3) / (n * s^3)
+}
+
+curtosis <- function(x) {
+  x <- x[!is.na(x)]; n <- length(x); m <- mean(x)
+  s <- sqrt(sum((x - m)^2) / n); sum((x - m)^4) / (n * s^4) - 3
+}
+
+d_cohen <- function(x, y) {
+  x <- x[!is.na(x)]; y <- y[!is.na(y)]
+  nx <- length(x); ny <- length(y)
+  s_p <- sqrt(((nx - 1) * var(x) + (ny - 1) * var(y)) / (nx + ny - 2))
+  (mean(x) - mean(y)) / s_p
+}
+
+# Prueba de Brown-Forsythe (Levene con mediana), sin dependencias externas
+brown_forsythe <- function(y, g) {
+  ok <- !is.na(y) & !is.na(g)
+  y <- y[ok]; g <- droplevels(factor(g[ok]))
+  medianas <- tapply(y, g, median)
+  z <- abs(y - medianas[as.character(g)])
+  summary(aov(z ~ g))[[1]]
+}
+
+v_cramer <- function(tabla) {
+  chi <- suppressWarnings(chisq.test(tabla, correct = FALSE)$statistic)
+  sqrt(as.numeric(chi) / (sum(tabla) * (min(dim(tabla)) - 1)))
+}
+
+interp_r <- function(r) {
+  ar <- abs(r)
+  if (ar < 0.10) "despreciable"
+  else if (ar < 0.30) "débil"
+  else if (ar < 0.50) "moderada"
+  else if (ar < 0.70) "considerable"
+  else if (ar < 0.90) "fuerte"
+  else "muy fuerte"
+}
+
+interp_eta <- function(e) {
+  if (e < 0.01) "prácticamente nulo"
+  else if (e < 0.06) "pequeño"
+  else if (e < 0.14) "mediano"
+  else "grande"
+}
+
+interp_d <- function(d) {
+  ad <- abs(d)
+  if (ad < 0.20) "prácticamente nulo"
+  else if (ad < 0.50) "pequeño"
+  else if (ad < 0.80) "mediano"
+  else "grande"
+}
+
+tabla_anova <- function(modelo) {
+  t <- summary(modelo)[[1]]
+  data.frame(
+    `Fuente de variación` = trimws(rownames(t)),
+    `gl` = t[, "Df"],
+    `Suma de cuadrados` = fnum(t[, "Sum Sq"]),
+    `Cuadrado medio` = fnum(t[, "Mean Sq"]),
+    `F` = ifelse(is.na(t[, "F value"]), "", fnum(t[, "F value"], 3)),
+    `Valor p` = ifelse(is.na(t[, "Pr(>F)"]), "",
+                ifelse(t[, "Pr(>F)"] < 0.001, "< 0,001",
+                       formatC(t[, "Pr(>F)"], format = "f", digits = 4))),
+    check.names = FALSE, row.names = NULL
+  )
+}
 ```
 
-Remember each Rmd file contains one and only one chapter, and a chapter is defined by the first-level heading `#`.
+Este documento constituye el **avance** del proyecto de investigación y reporta de manera
+reproducible el trabajo estadístico realizado hasta la fecha sobre una base de
+`r format(n_total, big.mark = ".")` carreras de taxi. Fue elaborado íntegramente en **R**
+[@rcore] con el paquete **bookdown** [@bookdown]: cada tabla, cada gráfico y cada valor
+numérico que aparece en el texto se recalcula automáticamente a partir del archivo de datos
+original cada vez que el documento se compila. No hay resultados copiados a mano.
 
-To compile this example to PDF, you need XeLaTeX. You are recommended to install TinyTeX (which includes XeLaTeX): <https://yihui.org/tinytex/>.
+## Problema de investigación {-}
 
-```{r include=FALSE}
-# automatically create a bib database for R packages
-knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown'
-), 'packages.bib')
-```
+El precio de una carrera de taxi es el resultado de una estructura tarifaria explícita sobre la que
+pueden actuar factores de contexto: la congestión vehicular, las condiciones meteorológicas,
+la franja horaria o el día de la semana. La literatura sobre tarificación en transporte
+urbano sostiene que estos factores encarecen el servicio, ya sea de forma mecánica (una
+carrera congestionada dura más y acumula más cargo por minuto) o deliberada (mecanismos de
+precio dinámico que elevan la tarifa cuando la demanda supera a la oferta).
+
+El problema que motiva este avance es determinar **cuáles de esos factores producen realmente
+una variación detectable en el precio final** de una carrera, y con qué magnitud. La
+distinción no es trivial: un factor puede parecer influyente en una comparación simple y
+resultar irrelevante cuando se controla la heterogeneidad de varianzas o la presencia de
+valores extremos.
+
+## Preguntas de investigación {-}
+
+1. ¿Qué intensidad tiene la asociación entre el precio de la carrera y sus dos determinantes
+   técnicos, la distancia recorrida y la duración del trayecto?
+2. ¿Difiere el precio medio de las carreras entre días hábiles y fines de semana?
+3. ¿Influyen las condiciones de tráfico, el clima y la franja horaria en el precio de la
+   carrera?
+4. ¿Se reproduce el precio observado a partir de la estructura tarifaria declarada, o existen
+   carreras con recargos no explicados por ella?
+5. En caso de existir tales recargos, ¿están asociados a alguna condición de operación?
+
+## Objetivos {-}
+
+**Objetivo general.** Identificar y cuantificar, mediante técnicas estadísticas descriptivas e
+inferenciales, los factores asociados al precio de las carreras de taxi registradas en la base
+de datos analizada.
+
+**Objetivos específicos.**
+
+a. Caracterizar la distribución del precio y de sus componentes tarifarios, evaluando
+   simetría, dispersión y presencia de valores atípicos.
+b. Diagnosticar el patrón de datos faltantes y justificar el procedimiento de tratamiento
+   adoptado.
+c. Estimar la intensidad y significación de las asociaciones entre el precio y las variables
+   cuantitativas del trayecto.
+d. Contrastar la igualdad de precios medios entre los niveles de las variables de contexto.
+e. Evaluar la robustez de cada conclusión mediante pruebas no paramétricas, correcciones para
+   varianzas desiguales y análisis de sensibilidad frente a valores extremos.
+f. Verificar la consistencia interna entre el precio observado y la estructura tarifaria
+   declarada.
+
+## Hipótesis {-}
+
+| | Hipótesis nula ($H_0$) | Hipótesis alterna ($H_1$) |
+|:--|:---------------------------|:-------------------------------|
+| **H1** | $\rho_{\text{distancia, precio}} = 0$ | $\rho \neq 0$ |
+| **H2** | $\rho_{\text{duración, precio}} = 0$ | $\rho \neq 0$ |
+| **H3** | $\mu_{\text{hábil}} = \mu_{\text{finde}}$ | $\mu_{\text{hábil}} \neq \mu_{\text{finde}}$ |
+| **H4** | $\mu_{\text{bajo}} = \mu_{\text{medio}} = \mu_{\text{alto}}$ (tráfico) | Al menos una media difiere |
+| **H5** | $\mu_{\text{despejado}} = \mu_{\text{lluvia}} = \mu_{\text{nieve}}$ | Al menos una media difiere |
+| **H6** | Las cuatro franjas horarias tienen igual precio medio | Al menos una difiere |
+| **H7** | La presencia de recargo es independiente del tráfico | Existe asociación |
+
+Todas las pruebas se realizan con un nivel de significancia $\alpha = 0{,}05$.
+
+## Alcance del avance {-}
+
+Conforme al alcance definido para esta entrega, el análisis se limita a **estadística
+descriptiva e inferencia clásica**: estimación por intervalos, correlación, pruebas de
+hipótesis paramétricas y no paramétricas, análisis de varianza y pruebas de asociación entre
+variables categóricas. 

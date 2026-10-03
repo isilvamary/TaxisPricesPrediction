@@ -1,23 +1,370 @@
-# Methods
+# Análisis descriptivo {#descriptivo}
 
-We describe our methods in this chapter.
+A partir de este capítulo se trabaja con la submuestra de `r n_comp` carreras completas
+justificada en el Capítulo \@ref(metodologia).
 
-Math can be added in body using usual syntax like this 
+## Caracterización global del precio
 
-## math example
+```{r desc-global, echo=FALSE}
+pr <- comp$precio
+n <- length(pr)
+ic_pr <- t.test(pr)$conf.int
 
-$p$ is unknown but expected to be around 1/3. Standard error will be approximated
+resumen_global <- data.frame(
+  Estadístico = c("n", "Media", "Error estándar", "IC 95% de la media", "Mediana",
+                  "Desviación estándar", "Coeficiente de variación",
+                  "Mínimo", "Máximo", "Q1", "Q3", "Rango intercuartílico",
+                  "Asimetría", "Curtosis (exceso)"),
+  Valor = c(
+    as.character(n), fnum(mean(pr)), fnum(sd(pr)/sqrt(n), 3),
+    paste0("[", fnum(ic_pr[1]), " ; ", fnum(ic_pr[2]), "]"),
+    fnum(median(pr)), fnum(sd(pr)),
+    paste0(fnum(100*sd(pr)/mean(pr), 1), " %"),
+    fnum(min(pr)), fnum(max(pr)),
+    fnum(quantile(pr, 0.25)), fnum(quantile(pr, 0.75)), fnum(IQR(pr)),
+    fnum(asimetria(pr), 3), fnum(curtosis(pr), 3)
+  )
+)
+knitr::kable(resumen_global,   
+             caption = "Estadísticos descriptivos del precio de la carrera.",
+             format = "html")
+```
 
-$$
-SE = \sqrt{\frac{p(1-p)}{n}} \approx \sqrt{\frac{1/3 (1 - 1/3)} {300}} = 0.027
-$$
+**Interpretación.** El precio medio de una carrera es de `r fnum(mean(pr))` unidades
+monetarias, pero ese valor describe mal a la carrera típica. La mediana, `r fnum(median(pr))`,
+es sensiblemente inferior, y la distancia entre ambas medidas es el primer indicio de una
+**asimetría positiva pronunciada**: la media está siendo arrastrada al alza por un grupo
+reducido de carreras muy caras.
 
-You can also use math in footnotes like this^[where we mention $p = \frac{a}{b}$].
+Los coeficientes de forma confirman el diagnóstico de manera contundente. La asimetría alcanza
+`r fnum(asimetria(pr), 2)` —frente al valor 0 de una distribución simétrica— y la curtosis en
+exceso llega a `r fnum(curtosis(pr), 1)`, muy por encima del 0 correspondiente a una normal.
+Se trata de una distribución **fuertemente asimétrica a la derecha y leptocúrtica**, con una
+cola derecha larga y pesada. El coeficiente de variación de
+`r fnum(100*sd(pr)/mean(pr), 1)` % ratifica una heterogeneidad muy elevada.
 
-We will approximate standard error to 0.027[^longnote]
+Este perfil no es una anomalía inesperada: es exactamente el que predice el marco teórico del
+Capítulo \@ref(marco) para un mercado donde la mayoría de las carreras se liquida a tarifa
+ordinaria y una minoría incorpora recargos o corresponde a trayectos excepcionalmente largos.
 
-[^longnote]: $p$ is unknown but expected to be around 1/3. Standard error will be approximated
+```{r fig-hist, echo=FALSE, fig.cap="Distribución del precio de la carrera. La línea discontinua marca la media y la punteada la mediana."}
+ggplot(comp, aes(x = precio)) +
+  geom_histogram(bins = 45, fill = azul, colour = "white", alpha = 0.9) +
+  geom_vline(xintercept = mean(pr), linetype = "dashed", colour = rojo, linewidth = 0.9) +
+  geom_vline(xintercept = median(pr), linetype = "dotted", colour = oscuro, linewidth = 0.9) +
+  labs(title = "Distribución del precio de la carrera",
+       subtitle = "Asimetría positiva marcada con cola derecha extensa",
+       x = "Precio de la carrera", y = "Frecuencia",
+       caption = "Fuente: elaboración propia a partir de la base de carreras de taxi.")
+```
 
-    $$
-    SE = \sqrt{\frac{p(1-p)}{n}} \approx \sqrt{\frac{1/3 (1 - 1/3)} {300}} = 0.027
-    $$
+```{r fig-hist-log, echo=FALSE, fig.height=3.6, fig.cap="El mismo histograma en escala logarítmica, donde la forma se aproxima a la campana."}
+ggplot(comp, aes(x = precio)) +
+  geom_histogram(bins = 40, fill = oscuro, colour = "white", alpha = 0.9) +
+  scale_x_log10() +
+  labs(title = "Precio de la carrera en escala logarítmica",
+       subtitle = "La transformación revela una forma aproximadamente simétrica",
+       x = "Precio (escala logarítmica)", y = "Frecuencia",
+       caption = "Fuente: elaboración propia.")
+```
+
+La comparación entre las Figuras \@ref(fig:fig-hist) y \@ref(fig:fig-hist-log) es
+metodológicamente relevante. En escala original la distribución es claramente asimétrica; en
+escala logarítmica recupera una forma acampanada y razonablemente simétrica. Esto indica que
+la asimetría es de naturaleza **multiplicativa**, característica de las variables de precio:
+los factores que encarecen una carrera actúan proporcionalmente y no por adición de una
+cantidad fija. Es la firma estadística de un mecanismo tarifario basado en tasas y
+multiplicadores.
+
+## Valores atípicos
+
+```{r atipicos, echo=FALSE}
+q1 <- quantile(pr, 0.25); q3 <- quantile(pr, 0.75); ric <- q3 - q1
+lim_sup <- q3 + 1.5 * ric
+lim_inf <- q1 - 1.5 * ric
+atip <- comp[comp$precio > lim_sup | comp$precio < lim_inf, ]
+n_atip <- nrow(atip)
+
+tab_atip <- data.frame(
+  Elemento = c("Q1", "Q3", "Rango intercuartílico", "Límite inferior de Tukey",
+               "Límite superior de Tukey", "Atípicos por exceso",
+               "Atípicos por defecto", "Porcentaje de atípicos",
+               "Precio máximo observado", "Distancia media de los atípicos",
+               "Distancia media del resto"),
+  Valor = c(fnum(q1), fnum(q3), fnum(ric), fnum(lim_inf), fnum(lim_sup),
+            as.character(sum(comp$precio > lim_sup)),
+            as.character(sum(comp$precio < lim_inf)),
+            paste0(fnum(100*n_atip/n, 1), " %"),
+            fnum(max(pr)),
+            fnum(mean(atip$distancia)),
+            fnum(mean(comp$distancia[comp$precio <= lim_sup & comp$precio >= lim_inf])))
+)
+kable(tab_atip, caption = "Identificación de valores atípicos mediante el criterio de Tukey.")
+```
+
+```{r fig-box-global, echo=FALSE, fig.height=2.6, fig.cap="Diagrama de caja del precio. Los puntos situados a la derecha del bigote son los atípicos por exceso."}
+ggplot(comp, aes(x = precio, y = "")) +
+  geom_boxplot(fill = azul, alpha = 0.6, outlier.colour = rojo,
+               outlier.alpha = 0.7, width = 0.45) +
+  labs(title = "Diagrama de caja del precio de la carrera",
+       x = "Precio de la carrera", y = NULL,
+       caption = "Fuente: elaboración propia.")
+```
+
+**Interpretación.** El criterio de Tukey identifica `r n_atip` carreras atípicas, todas ellas
+por exceso, que representan apenas el `r fnum(100*n_atip/n, 1)` % de la submuestra. Su
+característica más llamativa no es el precio sino la **distancia**: estas carreras recorren en
+promedio `r fnum(mean(atip$distancia))` kilómetros, frente a
+`r fnum(mean(comp$distancia[comp$precio <= lim_sup]))` kilómetros del resto.
+
+La conclusión descriptiva es importante y condiciona todo el capítulo siguiente: los valores
+extremos **no parecen errores de registro**, sino trayectos de larga distancia que constituyen
+un régimen de operación distinto. Por tratarse de observaciones legítimas no se eliminan del
+análisis, pero su influencia potencial sobre las pruebas basadas en medias obliga a un
+análisis de sensibilidad específico, que se desarrolla en la Sección
+\@ref(sensibilidad).
+
+## Las variables del trayecto
+
+```{r desc-numericas, echo=FALSE}
+numericas <- comp[, c("distancia", "duracion", "pasajeros",
+                      "tarifa_base", "tarifa_km", "tarifa_min", "precio")]
+etiquetas <- c("Distancia (km)", "Duración (min)", "Pasajeros",
+               "Tarifa base", "Tarifa por km", "Tarifa por minuto", "Precio")
+
+tab_num <- data.frame(
+  Variable = etiquetas,
+  n = sapply(numericas, function(v) sum(!is.na(v))),
+  Media = sapply(numericas, mean),
+  `Desv. est.` = sapply(numericas, sd),
+  `CV (%)` = sapply(numericas, function(v) 100*sd(v)/mean(v)),
+  Mediana = sapply(numericas, median),
+  Mínimo = sapply(numericas, min),
+  Máximo = sapply(numericas, max),
+  Asimetría = sapply(numericas, asimetria),
+  check.names = FALSE, row.names = NULL
+)
+kable(tab_num, digits = 2,
+      caption = "Estadísticos descriptivos de las variables cuantitativas del trayecto.")
+```
+
+**Interpretación.** La lectura conjunta de la Tabla \@ref(tab:desc-numericas) revela una
+asimetría muy desigual entre variables. Los **componentes tarifarios** —tarifa base, tarifa
+por kilómetro y tarifa por minuto— presentan coeficientes de asimetría próximos a cero y
+recorridos acotados, lo que sugiere que fueron asignados de manera aproximadamente uniforme
+dentro de rangos administrativos predefinidos. La **duración** y el número de **pasajeros**
+muestran igualmente perfiles simétricos.
+
+En contraste, la **distancia** y el **precio** son las dos únicas variables con asimetría
+positiva apreciable, y lo son en grados similares. Esta coincidencia es la primera señal, aún
+descriptiva, de que ambas variables comparten un mismo mecanismo generador: el precio hereda
+la forma de la distribución de la distancia. El Capítulo \@ref(inferencial) contrasta
+formalmente esta relación.
+
+## El precio según los factores de contexto
+
+```{r desc-factores, echo=FALSE}
+resumen_factor <- function(f, nombre) {
+  v <- comp[[f]]
+  do.call(rbind, lapply(levels(v), function(l) {
+    x <- comp$precio[v == l]
+    data.frame(Factor = nombre,
+               Nivel = l,
+               n = length(x),
+               Media = mean(x),
+               `Desv. est.` = sd(x),
+               Mediana = median(x),
+               `CV (%)` = 100 * sd(x) / mean(x),
+               check.names = FALSE)
+  }))
+}
+
+tab_factores <- rbind(
+  resumen_factor("trafico", "Tráfico"),
+  resumen_factor("clima", "Clima"),
+  resumen_factor("franja", "Franja horaria"),
+  resumen_factor("dia", "Día")
+)
+kable(tab_factores, digits = 2, row.names = FALSE,
+      caption = "Precio de la carrera según cada factor de contexto.")
+```
+
+**Interpretación.** La Tabla \@ref(tab:desc-factores) ofrece un resultado que contradice la
+expectativa teórica. Las medias de precio son notablemente **similares** entre los niveles de
+casi todos los factores: las cuatro franjas horarias difieren entre sí en menos de dos
+unidades monetarias, y lo mismo ocurre entre condiciones climáticas. Si la congestión y el
+clima encarecieran las carreras según predice la literatura, las diferencias deberían ser
+visibles ya en esta tabla.
+
+La única excepción aparente es el **tráfico alto**, cuya media supera a la de los otros dos
+niveles. Sin embargo, la propia tabla contiene el elemento que obliga a la cautela: la
+desviación estándar del grupo de tráfico alto casi duplica a la de los demás, y su **mediana**
+no se aparta de la de los otros niveles del mismo modo que su media. Cuando la media se
+desplaza pero la mediana no lo hace, la explicación habitual es la presencia de unas pocas
+observaciones extremas dentro de ese grupo. Retengamos esta observación: reaparecerá como el
+hallazgo central del análisis inferencial.
+
+```{r fig-box-factores, echo=FALSE, fig.height=5.2, fig.cap="Distribución del precio según cada factor de contexto (escala logarítmica para facilitar la comparación)."}
+largo <- rbind(
+  data.frame(precio = comp$precio, factor = "Tráfico",
+             nivel = as.character(comp$trafico)),
+  data.frame(precio = comp$precio, factor = "Clima",
+             nivel = as.character(comp$clima)),
+  data.frame(precio = comp$precio, factor = "Franja horaria",
+             nivel = as.character(comp$franja)),
+  data.frame(precio = comp$precio, factor = "Día",
+             nivel = as.character(comp$dia))
+)
+largo$factor <- factor(largo$factor,
+                       levels = c("Tráfico", "Clima", "Franja horaria", "Día"))
+largo$nivel <- factor(largo$nivel,
+                      levels = c("Bajo", "Medio", "Alto",
+                                 "Despejado", "Lluvia", "Nieve",
+                                 "Mañana", "Tarde", "Noche", "Madrugada",
+                                 "Día hábil", "Fin de semana"))
+
+ggplot(largo, aes(x = nivel, y = precio)) +
+  geom_boxplot(fill = azul, alpha = 0.55, outlier.colour = rojo, outlier.alpha = 0.5) +
+  stat_summary(fun = mean, geom = "point", shape = 23, size = 2.2,
+               fill = "white", colour = "black") +
+  scale_y_log10() +
+  facet_wrap(~ factor, scales = "free_x") +
+  labs(title = "Precio de la carrera según los factores de contexto",
+       subtitle = "Escala logarítmica | el rombo blanco indica la media",
+       x = NULL, y = "Precio (escala logarítmica)",
+       caption = "Fuente: elaboración propia.") +
+  theme(axis.text.x = element_text(size = 8))
+```
+
+La Figura \@ref(fig:fig-box-factores) confirma visualmente la impresión anterior: las cajas
+están prácticamente alineadas dentro de cada panel. No se aprecia el desplazamiento sistemático
+que evidenciaría un efecto de contexto sobre el precio. Los puntos rojos —los atípicos—
+aparecen distribuidos entre todos los niveles.
+
+## Relación entre el precio y las variables del trayecto
+
+```{r fig-matriz-cor, echo=FALSE, fig.height=4.6, fig.cap="Matriz de correlaciones de Pearson entre las variables cuantitativas."}
+m_cor <- cor(numericas, use = "complete.obs")
+dimnames(m_cor) <- list(etiquetas, etiquetas)
+df_cor <- as.data.frame(as.table(m_cor))
+names(df_cor) <- c("v1", "v2", "r")
+
+ggplot(df_cor, aes(x = v1, y = v2, fill = r)) +
+  geom_tile(colour = "white", linewidth = 0.6) +
+  geom_text(aes(label = fnum(r, 2)), size = 3,
+            colour = ifelse(abs(df_cor$r) > 0.6, "white", "grey20")) +
+  scale_fill_gradient2(low = rojo, mid = "white", high = oscuro,
+                       midpoint = 0, limits = c(-1, 1)) +
+  labs(title = "Matriz de correlaciones",
+       x = NULL, y = NULL, fill = "r de Pearson",
+       caption = "Fuente: elaboración propia.") +
+  theme(axis.text.x = element_text(angle = 40, hjust = 1, size = 8),
+        axis.text.y = element_text(size = 8),
+        panel.grid = element_blank())
+```
+
+**Interpretación.** La matriz de la Figura \@ref(fig:fig-matriz-cor) concentra el hallazgo
+descriptivo más importante del capítulo. La fila del precio muestra una correlación muy
+elevada con la **distancia** y correlaciones sustancialmente menores con todas las demás
+variables. Igualmente revelador es lo que ocurre fuera de esa fila: las variables explicativas
+entre sí presentan correlaciones próximas a cero. Distancia y duración, en particular, son
+prácticamente **ortogonales**, lo cual es llamativo desde el punto de vista sustantivo —cabría
+esperar que los trayectos más largos duraran más— y constituye una característica de la base
+que se discutirá en el Capítulo \@ref(discusion).
+
+```{r fig-dispersion, echo=FALSE, fig.height=3.8, fig.cap="Relación del precio con la distancia y con la duración del trayecto."}
+disp <- rbind(
+  data.frame(precio = comp$precio, variable = "Distancia (km)",
+             valor = comp$distancia),
+  data.frame(precio = comp$precio, variable = "Duración (minutos)",
+             valor = comp$duracion)
+)
+
+ggplot(disp, aes(x = valor, y = precio)) +
+  geom_point(alpha = 0.35, colour = azul, size = 1.5) +
+  facet_wrap(~ variable, scales = "free_x") +
+  labs(title = "Precio frente a distancia y duración",
+       x = NULL, y = "Precio de la carrera",
+       caption = "Fuente: elaboración propia.")
+```
+
+El contraste entre los dos paneles de la Figura \@ref(fig:fig-dispersion) es nítido. Frente a
+la distancia los puntos se ordenan siguiendo una pauta ascendente clara, con una dispersión
+que se abre a medida que crece la distancia. Frente a la duración, en cambio, la nube es
+esencialmente **amorfa**: no se distingue tendencia alguna. El precio aumenta con los
+kilómetros recorridos, no con los minutos transcurridos.
+
+## Consistencia con la estructura tarifaria
+
+```{r tarifa-teorica, echo=FALSE}
+razon <- comp$razon
+exactas <- sum(abs(razon - 1) < 0.001)
+
+tab_tar <- data.frame(
+  Elemento = c("Carreras analizadas",
+               "Carreras cuyo precio coincide con la tarifa teórica",
+               "Porcentaje de coincidencia exacta",
+               "Carreras con recargo (razón > 1,01)",
+               "Razón mediana",
+               "Razón máxima",
+               "Precio medio de las carreras con recargo",
+               "Precio medio de las carreras sin recargo",
+               "Distancia media de las carreras con recargo",
+               "Distancia media de las carreras sin recargo"),
+  Valor = c(
+    as.character(n), as.character(exactas),
+    paste0(fnum(100*exactas/n, 1), " %"),
+    as.character(sum(comp$recargo == "Con recargo")),
+    fnum(median(razon), 3), fnum(max(razon), 3),
+    fnum(mean(comp$precio[comp$recargo == "Con recargo"])),
+    fnum(mean(comp$precio[comp$recargo == "Sin recargo"])),
+    fnum(mean(comp$distancia[comp$recargo == "Con recargo"])),
+    fnum(mean(comp$distancia[comp$recargo == "Sin recargo"]))
+  )
+)
+kable(tab_tar, caption = "Comparación entre el precio observado y la tarifa teórica derivada de la estructura declarada.")
+```
+
+```{r fig-tarifa, echo=FALSE, fig.height=4.2, fig.cap="Precio observado frente a tarifa teórica. La línea discontinua es la diagonal de coincidencia perfecta."}
+ggplot(comp, aes(x = tarifa_teorica, y = precio, colour = recargo)) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed",
+              colour = "grey40", linewidth = 0.8) +
+  geom_point(alpha = 0.55, size = 1.8) +
+  scale_colour_manual(values = c("Sin recargo" = azul, "Con recargo" = rojo)) +
+  labs(title = "Precio observado frente a tarifa teórica",
+       subtitle = "La inmensa mayoría de las carreras se sitúa exactamente sobre la diagonal",
+       x = "Tarifa teórica (base + km + minutos)", y = "Precio observado",
+       colour = NULL, caption = "Fuente: elaboración propia.")
+```
+
+**Interpretación: el mecanismo de formación del precio.** La Tabla \@ref(tab:tarifa-teorica) y
+la Figura \@ref(fig:fig-tarifa) resuelven la cuarta pregunta de investigación de manera casi
+definitiva. En `r fnum(100*exactas/n, 1)` % de las carreras el precio observado **coincide
+exactamente** con la tarifa teórica calculada a partir de la estructura bipartita declarada.
+La razón mediana entre precio observado y tarifa teórica es `r fnum(median(razon), 3)`.
+
+El precio no es, por tanto, una variable con componente aleatorio apreciable: es una función
+determinista de la tarifa base, la distancia y la duración. Esto explica de manera inmediata
+por qué los factores de contexto no aparecían asociados al precio en la Tabla
+\@ref(tab:desc-factores): **no pueden estarlo**, salvo que modifiquen alguno de los
+componentes de esa fórmula.
+
+Existe, sin embargo, una excepción cuantitativamente pequeña pero conceptualmente decisiva:
+`r sum(comp$recargo == "Con recargo")` carreras se apartan de la diagonal, con razones que
+llegan hasta `r fnum(max(razon), 2)`. Son precisamente las carreras que aparecen en rojo en la
+parte superior de la Figura \@ref(fig:fig-tarifa) y coinciden en buena medida con los valores
+atípicos detectados antes: trayectos muy largos cuyo precio excede a la tarifa teórica. La
+quinta pregunta de investigación —si estos recargos se asocian a alguna condición de
+operación— se responde mediante la prueba de asociación del Capítulo \@ref(inferencial).
+
+## Síntesis descriptiva
+
+1. El precio presenta una distribución fuertemente asimétrica a la derecha, con
+   `r n_atip` valores atípicos correspondientes a trayectos de larga distancia.
+2. La asimetría es de naturaleza multiplicativa: la transformación logarítmica restituye la
+   simetría.
+3. La distancia es la única variable del trayecto fuertemente asociada al precio; la duración
+   apenas lo está.
+4. Los factores de contexto no muestran diferencias descriptivas apreciables en el precio.
+5. El precio se reproduce exactamente a partir de la estructura tarifaria declarada en
+   `r fnum(100*exactas/n, 1)` % de los casos.

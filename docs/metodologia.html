@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Determinantes del precio de las carreras de taxi</title>
+  <title>Capítulo 2 Metodología | Determinantes del precio de las carreras de taxi</title>
   <meta name="description" content="Avance de investigación sobre los determinantes del precio de las carreras de taxi mediante estadística descriptiva e inferencial, sin modelos de regresión." />
   <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Determinantes del precio de las carreras de taxi" />
+  <meta property="og:title" content="Capítulo 2 Metodología | Determinantes del precio de las carreras de taxi" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="Avance de investigación sobre los determinantes del precio de las carreras de taxi mediante estadística descriptiva e inferencial, sin modelos de regresión." />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Determinantes del precio de las carreras de taxi" />
+  <meta name="twitter:title" content="Capítulo 2 Metodología | Determinantes del precio de las carreras de taxi" />
   
   <meta name="twitter:description" content="Avance de investigación sobre los determinantes del precio de las carreras de taxi mediante estadística descriptiva e inferencial, sin modelos de regresión." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="marco.html"/>
+<link rel="prev" href="marco.html"/>
+<link rel="next" href="descriptivo.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -194,130 +194,314 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Determinantes del precio de las carreras de taxi</h1>
-<h2 class="subtitle"><em>Avance de proyecto de investigación: análisis descriptivo e inferencial</em></h2>
-<p class="author"><em>Escribe aquí tu nombre y el de tu institución</em></p>
-<p class="date"><em>02/10/2026</em></p>
+<div id="metodologia" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Capítulo 2</span> Metodología<a href="metodologia.html#metodologia" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="tipo-y-diseño-de-estudio" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Tipo y diseño de estudio<a href="metodologia.html#tipo-y-dise%C3%B1o-de-estudio" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>La investigación es de enfoque <strong>cuantitativo</strong>, alcance <strong>descriptivo-correlacional</strong> y
+diseño <strong>no experimental, transversal y retrospectivo</strong>. No existe manipulación de variables
+por parte del equipo investigador: los factores de contexto —tráfico, clima, franja horaria,
+día— se registran tal como ocurrieron. Esta condición delimita el alcance interpretativo de
+los resultados: las asociaciones detectadas no autorizan, por sí solas, inferencias causales.</p>
 </div>
-<div id="presentación" class="section level1 unnumbered hasAnchor">
-<h1>Presentación<a href="index.html#presentaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>Este documento constituye el <strong>avance</strong> del proyecto de investigación y reporta de manera
-reproducible el trabajo estadístico realizado hasta la fecha sobre una base de
-1.000 carreras de taxi. Fue elaborado íntegramente en <strong>R</strong>
-<span class="citation">(<a href="#ref-rcore">R Core Team 2024</a>)</span> con el paquete <strong>bookdown</strong> <span class="citation">(<a href="#ref-bookdown">Xie 2016</a>)</span>: cada tabla, cada gráfico y cada valor
-numérico que aparece en el texto se recalcula automáticamente a partir del archivo de datos
-original cada vez que el documento se compila. No hay resultados copiados a mano.</p>
-<div id="problema-de-investigación" class="section level2 unnumbered hasAnchor">
-<h2>Problema de investigación<a href="index.html#problema-de-investigaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El precio de una carrera de taxi es el resultado de una estructura tarifaria explícita —un
-cargo fijo de partida más componentes proporcionales a la distancia y al tiempo— sobre la que
-pueden actuar factores de contexto: la congestión vehicular, las condiciones meteorológicas,
-la franja horaria o el día de la semana. La literatura sobre tarificación en transporte
-urbano sostiene que estos factores encarecen el servicio, ya sea de forma mecánica (una
-carrera congestionada dura más y acumula más cargo por minuto) o deliberada (mecanismos de
-precio dinámico que elevan la tarifa cuando la demanda supera a la oferta).</p>
-<p>El problema que motiva este avance es determinar <strong>cuáles de esos factores producen realmente
-una variación detectable en el precio final</strong> de una carrera, y con qué magnitud. La
-distinción no es trivial: un factor puede parecer influyente en una comparación simple y
-resultar irrelevante cuando se controla la heterogeneidad de varianzas o la presencia de
-valores extremos.</p>
+<div id="unidad-de-análisis-y-fuente-de-datos" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Unidad de análisis y fuente de datos<a href="metodologia.html#unidad-de-an%C3%A1lisis-y-fuente-de-datos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>La unidad de análisis es la <strong>carrera de taxi individual</strong>. La base contiene
+1.000 registros y 11 variables, correspondientes a
+la distancia, la duración, la ocupación, los tres componentes tarifarios, cuatro factores de
+contexto y el precio final cobrado.</p>
 </div>
-<div id="preguntas-de-investigación" class="section level2 unnumbered hasAnchor">
-<h2>Preguntas de investigación<a href="index.html#preguntas-de-investigaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<ol style="list-style-type: decimal">
-<li>¿Qué intensidad tiene la asociación entre el precio de la carrera y sus dos determinantes
-técnicos, la distancia recorrida y la duración del trayecto?</li>
-<li>¿Difiere el precio medio de las carreras entre días hábiles y fines de semana?</li>
-<li>¿Influyen las condiciones de tráfico, el clima y la franja horaria en el precio de la
-carrera?</li>
-<li>¿Se reproduce el precio observado a partir de la estructura tarifaria declarada, o existen
-carreras con recargos no explicados por ella?</li>
-<li>En caso de existir tales recargos, ¿están asociados a alguna condición de operación?</li>
-</ol>
-</div>
-<div id="objetivos" class="section level2 unnumbered hasAnchor">
-<h2>Objetivos<a href="index.html#objetivos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><strong>Objetivo general.</strong> Identificar y cuantificar, mediante técnicas estadísticas descriptivas e
-inferenciales, los factores asociados al precio de las carreras de taxi registradas en la base
-de datos analizada.</p>
-<p><strong>Objetivos específicos.</strong></p>
-<ol style="list-style-type: lower-alpha">
-<li>Caracterizar la distribución del precio y de sus componentes tarifarios, evaluando
-simetría, dispersión y presencia de valores atípicos.</li>
-<li>Diagnosticar el patrón de datos faltantes y justificar el procedimiento de tratamiento
-adoptado.</li>
-<li>Estimar la intensidad y significación de las asociaciones entre el precio y las variables
-cuantitativas del trayecto.</li>
-<li>Contrastar la igualdad de precios medios entre los niveles de las variables de contexto.</li>
-<li>Evaluar la robustez de cada conclusión mediante pruebas no paramétricas, correcciones para
-varianzas desiguales y análisis de sensibilidad frente a valores extremos.</li>
-<li>Verificar la consistencia interna entre el precio observado y la estructura tarifaria
-declarada.</li>
-</ol>
-</div>
-<div id="hipótesis" class="section level2 unnumbered hasAnchor">
-<h2>Hipótesis<a href="index.html#hip%C3%B3tesis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="operacionalización-de-las-variables" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Operacionalización de las variables<a href="metodologia.html#operacionalizaci%C3%B3n-de-las-variables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <table>
+<caption><span id="tab:tabla-variables">Table 2.1: </span>Matriz de operacionalización de variables.</caption>
 <colgroup>
-<col width="4%" />
-<col width="44%" />
-<col width="50%" />
+<col width="22%" />
+<col width="15%" />
+<col width="23%" />
+<col width="38%" />
 </colgroup>
 <thead>
 <tr class="header">
-<th align="left"></th>
-<th align="left">Hipótesis nula (<span class="math inline">\(H_0\)</span>)</th>
-<th align="left">Hipótesis alterna (<span class="math inline">\(H_1\)</span>)</th>
+<th align="left">Variable</th>
+<th align="left">Rol</th>
+<th align="left">Naturaleza</th>
+<th align="left">Escala / niveles</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><strong>H1</strong></td>
-<td align="left"><span class="math inline">\(\rho_{\text{distancia, precio}} = 0\)</span></td>
-<td align="left"><span class="math inline">\(\rho \neq 0\)</span></td>
+<td align="left">Precio de la carrera</td>
+<td align="left">Dependiente</td>
+<td align="left">Cuantitativa continua</td>
+<td align="left">Razón (unidades monetarias)</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>H2</strong></td>
-<td align="left"><span class="math inline">\(\rho_{\text{duración, precio}} = 0\)</span></td>
-<td align="left"><span class="math inline">\(\rho \neq 0\)</span></td>
+<td align="left">Distancia</td>
+<td align="left">Independiente</td>
+<td align="left">Cuantitativa continua</td>
+<td align="left">Razón (kilómetros)</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>H3</strong></td>
-<td align="left"><span class="math inline">\(\mu_{\text{hábil}} = \mu_{\text{finde}}\)</span></td>
-<td align="left"><span class="math inline">\(\mu_{\text{hábil}} \neq \mu_{\text{finde}}\)</span></td>
+<td align="left">Duración</td>
+<td align="left">Independiente</td>
+<td align="left">Cuantitativa continua</td>
+<td align="left">Razón (minutos)</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>H4</strong></td>
-<td align="left"><span class="math inline">\(\mu_{\text{bajo}} = \mu_{\text{medio}} = \mu_{\text{alto}}\)</span> (tráfico)</td>
-<td align="left">Al menos una media difiere</td>
+<td align="left">Pasajeros</td>
+<td align="left">Independiente</td>
+<td align="left">Cuantitativa discreta</td>
+<td align="left">Razón (1 a 4)</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>H5</strong></td>
-<td align="left"><span class="math inline">\(\mu_{\text{despejado}} = \mu_{\text{lluvia}} = \mu_{\text{nieve}}\)</span></td>
-<td align="left">Al menos una media difiere</td>
+<td align="left">Tarifa base</td>
+<td align="left">Independiente</td>
+<td align="left">Cuantitativa continua</td>
+<td align="left">Razón (unidades monetarias)</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>H6</strong></td>
-<td align="left">Las cuatro franjas horarias tienen igual precio medio</td>
-<td align="left">Al menos una difiere</td>
+<td align="left">Tarifa por km</td>
+<td align="left">Independiente</td>
+<td align="left">Cuantitativa continua</td>
+<td align="left">Razón (por kilómetro)</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>H7</strong></td>
-<td align="left">La presencia de recargo es independiente del tráfico</td>
-<td align="left">Existe asociación</td>
+<td align="left">Tarifa por minuto</td>
+<td align="left">Independiente</td>
+<td align="left">Cuantitativa continua</td>
+<td align="left">Razón (por minuto)</td>
+</tr>
+<tr class="even">
+<td align="left">Tráfico</td>
+<td align="left">Independiente</td>
+<td align="left">Cualitativa ordinal</td>
+<td align="left">Bajo / Medio / Alto</td>
+</tr>
+<tr class="odd">
+<td align="left">Clima</td>
+<td align="left">Independiente</td>
+<td align="left">Cualitativa nominal</td>
+<td align="left">Despejado / Lluvia / Nieve</td>
+</tr>
+<tr class="even">
+<td align="left">Franja horaria</td>
+<td align="left">Independiente</td>
+<td align="left">Cualitativa ordinal</td>
+<td align="left">Mañana / Tarde / Noche / Madrugada</td>
+</tr>
+<tr class="odd">
+<td align="left">Día</td>
+<td align="left">Independiente</td>
+<td align="left">Cualitativa nominal</td>
+<td align="left">Día hábil / Fin de semana</td>
 </tr>
 </tbody>
 </table>
-<p>Todas las pruebas se realizan con un nivel de significancia <span class="math inline">\(\alpha = 0{,}05\)</span>.</p>
+<p>Adicionalmente se construyeron dos <strong>variables derivadas</strong>, necesarias para responder a las
+preguntas 4 y 5:</p>
+<ul>
+<li><strong>Tarifa teórica:</strong> <span class="math inline">\(\hat{P} = B + \tau_d \cdot d + \tau_t \cdot t\)</span>, es decir, el precio que
+correspondería a cada carrera aplicando estrictamente la estructura tarifaria declarada en
+la propia base.</li>
+<li><strong>Recargo:</strong> variable dicotómica que clasifica cada carrera según si el precio observado
+excede en más de un 1 % a la tarifa teórica. El umbral del 1 % actúa como tolerancia frente
+al redondeo y evita clasificar como recargo lo que solo es error de precisión numérica.</li>
+</ul>
 </div>
-<div id="alcance-del-avance" class="section level2 unnumbered hasAnchor">
-<h2>Alcance del avance<a href="index.html#alcance-del-avance" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Conforme al alcance definido para esta entrega, el análisis se limita a <strong>estadística
-descriptiva e inferencia clásica</strong>: estimación por intervalos, correlación, pruebas de
-hipótesis paramétricas y no paramétricas, análisis de varianza y pruebas de asociación entre
-variables categóricas. <strong>No se incluyen modelos de regresión</strong>; su formulación queda planteada
-como línea de trabajo posterior en el Capítulo <a href="discusion.html#discusion">5</a>.</p>
+<div id="tratamiento-de-los-datos-faltantes" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> Tratamiento de los datos faltantes<a href="metodologia.html#tratamiento-de-los-datos-faltantes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table>
+<caption><span id="tab:tabla-faltantes">Table 2.2: </span>Recuento de valores faltantes por variable.</caption>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="right">Casos faltantes</th>
+<th align="left">Porcentaje</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">distancia</td>
+<td align="right">50</td>
+<td align="left">5.0 %</td>
+</tr>
+<tr class="even">
+<td align="left">franja</td>
+<td align="right">50</td>
+<td align="left">5.0 %</td>
+</tr>
+<tr class="odd">
+<td align="left">dia</td>
+<td align="right">50</td>
+<td align="left">5.0 %</td>
+</tr>
+<tr class="even">
+<td align="left">pasajeros</td>
+<td align="right">50</td>
+<td align="left">5.0 %</td>
+</tr>
+<tr class="odd">
+<td align="left">trafico</td>
+<td align="right">50</td>
+<td align="left">5.0 %</td>
+</tr>
+<tr class="even">
+<td align="left">clima</td>
+<td align="right">50</td>
+<td align="left">5.0 %</td>
+</tr>
+<tr class="odd">
+<td align="left">tarifa_base</td>
+<td align="right">50</td>
+<td align="left">5.0 %</td>
+</tr>
+<tr class="even">
+<td align="left">tarifa_km</td>
+<td align="right">50</td>
+<td align="left">5.0 %</td>
+</tr>
+<tr class="odd">
+<td align="left">tarifa_min</td>
+<td align="right">50</td>
+<td align="left">5.0 %</td>
+</tr>
+<tr class="even">
+<td align="left">duracion</td>
+<td align="right">50</td>
+<td align="left">5.0 %</td>
+</tr>
+<tr class="odd">
+<td align="left">precio</td>
+<td align="right">49</td>
+<td align="left">4.9 %</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><span id="tab:tabla-faltantes">Table 2.2: </span>Distribución del número de valores faltantes por registro.</caption>
+<thead>
+<tr class="header">
+<th align="left">Número de valores faltantes en el registro</th>
+<th align="right">Cantidad de registros</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">0</td>
+<td align="right">562</td>
+</tr>
+<tr class="even">
+<td align="left">1</td>
+<td align="right">341</td>
+</tr>
+<tr class="odd">
+<td align="left">2</td>
+<td align="right">83</td>
+</tr>
+<tr class="even">
+<td align="left">3</td>
+<td align="right">14</td>
+</tr>
+</tbody>
+</table>
+<p>La ausencia de información afecta a todas las variables en una proporción muy similar,
+cercana al 5 % en cada una, y se distribuye de forma dispersa entre los registros: la mayoría
+de los casos incompletos presenta un único valor ausente. Este patrón —uniforme entre
+variables y sin concentración en registros concretos— es el que cabría esperar de un mecanismo
+<strong>completamente aleatorio (MCAR)</strong> en el sentido de <span class="citation">Rubin (<a href="#ref-rubin1976">1976</a>)</span>.</p>
+<p>Para someter esa presunción a prueba se comparan los casos completos con los incompletos en
+las variables efectivamente observadas:</p>
+<table>
+<caption><span id="tab:prueba-mcar">Table 2.3: </span>Comparación entre casos completos e incompletos como diagnóstico del mecanismo de ausencia.</caption>
+<colgroup>
+<col width="12%" />
+<col width="21%" />
+<col width="26%" />
+<col width="28%" />
+<col width="10%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Prueba</th>
+<th align="left">Media casos completos</th>
+<th align="left">Media casos incompletos</th>
+<th align="left">Valor p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Precio</td>
+<td align="left">t de Welch</td>
+<td align="left">57.66</td>
+<td align="left">55.74</td>
+<td align="left">= 0.4517</td>
+</tr>
+<tr class="even">
+<td align="left">Precio</td>
+<td align="left">U de Mann-Whitney</td>
+<td align="left">-</td>
+<td align="left">-</td>
+<td align="left">= 0.7680</td>
+</tr>
+<tr class="odd">
+<td align="left">Distancia</td>
+<td align="left">t de Welch</td>
+<td align="left">27.77</td>
+<td align="left">26.05</td>
+<td align="left">= 0.1775</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Interpretación.</strong> Ninguna de las comparaciones alcanza significación estadística: los
+registros incompletos no difieren de los completos ni en precio ni en distancia. La evidencia
+es por tanto compatible con un mecanismo MCAR, bajo el cual la <strong>eliminación por lista</strong>
+produce estimaciones insesgadas. Se adopta en consecuencia ese procedimiento, trabajando con
+los 562 casos completos (56.2 % de la base original).</p>
+<p>Debe reconocerse el costo de esta decisión: se descarta cerca del
+44 % de los registros, con la consiguiente pérdida de
+potencia estadística. La alternativa —imputar los valores ausentes mediante métodos múltiples—
+se plantea como línea de trabajo para la siguiente fase del proyecto.</p>
+</div>
+<div id="plan-de-análisis-estadístico" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> Plan de análisis estadístico<a href="metodologia.html#plan-de-an%C3%A1lisis-estad%C3%ADstico" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El análisis se ejecuta en cuatro fases encadenadas:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Exploración descriptiva.</strong> Medidas de tendencia central, dispersión y forma; detección de
+valores atípicos por el criterio de Tukey; caracterización gráfica global y por grupos.</li>
+<li><strong>Verificación de supuestos.</strong> Shapiro–Wilk y gráficos cuantil–cuantil para la normalidad;
+Brown–Forsythe para la homogeneidad de varianzas.</li>
+<li><strong>Inferencia.</strong> Correlaciones de Pearson y Spearman con sus intervalos de confianza;
+prueba <span class="math inline">\(t\)</span> de Welch; ANOVA de una vía, ANOVA de Welch y Kruskal–Wallis; comparaciones
+múltiples de Tukey; pruebas <span class="math inline">\(\chi^2\)</span> y exacta de Fisher.</li>
+<li><strong>Robustez.</strong> Intervalos bootstrap con <span class="math inline">\(B = 10\,000\)</span> remuestreos y análisis de sensibilidad
+mediante exclusión de las observaciones extremas.</li>
+</ol>
+</div>
+<div id="criterios-de-decisión" class="section level2 hasAnchor" number="2.6">
+<h2><span class="header-section-number">2.6</span> Criterios de decisión<a href="metodologia.html#criterios-de-decisi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Se fija <span class="math inline">\(\alpha = 0{,}05\)</span>. Toda conclusión se acompaña del tamaño del efecto correspondiente
+(<span class="math inline">\(r\)</span>, <span class="math inline">\(d\)</span> de Cohen, <span class="math inline">\(\eta^2\)</span>, <span class="math inline">\(\epsilon^2\)</span> o <span class="math inline">\(V\)</span> de Cramér) y, cuando procede, de su intervalo
+de confianza. Una conclusión se considera <strong>sólida</strong> únicamente cuando la prueba paramétrica,
+la no paramétrica y el análisis de sensibilidad coinciden.</p>
+</div>
+<div id="herramientas-y-reproducibilidad" class="section level2 hasAnchor" number="2.7">
+<h2><span class="header-section-number">2.7</span> Herramientas y reproducibilidad<a href="metodologia.html#herramientas-y-reproducibilidad" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El análisis se ejecutó en R <span class="citation">(<a href="#ref-rcore">R Core Team 2024</a>)</span>; los gráficos se construyeron con la gramática de
+gráficos implementada en <strong>ggplot2</strong> <span class="citation">(<a href="#ref-ggplot2">Wickham 2016</a>)</span> y el informe se generó con <strong>bookdown</strong>
+<span class="citation">(<a href="#ref-bookdown">Xie 2016</a>)</span>. La semilla aleatoria se fijó en 2024, de modo que los procedimientos basados en
+remuestreo producen resultados idénticos en cualquier ejecución posterior. El código fuente
+completo y la base de datos original acompañan a este documento en el repositorio del
+proyecto.</p>
+</div>
+<div id="consideraciones-éticas" class="section level2 hasAnchor" number="2.8">
+<h2><span class="header-section-number">2.8</span> Consideraciones éticas<a href="metodologia.html#consideraciones-%C3%A9ticas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>La base de datos analizada contiene registros operativos agregados de carreras de taxi y <strong>no
+incluye información que permita identificar a personas</strong>: no hay nombres, documentos,
+coordenadas de origen o destino, ni identificadores de conductor o pasajero. El trabajo
+constituye un análisis secundario de datos de acceso público, por lo que no requiere
+consentimiento informado ni aprobación de un comité de ética en investigación.</p>
 
 </div>
 </div>
@@ -325,6 +509,12 @@ como línea de trabajo posterior en el Capítulo <a href="discusion.html#discusi
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-rcore" class="csl-entry">
 R Core Team. 2024. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
+</div>
+<div id="ref-rubin1976" class="csl-entry">
+Rubin, Donald B. 1976. <span>“Inference and Missing Data.”</span> <em>Biometrika</em> 63 (3): 581–92.
+</div>
+<div id="ref-ggplot2" class="csl-entry">
+Wickham, Hadley. 2016. <em>Ggplot2: Elegant Graphics for Data Analysis</em>. New York: Springer-Verlag.
 </div>
 <div id="ref-bookdown" class="csl-entry">
 Xie, Yihui. 2016. <em>Bookdown: Authoring Books and Technical Documents with r Markdown</em>. Boca Raton, Florida: Chapman; Hall/CRC. <a href="https://bookdown.org/yihui/bookdown">https://bookdown.org/yihui/bookdown</a>.
@@ -335,8 +525,8 @@ Xie, Yihui. 2016. <em>Bookdown: Authoring Books and Technical Documents with r M
           </div>
         </div>
       </div>
-
-<a href="marco.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="marco.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="descriptivo.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

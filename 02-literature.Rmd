@@ -1,3 +1,153 @@
-# Literature
+# Metodología {#metodologia}
 
-Here is a review of existing methods.
+## Tipo y diseño de estudio
+
+La investigación es de enfoque **cuantitativo**, alcance **descriptivo-correlacional** y
+diseño **no experimental, transversal y retrospectivo**. No existe manipulación de variables
+por parte del equipo investigador: los factores de contexto —tráfico, clima, franja horaria,
+día— se registran tal como ocurrieron. Esta condición delimita el alcance interpretativo de
+los resultados: las asociaciones detectadas no autorizan, por sí solas, inferencias causales.
+
+## Unidad de análisis y fuente de datos
+
+La unidad de análisis es la **carrera de taxi individual**. La base contiene
+`r format(n_total, big.mark = ".")` registros y `r ncol(crudos)` variables, correspondientes a
+la distancia, la duración, la ocupación, los tres componentes tarifarios, cuatro factores de
+contexto y el precio final cobrado.
+
+## Operacionalización de las variables
+
+```{r tabla-variables, echo=FALSE}
+vars <- data.frame(
+  Variable = c("Precio de la carrera", "Distancia", "Duración", "Pasajeros",
+               "Tarifa base", "Tarifa por km", "Tarifa por minuto",
+               "Tráfico", "Clima", "Franja horaria", "Día"),
+  Rol = c("Dependiente", rep("Independiente", 10)),
+  Naturaleza = c(rep("Cuantitativa continua", 3), "Cuantitativa discreta",
+                 rep("Cuantitativa continua", 3),
+                 "Cualitativa ordinal", "Cualitativa nominal",
+                 "Cualitativa ordinal", "Cualitativa nominal"),
+  `Escala / niveles` = c(
+    "Razón (unidades monetarias)",
+    "Razón (kilómetros)",
+    "Razón (minutos)",
+    "Razón (1 a 4)",
+    "Razón (unidades monetarias)",
+    "Razón (por kilómetro)",
+    "Razón (por minuto)",
+    "Bajo / Medio / Alto",
+    "Despejado / Lluvia / Nieve",
+    "Mañana / Tarde / Noche / Madrugada",
+    "Día hábil / Fin de semana"),
+  check.names = FALSE
+)
+kable(vars, caption = "Matriz de operacionalización de variables.")
+```
+
+Adicionalmente se construyeron dos **variables derivadas**, necesarias para responder a las
+preguntas 4 y 5:
+
+- **Tarifa teórica:** $\hat{P} = B + \tau_d \cdot d + \tau_t \cdot t$, es decir, el precio que
+  correspondería a cada carrera aplicando estrictamente la estructura tarifaria declarada en
+  la propia base.
+- **Recargo:** variable dicotómica que clasifica cada carrera según si el precio observado
+  excede en más de un 1 % a la tarifa teórica. El umbral del 1 % actúa como tolerancia frente
+  al redondeo y evita clasificar como recargo lo que solo es error de precisión numérica.
+
+## Tratamiento de los datos faltantes
+
+```{r tabla-faltantes, echo=FALSE}
+falt <- data.frame(
+  Variable = names(datos)[1:11],
+  `Casos faltantes` = sapply(datos[, 1:11], function(v) sum(is.na(v))),
+  `Porcentaje` = paste0(fnum(100 * sapply(datos[, 1:11], function(v) mean(is.na(v))), 1), " %"),
+  check.names = FALSE, row.names = NULL
+)
+kable(falt, caption = "Recuento de valores faltantes por variable.")
+
+n_falt <- rowSums(is.na(datos[, 1:11]))
+dist_falt <- as.data.frame(table(`Faltantes por registro` = n_falt))
+names(dist_falt) <- c("Número de valores faltantes en el registro", "Cantidad de registros")
+kable(dist_falt, caption = "Distribución del número de valores faltantes por registro.")
+```
+
+La ausencia de información afecta a todas las variables en una proporción muy similar,
+cercana al 5 % en cada una, y se distribuye de forma dispersa entre los registros: la mayoría
+de los casos incompletos presenta un único valor ausente. Este patrón —uniforme entre
+variables y sin concentración en registros concretos— es el que cabría esperar de un mecanismo
+**completamente aleatorio (MCAR)** en el sentido de @rubin1976.
+
+Para someter esa presunción a prueba se comparan los casos completos con los incompletos en
+las variables efectivamente observadas:
+
+```{r prueba-mcar, echo=FALSE}
+es_completo <- complete.cases(datos[, 1:11])
+
+p_comp <- datos$precio[es_completo]
+p_inc  <- datos$precio[!es_completo & !is.na(datos$precio)]
+t_mcar <- t.test(p_comp, p_inc)
+mw_mcar <- suppressWarnings(wilcox.test(p_comp, p_inc, exact = FALSE))
+
+d_comp <- datos$distancia[es_completo]
+d_inc  <- datos$distancia[!es_completo & !is.na(datos$distancia)]
+t_mcar_d <- t.test(d_comp, d_inc)
+
+tab_mcar <- data.frame(
+  Variable = c("Precio", "Precio", "Distancia"),
+  Prueba = c("t de Welch", "U de Mann-Whitney", "t de Welch"),
+  `Media casos completos` = c(fnum(mean(p_comp)), "-", fnum(mean(d_comp))),
+  `Media casos incompletos` = c(fnum(mean(p_inc)), "-", fnum(mean(d_inc))),
+  `Valor p` = c(fp(t_mcar$p.value), fp(mw_mcar$p.value), fp(t_mcar_d$p.value)),
+  check.names = FALSE
+)
+kable(tab_mcar, caption = "Comparación entre casos completos e incompletos como diagnóstico del mecanismo de ausencia.")
+```
+
+**Interpretación.** Ninguna de las comparaciones alcanza significación estadística: los
+registros incompletos no difieren de los completos ni en precio ni en distancia. La evidencia
+es por tanto compatible con un mecanismo MCAR, bajo el cual la **eliminación por lista**
+produce estimaciones insesgadas. Se adopta en consecuencia ese procedimiento, trabajando con
+los `r n_comp` casos completos (`r fnum(100*n_comp/n_total, 1)` % de la base original).
+
+Debe reconocerse el costo de esta decisión: se descarta cerca del
+`r fnum(100*(1 - n_comp/n_total), 0)` % de los registros, con la consiguiente pérdida de
+potencia estadística. La alternativa —imputar los valores ausentes mediante métodos múltiples—
+se plantea como línea de trabajo para la siguiente fase del proyecto.
+
+## Plan de análisis estadístico
+
+El análisis se ejecuta en cuatro fases encadenadas:
+
+1. **Exploración descriptiva.** Medidas de tendencia central, dispersión y forma; detección de
+   valores atípicos por el criterio de Tukey; caracterización gráfica global y por grupos.
+2. **Verificación de supuestos.** Shapiro–Wilk y gráficos cuantil–cuantil para la normalidad;
+   Brown–Forsythe para la homogeneidad de varianzas.
+3. **Inferencia.** Correlaciones de Pearson y Spearman con sus intervalos de confianza;
+   prueba $t$ de Welch; ANOVA de una vía, ANOVA de Welch y Kruskal–Wallis; comparaciones
+   múltiples de Tukey; pruebas $\chi^2$ y exacta de Fisher.
+4. **Robustez.** Intervalos bootstrap con $B = 10\,000$ remuestreos y análisis de sensibilidad
+   mediante exclusión de las observaciones extremas.
+
+## Criterios de decisión
+
+Se fija $\alpha = 0{,}05$. Toda conclusión se acompaña del tamaño del efecto correspondiente
+($r$, $d$ de Cohen, $\eta^2$, $\epsilon^2$ o $V$ de Cramér) y, cuando procede, de su intervalo
+de confianza. Una conclusión se considera **sólida** únicamente cuando la prueba paramétrica,
+la no paramétrica y el análisis de sensibilidad coinciden.
+
+## Herramientas y reproducibilidad
+
+El análisis se ejecutó en R [@rcore]; los gráficos se construyeron con la gramática de
+gráficos implementada en **ggplot2** [@ggplot2] y el informe se generó con **bookdown**
+[@bookdown]. La semilla aleatoria se fijó en 2024, de modo que los procedimientos basados en
+remuestreo producen resultados idénticos en cualquier ejecución posterior. El código fuente
+completo y la base de datos original acompañan a este documento en el repositorio del
+proyecto.
+
+## Consideraciones éticas
+
+La base de datos analizada contiene registros operativos agregados de carreras de taxi y **no
+incluye información que permita identificar a personas**: no hay nombres, documentos,
+coordenadas de origen o destino, ni identificadores de conductor o pasajero. El trabajo
+constituye un análisis secundario de datos de acceso público, por lo que no requiere
+consentimiento informado ni aprobación de un comité de ética en investigación.

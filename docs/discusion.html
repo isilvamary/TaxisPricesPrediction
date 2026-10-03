@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Determinantes del precio de las carreras de taxi</title>
+  <title>Capítulo 5 Discusión y conclusiones del avance | Determinantes del precio de las carreras de taxi</title>
   <meta name="description" content="Avance de investigación sobre los determinantes del precio de las carreras de taxi mediante estadística descriptiva e inferencial, sin modelos de regresión." />
   <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Determinantes del precio de las carreras de taxi" />
+  <meta property="og:title" content="Capítulo 5 Discusión y conclusiones del avance | Determinantes del precio de las carreras de taxi" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="Avance de investigación sobre los determinantes del precio de las carreras de taxi mediante estadística descriptiva e inferencial, sin modelos de regresión." />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Determinantes del precio de las carreras de taxi" />
+  <meta name="twitter:title" content="Capítulo 5 Discusión y conclusiones del avance | Determinantes del precio de las carreras de taxi" />
   
   <meta name="twitter:description" content="Avance de investigación sobre los determinantes del precio de las carreras de taxi mediante estadística descriptiva e inferencial, sin modelos de regresión." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="marco.html"/>
+<link rel="prev" href="inferencial.html"/>
+<link rel="next" href="referencias.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -194,140 +194,186 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Determinantes del precio de las carreras de taxi</h1>
-<h2 class="subtitle"><em>Avance de proyecto de investigación: análisis descriptivo e inferencial</em></h2>
-<p class="author"><em>Escribe aquí tu nombre y el de tu institución</em></p>
-<p class="date"><em>02/10/2026</em></p>
+<div id="discusion" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Capítulo 5</span> Discusión y conclusiones del avance<a href="discusion.html#discusion" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="discusión-de-los-resultados" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Discusión de los resultados<a href="discusion.html#discusi%C3%B3n-de-los-resultados" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Los hallazgos de este avance convergen en una conclusión que puede enunciarse en una sola
+frase: <strong>el precio de una carrera de taxi en esta base de datos es una función determinista de
+la estructura tarifaria, y ningún factor de contexto lo altera.</strong> Conviene desarrollar sus
+implicaciones.</p>
+<div id="el-mecanismo-de-formación-del-precio" class="section level3 hasAnchor" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> El mecanismo de formación del precio<a href="discusion.html#el-mecanismo-de-formaci%C3%B3n-del-precio" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>El análisis de consistencia tarifaria mostró que en aproximadamente el 97 % de las carreras el
+precio observado coincide con la tarifa teórica <span class="math inline">\(B + \tau_d d + \tau_t t\)</span> hasta la precisión
+del redondeo. Este resultado explica, por sí solo, prácticamente todo lo demás. Si el precio
+se obtiene aplicando una fórmula cerrada a tres insumos, entonces solo pueden influir en él
+las variables que entren en esa fórmula. Y de las dos variables del trayecto que sí entran, el
+análisis correlacional estableció una jerarquía nítida: la distancia domina de manera
+abrumadora sobre la duración.</p>
+<p>La razón es de magnitud relativa. La tarifa por kilómetro multiplica una variable con un
+recorrido amplio y asimétrico; la tarifa por minuto, de un orden de magnitud inferior,
+multiplica una variable con un recorrido más acotado. El producto <span class="math inline">\(\tau_d \cdot d\)</span> domina así
+la suma. Desde el punto de vista de la economía del transporte esto describe un sistema
+tarifario <strong>orientado a la distancia</strong>, que traslada al conductor —y no al pasajero— el costo
+del tiempo perdido en congestión.</p>
 </div>
-<div id="presentación" class="section level1 unnumbered hasAnchor">
-<h1>Presentación<a href="index.html#presentaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>Este documento constituye el <strong>avance</strong> del proyecto de investigación y reporta de manera
-reproducible el trabajo estadístico realizado hasta la fecha sobre una base de
-1.000 carreras de taxi. Fue elaborado íntegramente en <strong>R</strong>
-<span class="citation">(<a href="#ref-rcore">R Core Team 2024</a>)</span> con el paquete <strong>bookdown</strong> <span class="citation">(<a href="#ref-bookdown">Xie 2016</a>)</span>: cada tabla, cada gráfico y cada valor
-numérico que aparece en el texto se recalcula automáticamente a partir del archivo de datos
-original cada vez que el documento se compila. No hay resultados copiados a mano.</p>
-<div id="problema-de-investigación" class="section level2 unnumbered hasAnchor">
-<h2>Problema de investigación<a href="index.html#problema-de-investigaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El precio de una carrera de taxi es el resultado de una estructura tarifaria explícita —un
-cargo fijo de partida más componentes proporcionales a la distancia y al tiempo— sobre la que
-pueden actuar factores de contexto: la congestión vehicular, las condiciones meteorológicas,
-la franja horaria o el día de la semana. La literatura sobre tarificación en transporte
-urbano sostiene que estos factores encarecen el servicio, ya sea de forma mecánica (una
-carrera congestionada dura más y acumula más cargo por minuto) o deliberada (mecanismos de
-precio dinámico que elevan la tarifa cuando la demanda supera a la oferta).</p>
-<p>El problema que motiva este avance es determinar <strong>cuáles de esos factores producen realmente
-una variación detectable en el precio final</strong> de una carrera, y con qué magnitud. La
-distinción no es trivial: un factor puede parecer influyente en una comparación simple y
-resultar irrelevante cuando se controla la heterogeneidad de varianzas o la presencia de
-valores extremos.</p>
+<div id="la-ausencia-de-efectos-contextuales" class="section level3 hasAnchor" number="5.1.2">
+<h3><span class="header-section-number">5.1.2</span> La ausencia de efectos contextuales<a href="discusion.html#la-ausencia-de-efectos-contextuales" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Ni el clima, ni la franja horaria, ni el día de la semana, ni las condiciones de tráfico
+mostraron asociación con el precio una vez aplicados procedimientos robustos. Este resultado
+contradice la predicción teórica y admite dos lecturas, no excluyentes.</p>
+<p>La primera es sustantiva: el sistema tarifario analizado carece de mecanismos de ajuste
+contextual. No hay recargo nocturno, ni recargo por clima adverso, ni precio dinámico
+sistemático. Los componentes tarifarios se asignan con independencia de las condiciones de
+operación, hecho que el propio avance verificó al comprobar que tráfico, clima, franja y día
+son estadísticamente independientes entre sí.</p>
+<p>La segunda lectura es metodológica y atañe a la naturaleza de los datos. En un entorno urbano
+real cabría esperar cierta asociación entre lluvia y congestión, entre hora pico y tráfico
+denso, o entre distancia y duración del trayecto. La ausencia <strong>total</strong> de tales asociaciones
+—incluida la ortogonalidad entre distancia y duración, quizá el resultado más llamativo de la
+matriz de correlaciones— sugiere que las variables de la base fueron generadas de forma
+independiente unas de otras. Reconocerlo no invalida el ejercicio analítico, pero sí acota
+con honestidad el alcance de sus conclusiones sustantivas: lo que el estudio caracteriza con
+solidez es la <strong>estructura interna de esta base de datos</strong>, no necesariamente el
+comportamiento de un mercado de taxis real.</p>
 </div>
-<div id="preguntas-de-investigación" class="section level2 unnumbered hasAnchor">
-<h2>Preguntas de investigación<a href="index.html#preguntas-de-investigaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="la-fragilidad-de-la-significación-estadística" class="section level3 hasAnchor" number="5.1.3">
+<h3><span class="header-section-number">5.1.3</span> La fragilidad de la significación estadística<a href="discusion.html#la-fragilidad-de-la-significaci%C3%B3n-estad%C3%ADstica" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>El resultado metodológicamente más valioso del avance es la discrepancia observada en el
+factor tráfico. El ANOVA clásico declaró un efecto significativo; el ANOVA de Welch y la
+prueba de Kruskal–Wallis no lo hicieron. La prueba de Brown–Forsythe reveló que el supuesto
+de homocedasticidad, exigido únicamente por el primero de los tres, estaba violado
+precisamente en ese factor. El análisis de sensibilidad cerró el argumento: excluyendo trece
+carreras de entre quinientas sesenta y dos, la significación se desvanece por completo.</p>
+<p>Un investigador que hubiera aplicado el procedimiento estándar sin verificar supuestos ni
+someter el resultado a análisis de sensibilidad habría concluido que la congestión encarece
+las carreras, y habría respaldado esa conclusión con un valor <span class="math inline">\(p\)</span> inferior a <span class="math inline">\(0{,}01\)</span> sobre
+más de quinientas observaciones. El caso ilustra con claridad por qué la verificación de
+supuestos no es un trámite previo al análisis, sino parte constitutiva de él.</p>
+</div>
+<div id="los-casos-con-recargo" class="section level3 hasAnchor" number="5.1.4">
+<h3><span class="header-section-number">5.1.4</span> Los casos con recargo<a href="discusion.html#los-casos-con-recargo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Las trece carreras cuyo precio excede la tarifa teórica constituyen un subconjunto
+cualitativamente distinto: trayectos de distancia muy superior a la media y con razones de
+sobreprecio que llegan a triplicar la tarifa calculada. Su comportamiento es compatible con un
+mecanismo de precio dinámico como el descrito por <span class="citation">Cachon, Daniels, and Lobel (<a href="#ref-cachon2017">2017</a>)</span>, y la prueba exacta de Fisher
+sugiere una mayor concentración bajo tráfico alto. Sin embargo, con trece casos la evidencia
+es demasiado escasa para sostener una afirmación firme, y así se ha reportado.</p>
+</div>
+</div>
+<div id="conclusiones" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Conclusiones<a href="discusion.html#conclusiones" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ol style="list-style-type: decimal">
-<li>¿Qué intensidad tiene la asociación entre el precio de la carrera y sus dos determinantes
-técnicos, la distancia recorrida y la duración del trayecto?</li>
-<li>¿Difiere el precio medio de las carreras entre días hábiles y fines de semana?</li>
-<li>¿Influyen las condiciones de tráfico, el clima y la franja horaria en el precio de la
-carrera?</li>
-<li>¿Se reproduce el precio observado a partir de la estructura tarifaria declarada, o existen
-carreras con recargos no explicados por ella?</li>
-<li>En caso de existir tales recargos, ¿están asociados a alguna condición de operación?</li>
+<li><p><strong>Sobre la distancia (H1).</strong> Se rechaza la hipótesis nula. La distancia mantiene una
+correlación fuerte, positiva y altamente significativa con el precio, explicando alrededor
+de tres cuartas partes de su varianza. Es el determinante principal del precio.</p></li>
+<li><p><strong>Sobre la duración (H2).</strong> Se rechaza la hipótesis nula, pero la asociación es débil: la
+duración explica una fracción marginal de la varianza del precio pese a estar contemplada
+explícitamente en la estructura tarifaria.</p></li>
+<li><p><strong>Sobre el día de la semana (H3).</strong> No se rechaza la hipótesis nula. No hay evidencia de
+que el precio difiera entre días hábiles y fines de semana, y el tamaño del efecto es
+pequeño.</p></li>
+<li><p><strong>Sobre el tráfico (H4).</strong> No se rechaza la hipótesis nula cuando se emplean procedimientos
+robustos. La significación obtenida por el ANOVA clásico es un artefacto derivado de la
+heterocedasticidad y de un reducido conjunto de observaciones extremas.</p></li>
+<li><p><strong>Sobre el clima y la franja horaria (H5 y H6).</strong> No se rechazan las hipótesis nulas. Los
+tamaños del efecto son prácticamente nulos bajo los tres procedimientos aplicados.</p></li>
+<li><p><strong>Sobre los recargos (H7).</strong> La prueba exacta de Fisher sugiere una asociación entre
+tráfico alto y presencia de recargo, pero el escaso número de casos impide considerarla
+establecida.</p></li>
+<li><p><strong>Conclusión integradora.</strong> El precio se explica por la estructura tarifaria y, dentro de
+ella, esencialmente por la distancia recorrida. Los factores de contexto no intervienen. La
+única huella de tarificación no lineal aparece en un 2 % de carreras de larga distancia con
+sobreprecio.</p></li>
 </ol>
 </div>
-<div id="objetivos" class="section level2 unnumbered hasAnchor">
-<h2>Objetivos<a href="index.html#objetivos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><strong>Objetivo general.</strong> Identificar y cuantificar, mediante técnicas estadísticas descriptivas e
-inferenciales, los factores asociados al precio de las carreras de taxi registradas en la base
-de datos analizada.</p>
-<p><strong>Objetivos específicos.</strong></p>
-<ol style="list-style-type: lower-alpha">
-<li>Caracterizar la distribución del precio y de sus componentes tarifarios, evaluando
-simetría, dispersión y presencia de valores atípicos.</li>
-<li>Diagnosticar el patrón de datos faltantes y justificar el procedimiento de tratamiento
-adoptado.</li>
-<li>Estimar la intensidad y significación de las asociaciones entre el precio y las variables
-cuantitativas del trayecto.</li>
-<li>Contrastar la igualdad de precios medios entre los niveles de las variables de contexto.</li>
-<li>Evaluar la robustez de cada conclusión mediante pruebas no paramétricas, correcciones para
-varianzas desiguales y análisis de sensibilidad frente a valores extremos.</li>
-<li>Verificar la consistencia interna entre el precio observado y la estructura tarifaria
-declarada.</li>
+<div id="limitaciones" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Limitaciones<a href="discusion.html#limitaciones" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>Pérdida de casos.</strong> La eliminación por lista descartó cerca del 44 % de los registros. El
+diagnóstico realizado respalda el supuesto MCAR y, con él, la ausencia de sesgo, pero la
+pérdida de potencia es real.</li>
+<li><strong>Alcance no experimental.</strong> El diseño es observacional, de modo que las asociaciones
+detectadas no autorizan inferencias causales.</li>
+<li><strong>Escaso número de casos con recargo.</strong> Trece observaciones son insuficientes para
+caracterizar el mecanismo de precio dinámico.</li>
+<li><strong>Ausencia de información contextual adicional.</strong> La base no registra zona geográfica,
+identidad del conductor ni nivel de demanda, variables que podrían explicar los recargos.</li>
+<li><strong>Alcance analítico.</strong> Conforme a lo definido para esta entrega no se incluyeron modelos de
+regresión, por lo que no se estimaron los coeficientes tarifarios ni se construyó una función
+de predicción del precio.</li>
+</ul>
+</div>
+<div id="líneas-de-trabajo-para-la-siguiente-fase" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Líneas de trabajo para la siguiente fase<a href="discusion.html#l%C3%ADneas-de-trabajo-para-la-siguiente-fase" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li><strong>Modelado del precio.</strong> Estimar los componentes de la estructura tarifaria y evaluar su
+capacidad predictiva, cuantificando el aporte marginal de cada insumo.</li>
+<li><strong>Imputación múltiple.</strong> Recuperar los registros incompletos mediante imputación,
+comparando los resultados con los obtenidos por eliminación por lista como prueba de
+robustez.</li>
+<li><strong>Caracterización de los casos con recargo.</strong> Ampliar la muestra de carreras con
+sobreprecio y modelar la probabilidad de recargo en función de las condiciones de
+operación.</li>
+<li><strong>Análisis por umbrales de distancia.</strong> Evaluar si la relación entre distancia y precio
+mantiene la misma intensidad a lo largo de todo el recorrido o si cambia de régimen a partir
+de cierta distancia, lo que explicaría el comportamiento diferenciado de los trayectos
+largos.</li>
 </ol>
 </div>
-<div id="hipótesis" class="section level2 unnumbered hasAnchor">
-<h2>Hipótesis<a href="index.html#hip%C3%B3tesis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="nota-de-reproducibilidad" class="section level2 hasAnchor" number="5.5">
+<h2><span class="header-section-number">5.5</span> Nota de reproducibilidad<a href="discusion.html#nota-de-reproducibilidad" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <table>
-<colgroup>
-<col width="4%" />
-<col width="44%" />
-<col width="50%" />
-</colgroup>
+<caption><span id="tab:sesion">Table 5.1: </span>Entorno de ejecución en el que se compiló este documento.</caption>
 <thead>
 <tr class="header">
-<th align="left"></th>
-<th align="left">Hipótesis nula (<span class="math inline">\(H_0\)</span>)</th>
-<th align="left">Hipótesis alterna (<span class="math inline">\(H_1\)</span>)</th>
+<th align="left">Componente</th>
+<th align="left">Detalle</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><strong>H1</strong></td>
-<td align="left"><span class="math inline">\(\rho_{\text{distancia, precio}} = 0\)</span></td>
-<td align="left"><span class="math inline">\(\rho \neq 0\)</span></td>
+<td align="left">Versión de R</td>
+<td align="left">R version 4.5.3 (2026-03-11 ucrt)</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>H2</strong></td>
-<td align="left"><span class="math inline">\(\rho_{\text{duración, precio}} = 0\)</span></td>
-<td align="left"><span class="math inline">\(\rho \neq 0\)</span></td>
+<td align="left">Plataforma</td>
+<td align="left">x86_64-w64-mingw32/x64</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>H3</strong></td>
-<td align="left"><span class="math inline">\(\mu_{\text{hábil}} = \mu_{\text{finde}}\)</span></td>
-<td align="left"><span class="math inline">\(\mu_{\text{hábil}} \neq \mu_{\text{finde}}\)</span></td>
+<td align="left">Paquetes adjuntos</td>
+<td align="left">dplyr, ggplot2, knitr, tidyr</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>H4</strong></td>
-<td align="left"><span class="math inline">\(\mu_{\text{bajo}} = \mu_{\text{medio}} = \mu_{\text{alto}}\)</span> (tráfico)</td>
-<td align="left">Al menos una media difiere</td>
+<td align="left">Semilla aleatoria</td>
+<td align="left">2024</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>H5</strong></td>
-<td align="left"><span class="math inline">\(\mu_{\text{despejado}} = \mu_{\text{lluvia}} = \mu_{\text{nieve}}\)</span></td>
-<td align="left">Al menos una media difiere</td>
+<td align="left">Registros en la base original</td>
+<td align="left">1000</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>H6</strong></td>
-<td align="left">Las cuatro franjas horarias tienen igual precio medio</td>
-<td align="left">Al menos una difiere</td>
+<td align="left">Registros analizados</td>
+<td align="left">562</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>H7</strong></td>
-<td align="left">La presencia de recargo es independiente del tráfico</td>
-<td align="left">Existe asociación</td>
+<td align="left">Fecha de compilación</td>
+<td align="left">2026-10-02 19:39</td>
 </tr>
 </tbody>
 </table>
-<p>Todas las pruebas se realizan con un nivel de significancia <span class="math inline">\(\alpha = 0{,}05\)</span>.</p>
-</div>
-<div id="alcance-del-avance" class="section level2 unnumbered hasAnchor">
-<h2>Alcance del avance<a href="index.html#alcance-del-avance" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Conforme al alcance definido para esta entrega, el análisis se limita a <strong>estadística
-descriptiva e inferencia clásica</strong>: estimación por intervalos, correlación, pruebas de
-hipótesis paramétricas y no paramétricas, análisis de varianza y pruebas de asociación entre
-variables categóricas. <strong>No se incluyen modelos de regresión</strong>; su formulación queda planteada
-como línea de trabajo posterior en el Capítulo <a href="discusion.html#discusion">5</a>.</p>
+<p>Este informe se genera por completo a partir del código fuente y del archivo
+<code>datos/taxi_trip_pricing.csv</code> contenidos en el repositorio del proyecto. Cualquier lector
+puede clonar el repositorio, ejecutar la compilación y obtener exactamente los mismos
+resultados, incluidos los procedimientos basados en remuestreo.</p>
 
 </div>
 </div>
 <h3>References</h3>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
-<div id="ref-rcore" class="csl-entry">
-R Core Team. 2024. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
-</div>
-<div id="ref-bookdown" class="csl-entry">
-Xie, Yihui. 2016. <em>Bookdown: Authoring Books and Technical Documents with r Markdown</em>. Boca Raton, Florida: Chapman; Hall/CRC. <a href="https://bookdown.org/yihui/bookdown">https://bookdown.org/yihui/bookdown</a>.
+<div id="ref-cachon2017" class="csl-entry">
+Cachon, Gérard P., Kaitlin M. Daniels, and Ruben Lobel. 2017. <span>“The Role of Surge Pricing on a Service Platform with Self-Scheduling Capacity.”</span> <em>Manufacturing &amp; Service Operations Management</em> 19 (3): 368–84.
 </div>
 </div>
             </section>
@@ -335,8 +381,8 @@ Xie, Yihui. 2016. <em>Bookdown: Authoring Books and Technical Documents with r M
           </div>
         </div>
       </div>
-
-<a href="marco.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="inferencial.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="referencias.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

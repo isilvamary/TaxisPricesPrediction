@@ -1,3 +1,156 @@
-# Final Words
+# Discusión y conclusiones del avance {#discusion}
 
-We have finished a nice book.
+## Discusión de los resultados
+
+Los hallazgos de este avance convergen en una conclusión que puede enunciarse en una sola
+frase: **el precio de una carrera de taxi en esta base de datos es una función determinista de
+la estructura tarifaria, y ningún factor de contexto lo altera.** Conviene desarrollar sus
+implicaciones.
+
+### El mecanismo de formación del precio
+
+El análisis de consistencia tarifaria mostró que en aproximadamente el 97 % de las carreras el
+precio observado coincide con la tarifa teórica $B + \tau_d d + \tau_t t$ hasta la precisión
+del redondeo. Este resultado explica, por sí solo, prácticamente todo lo demás. Si el precio
+se obtiene aplicando una fórmula cerrada a tres insumos, entonces solo pueden influir en él
+las variables que entren en esa fórmula. Y de las dos variables del trayecto que sí entran, el
+análisis correlacional estableció una jerarquía nítida: la distancia domina de manera
+abrumadora sobre la duración.
+
+La razón es de magnitud relativa. La tarifa por kilómetro multiplica una variable con un
+recorrido amplio y asimétrico; la tarifa por minuto, de un orden de magnitud inferior,
+multiplica una variable con un recorrido más acotado. El producto $\tau_d \cdot d$ domina así
+la suma. Desde el punto de vista de la economía del transporte esto describe un sistema
+tarifario **orientado a la distancia**, que traslada al conductor —y no al pasajero— el costo
+del tiempo perdido en congestión.
+
+### La ausencia de efectos contextuales
+
+Ni el clima, ni la franja horaria, ni el día de la semana, ni las condiciones de tráfico
+mostraron asociación con el precio una vez aplicados procedimientos robustos. Este resultado
+contradice la predicción teórica y admite dos lecturas, no excluyentes.
+
+La primera es sustantiva: el sistema tarifario analizado carece de mecanismos de ajuste
+contextual. No hay recargo nocturno, ni recargo por clima adverso, ni precio dinámico
+sistemático. Los componentes tarifarios se asignan con independencia de las condiciones de
+operación, hecho que el propio avance verificó al comprobar que tráfico, clima, franja y día
+son estadísticamente independientes entre sí.
+
+La segunda lectura es metodológica y atañe a la naturaleza de los datos. En un entorno urbano
+real cabría esperar cierta asociación entre lluvia y congestión, entre hora pico y tráfico
+denso, o entre distancia y duración del trayecto. La ausencia **total** de tales asociaciones
+—incluida la ortogonalidad entre distancia y duración, quizá el resultado más llamativo de la
+matriz de correlaciones— sugiere que las variables de la base fueron generadas de forma
+independiente unas de otras. Reconocerlo no invalida el ejercicio analítico, pero sí acota
+con honestidad el alcance de sus conclusiones sustantivas: lo que el estudio caracteriza con
+solidez es la **estructura interna de esta base de datos**, no necesariamente el
+comportamiento de un mercado de taxis real.
+
+### La fragilidad de la significación estadística
+
+El resultado metodológicamente más valioso del avance es la discrepancia observada en el
+factor tráfico. El ANOVA clásico declaró un efecto significativo; el ANOVA de Welch y la
+prueba de Kruskal–Wallis no lo hicieron. La prueba de Brown–Forsythe reveló que el supuesto
+de homocedasticidad, exigido únicamente por el primero de los tres, estaba violado
+precisamente en ese factor. El análisis de sensibilidad cerró el argumento: excluyendo trece
+carreras de entre quinientas sesenta y dos, la significación se desvanece por completo.
+
+Un investigador que hubiera aplicado el procedimiento estándar sin verificar supuestos ni
+someter el resultado a análisis de sensibilidad habría concluido que la congestión encarece
+las carreras, y habría respaldado esa conclusión con un valor $p$ inferior a $0{,}01$ sobre
+más de quinientas observaciones. El caso ilustra con claridad por qué la verificación de
+supuestos no es un trámite previo al análisis, sino parte constitutiva de él.
+
+### Los casos con recargo
+
+Las trece carreras cuyo precio excede la tarifa teórica constituyen un subconjunto
+cualitativamente distinto: trayectos de distancia muy superior a la media y con razones de
+sobreprecio que llegan a triplicar la tarifa calculada. Su comportamiento es compatible con un
+mecanismo de precio dinámico como el descrito por @cachon2017, y la prueba exacta de Fisher
+sugiere una mayor concentración bajo tráfico alto. Sin embargo, con trece casos la evidencia
+es demasiado escasa para sostener una afirmación firme, y así se ha reportado.
+
+## Conclusiones
+
+1. **Sobre la distancia (H1).** Se rechaza la hipótesis nula. La distancia mantiene una
+   correlación fuerte, positiva y altamente significativa con el precio, explicando alrededor
+   de tres cuartas partes de su varianza. Es el determinante principal del precio.
+
+2. **Sobre la duración (H2).** Se rechaza la hipótesis nula, pero la asociación es débil: la
+   duración explica una fracción marginal de la varianza del precio pese a estar contemplada
+   explícitamente en la estructura tarifaria.
+
+3. **Sobre el día de la semana (H3).** No se rechaza la hipótesis nula. No hay evidencia de
+   que el precio difiera entre días hábiles y fines de semana, y el tamaño del efecto es
+   pequeño.
+
+4. **Sobre el tráfico (H4).** No se rechaza la hipótesis nula cuando se emplean procedimientos
+   robustos. La significación obtenida por el ANOVA clásico es un artefacto derivado de la
+   heterocedasticidad y de un reducido conjunto de observaciones extremas.
+
+5. **Sobre el clima y la franja horaria (H5 y H6).** No se rechazan las hipótesis nulas. Los
+   tamaños del efecto son prácticamente nulos bajo los tres procedimientos aplicados.
+
+6. **Sobre los recargos (H7).** La prueba exacta de Fisher sugiere una asociación entre
+   tráfico alto y presencia de recargo, pero el escaso número de casos impide considerarla
+   establecida.
+
+7. **Conclusión integradora.** El precio se explica por la estructura tarifaria y, dentro de
+   ella, esencialmente por la distancia recorrida. Los factores de contexto no intervienen. La
+   única huella de tarificación no lineal aparece en un 2 % de carreras de larga distancia con
+   sobreprecio.
+
+## Limitaciones
+
+- **Pérdida de casos.** La eliminación por lista descartó cerca del 44 % de los registros. El
+  diagnóstico realizado respalda el supuesto MCAR y, con él, la ausencia de sesgo, pero la
+  pérdida de potencia es real.
+- **Alcance no experimental.** El diseño es observacional, de modo que las asociaciones
+  detectadas no autorizan inferencias causales.
+- **Escaso número de casos con recargo.** Trece observaciones son insuficientes para
+  caracterizar el mecanismo de precio dinámico.
+- **Ausencia de información contextual adicional.** La base no registra zona geográfica,
+  identidad del conductor ni nivel de demanda, variables que podrían explicar los recargos.
+- **Alcance analítico.** Conforme a lo definido para esta entrega no se incluyeron modelos de
+  regresión, por lo que no se estimaron los coeficientes tarifarios ni se construyó una función
+  de predicción del precio.
+
+## Líneas de trabajo para la siguiente fase
+
+1. **Modelado del precio.** Estimar los componentes de la estructura tarifaria y evaluar su
+   capacidad predictiva, cuantificando el aporte marginal de cada insumo.
+2. **Imputación múltiple.** Recuperar los registros incompletos mediante imputación,
+   comparando los resultados con los obtenidos por eliminación por lista como prueba de
+   robustez.
+3. **Caracterización de los casos con recargo.** Ampliar la muestra de carreras con
+   sobreprecio y modelar la probabilidad de recargo en función de las condiciones de
+   operación.
+4. **Análisis por umbrales de distancia.** Evaluar si la relación entre distancia y precio
+   mantiene la misma intensidad a lo largo de todo el recorrido o si cambia de régimen a partir
+   de cierta distancia, lo que explicaría el comportamiento diferenciado de los trayectos
+   largos.
+
+## Nota de reproducibilidad
+
+```{r sesion, echo=FALSE}
+si <- sessionInfo()
+info <- data.frame(
+  Componente = c("Versión de R", "Plataforma", "Paquetes adjuntos",
+                 "Semilla aleatoria", "Registros en la base original",
+                 "Registros analizados", "Fecha de compilación"),
+  Detalle = c(si$R.version$version.string,
+              si$platform,
+              paste(sort(names(si$otherPkgs)), collapse = ", "),
+              "2024",
+              as.character(n_total),
+              as.character(n_comp),
+              format(Sys.time(), "%Y-%m-%d %H:%M")),
+  check.names = FALSE
+)
+kable(info, caption = "Entorno de ejecución en el que se compiló este documento.")
+```
+
+Este informe se genera por completo a partir del código fuente y del archivo
+`datos/taxi_trip_pricing.csv` contenidos en el repositorio del proyecto. Cualquier lector
+puede clonar el repositorio, ejecutar la compilación y obtener exactamente los mismos
+resultados, incluidos los procedimientos basados en remuestreo.

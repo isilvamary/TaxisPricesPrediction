@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 2 Inspección de los datos | 01-intro.knit</title>
+  <meta name="description" content="" />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 2 Inspección de los datos | 01-intro.knit" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 2 Inspección de los datos | 01-intro.knit" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="objetivos.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="objetivos.html"><a href="objetivos.html"><i class="fa fa-check"></i><b>1</b> Objetivos</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="objetivos.html"><a href="objetivos.html#objetivo-general"><i class="fa fa-check"></i><b>1.1</b> Objetivo general</a></li>
+<li class="chapter" data-level="1.2" data-path="objetivos.html"><a href="objetivos.html#objetivos-espec%C3%ADficos"><i class="fa fa-check"></i><b>1.2</b> Objetivos específicos</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="inspección-de-los-datos.html"><a href="inspección-de-los-datos.html"><i class="fa fa-check"></i><b>2</b> Inspección de los datos</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="inspección-de-los-datos" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Capítulo 2</span> Inspección de los datos<a href="inspección-de-los-datos.html#inspecci%C3%B3n-de-los-datos" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Primero, se carga la base de datos</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="inspección-de-los-datos.html#cb1-1" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-2"><a href="inspección-de-los-datos.html#cb1-2" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;C:/Users/maryi/Desktop/Universidad/6° semestre/Métodos Estadísticos/Proyecto computacional/Proyecto taxis/taxi_trip_pricing.csv&quot;</span>)</span></code></pre></div>
+<pre><code>## Rows: 1000 Columns: 11
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (4): Time_of_Day, Day_of_Week, Traffic_Conditions, Weather
+## dbl (7): Trip_Distance_km, Passenger_Count, Base_Fare, Per_Km_Rate, Per_Minu...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>La base de datos contiene información relacionada con viajes en taxi. Cada observación corresponde a un viaje y las variables registran características del recorrido, condiciones externas y aspectos relacionados con el precio del servicio.</p>
+<p>La base está compuesta por 1000 observaciones y 11 variables, entre las cuales se encuentran variables cuantitativas, como la distancia recorrida, el número de pasajeros, la tarifa base, las tarifas por kilómetro y minuto, la duración del viaje y el precio total; y variables categóricas, como el momento del día, el día de la semana, las condiciones del tráfico y el clima.</p>
+<p>Ahora, revisamos la estructura de la base de datos para revisar qué variables R está tomando como categóricas y como numéricas.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="inspección-de-los-datos.html#cb3-1" tabindex="-1"></a><span class="fu">str</span>(datos)</span></code></pre></div>
+<pre><code>## spc_tbl_ [1,000 × 11] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+##  $ Trip_Distance_km     : num [1:1000] 19.4 47.6 36.9 30.3 NA ...
+##  $ Time_of_Day          : chr [1:1000] &quot;Morning&quot; &quot;Afternoon&quot; &quot;Evening&quot; &quot;Evening&quot; ...
+##  $ Day_of_Week          : chr [1:1000] &quot;Weekday&quot; &quot;Weekday&quot; &quot;Weekend&quot; &quot;Weekday&quot; ...
+##  $ Passenger_Count      : num [1:1000] 3 1 1 4 3 2 4 3 3 2 ...
+##  $ Traffic_Conditions   : chr [1:1000] &quot;Low&quot; &quot;High&quot; &quot;High&quot; &quot;Low&quot; ...
+##  $ Weather              : chr [1:1000] &quot;Clear&quot; &quot;Clear&quot; &quot;Clear&quot; NA ...
+##  $ Base_Fare            : num [1:1000] 3.56 NA 2.7 3.48 2.93 2.55 3.51 2.97 2.77 3.39 ...
+##  $ Per_Km_Rate          : num [1:1000] 0.8 0.62 1.21 0.51 0.63 1.71 1.66 1.87 1.78 1.52 ...
+##  $ Per_Minute_Rate      : num [1:1000] 0.32 0.43 0.15 0.15 0.32 0.48 NA 0.23 0.34 0.47 ...
+##  $ Trip_Duration_Minutes: num [1:1000] 53.8 40.6 37.3 116.8 22.6 ...
+##  $ Trip_Price           : num [1:1000] 36.3 NA 52.9 36.5 15.6 ...
+##  - attr(*, &quot;spec&quot;)=
+##   .. cols(
+##   ..   Trip_Distance_km = col_double(),
+##   ..   Time_of_Day = col_character(),
+##   ..   Day_of_Week = col_character(),
+##   ..   Passenger_Count = col_double(),
+##   ..   Traffic_Conditions = col_character(),
+##   ..   Weather = col_character(),
+##   ..   Base_Fare = col_double(),
+##   ..   Per_Km_Rate = col_double(),
+##   ..   Per_Minute_Rate = col_double(),
+##   ..   Trip_Duration_Minutes = col_double(),
+##   ..   Trip_Price = col_double()
+##   .. )
+##  - attr(*, &quot;problems&quot;)=&lt;externalptr&gt;</code></pre>
+<p>El análisis de la estructura mediante str(datos) permite identificar el tipo de dato asignado a cada variable.</p>
+<p>Las variables relacionadas con distancias, tarifas, duración, número de pasajeros y precio son de naturaleza cuantitativa, mientras que las variables relacionadas con las condiciones del viaje, como el momento del día, el día de la semana, el tráfico y el clima, son categóricas.</p>
+<p>Esta clasificación es importante porque determina qué métodos estadísticos pueden utilizarse posteriormente. Por ejemplo, las variables cuantitativas pueden analizarse mediante medidas como la media, mediana y desviación estándar, mientras que las variables categóricas pueden estudiarse mediante frecuencias y proporciones.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="inspección-de-los-datos.html#cb5-1" tabindex="-1"></a><span class="fu">head</span>(datos)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 11
+##   Trip_Distance_km Time_of_Day Day_of_Week Passenger_Count Traffic_Conditions
+##              &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;                 &lt;dbl&gt; &lt;chr&gt;             
+## 1            19.4  Morning     Weekday                   3 Low               
+## 2            47.6  Afternoon   Weekday                   1 High              
+## 3            36.9  Evening     Weekend                   1 High              
+## 4            30.3  Evening     Weekday                   4 Low               
+## 5            NA    Evening     Weekday                   3 High              
+## 6             8.64 Afternoon   Weekend                   2 Medium            
+## # ℹ 6 more variables: Weather &lt;chr&gt;, Base_Fare &lt;dbl&gt;, Per_Km_Rate &lt;dbl&gt;,
+## #   Per_Minute_Rate &lt;dbl&gt;, Trip_Duration_Minutes &lt;dbl&gt;, Trip_Price &lt;dbl&gt;</code></pre>
+<p>La función head() permite observar las primeras filas de la base de datos.</p>
+<p>Este procedimiento sirve principalmente para realizar una revisión inicial de los datos, verificando que las variables hayan sido cargadas correctamente y que los valores tengan un formato coherente con su significado.</p>
+<p>Además, permite detectar de manera preliminar posibles inconsistencias, como valores faltantes o registros que no correspondan al tipo de información esperado.</p>
+<p>Veamos las dimensiones de los datos</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="inspección-de-los-datos.html#cb7-1" tabindex="-1"></a><span class="fu">dim</span>(datos)</span></code></pre></div>
+<pre><code>## [1] 1000   11</code></pre>
+<p>El resultado de dim(datos) indica que la base está conformada por:</p>
+<p>Esto significa que se dispone de información correspondiente a 1000 viajes de taxi, caracterizados mediante 11 variables.</p>
+<p>El tamaño de la muestra resulta suficiente para realizar diferentes procedimientos descriptivos e inferenciales, aunque la posibilidad de generalizar los resultados a una población más amplia dependerá de cómo fueron seleccionados los viajes y de si la muestra puede considerarse representativa.</p>
+<p>Esto indica que los datos están conformados por 1000 observaciones repartidos en 11 variables.</p>
+<p>Ahora, revisaremos el nombre de las variables</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="inspección-de-los-datos.html#cb9-1" tabindex="-1"></a><span class="fu">names</span>(datos)</span></code></pre></div>
+<pre><code>##  [1] &quot;Trip_Distance_km&quot;      &quot;Time_of_Day&quot;           &quot;Day_of_Week&quot;          
+##  [4] &quot;Passenger_Count&quot;       &quot;Traffic_Conditions&quot;    &quot;Weather&quot;              
+##  [7] &quot;Base_Fare&quot;             &quot;Per_Km_Rate&quot;           &quot;Per_Minute_Rate&quot;      
+## [10] &quot;Trip_Duration_Minutes&quot; &quot;Trip_Price&quot;</code></pre>
+<p>La revisión de los nombres permite identificar las variables disponibles y establecer qué aspectos del viaje pueden ser estudiados.</p>
+<p>En particular, se dispone de información sobre:</p>
+<p>Distancia del viaje: Trip_Distance_km
+Momento del día: Time_of_Day
+Día de la semana: Day_of_Week
+Número de pasajeros: Passenger_Count
+Condiciones del tráfico: Traffic_Conditions
+Clima: Weather
+Tarifa base: Base_Fare
+Tarifa por kilómetro: Per_Km_Rate
+Tarifa por minuto: Per_Minute_Rate
+Duración: Trip_Duration_Minutes
+Precio total: Trip_Price</p>
+<p>Esta estructura permite estudiar el precio del viaje como variable de interés y analizar su posible relación con las características del recorrido y las condiciones en las que este se realiza.</p>
+<p>Luego de esto, realizamos el resumen estadístico de los datos</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="inspección-de-los-datos.html#cb11-1" tabindex="-1"></a><span class="fu">summary</span>(datos)</span></code></pre></div>
+<pre><code>##  Trip_Distance_km Time_of_Day        Day_of_Week        Passenger_Count
+##  Min.   :  1.23   Length:1000        Length:1000        Min.   :1.000  
+##  1st Qu.: 12.63   Class :character   Class :character   1st Qu.:1.250  
+##  Median : 25.83   Mode  :character   Mode  :character   Median :2.000  
+##  Mean   : 27.07                                         Mean   :2.477  
+##  3rd Qu.: 38.41                                         3rd Qu.:3.000  
+##  Max.   :146.07                                         Max.   :4.000  
+##  NA&#39;s   :50                                             NA&#39;s   :50     
+##  Traffic_Conditions   Weather            Base_Fare      Per_Km_Rate   
+##  Length:1000        Length:1000        Min.   :2.010   Min.   :0.500  
+##  Class :character   Class :character   1st Qu.:2.730   1st Qu.:0.860  
+##  Mode  :character   Mode  :character   Median :3.520   Median :1.220  
+##                                        Mean   :3.503   Mean   :1.233  
+##                                        3rd Qu.:4.260   3rd Qu.:1.610  
+##                                        Max.   :5.000   Max.   :2.000  
+##                                        NA&#39;s   :50      NA&#39;s   :50     
+##  Per_Minute_Rate  Trip_Duration_Minutes   Trip_Price     
+##  Min.   :0.1000   Min.   :  5.01        Min.   :  6.127  
+##  1st Qu.:0.1900   1st Qu.: 35.88        1st Qu.: 33.743  
+##  Median :0.2900   Median : 61.86        Median : 50.075  
+##  Mean   :0.2929   Mean   : 62.12        Mean   : 56.875  
+##  3rd Qu.:0.3900   3rd Qu.: 89.06        3rd Qu.: 69.099  
+##  Max.   :0.5000   Max.   :119.84        Max.   :332.044  
+##  NA&#39;s   :50       NA&#39;s   :50            NA&#39;s   :49</code></pre>
+<p>La función summary() proporciona una primera descripción estadística de las variables.</p>
+<p>Para las variables cuantitativas, el resumen incluye valores como:</p>
+<p>mínimo,
+primer cuartil,
+mediana,
+media,
+tercer cuartil,
+máximo.</p>
+<p>Estos estadísticos permiten conocer la posición y dispersión de los datos y realizar una primera evaluación de sus distribuciones.</p>
+<p>Por ejemplo, la comparación entre la media y la mediana puede proporcionar indicios sobre la simetría de una variable. Si ambas son similares, la distribución puede ser aproximadamente simétrica; mientras que diferencias importantes pueden sugerir asimetría o la presencia de valores extremos.</p>
+<p>En las variables categóricas, summary() permite observar las frecuencias de las diferentes categorías, lo cual ayuda a identificar cuáles son las condiciones más frecuentes dentro de los viajes estudiados.</p>
+<p>Y por último, revisamos los valores faltantes</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="inspección-de-los-datos.html#cb13-1" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(datos))</span></code></pre></div>
+<pre><code>##      Trip_Distance_km           Time_of_Day           Day_of_Week 
+##                    50                    50                    50 
+##       Passenger_Count    Traffic_Conditions               Weather 
+##                    50                    50                    50 
+##             Base_Fare           Per_Km_Rate       Per_Minute_Rate 
+##                    50                    50                    50 
+## Trip_Duration_Minutes            Trip_Price 
+##                    50                    49</code></pre>
+<p>Inicialmente se realizó un conteo de los valores faltantes mediante:</p>
+<p>colSums(is.na(datos))</p>
+<p>Este procedimiento permitió identificar la presencia de datos faltantes en las variables de la base.</p>
+<p>Los valores faltantes constituyen un aspecto importante del análisis, ya que pueden reducir el tamaño efectivo de la muestra y afectar algunos procedimientos estadísticos si no son tratados adecuadamente.</p>
+<p>Por esta razón, se decidió realizar un proceso de imputación.</p>
+<p>Notamos que existen datos faltantes en todas las variables, tanto categóricas como numéricas.</p>
+<p>Para las variables cuantitativas se utilizó la mediana como medida de imputación.</p>
+<p>La mediana corresponde al valor que divide los datos ordenados en dos partes iguales. Se escogió esta medida debido a que presenta una menor sensibilidad frente a valores extremos en comparación con la media.</p>
+<p>El procedimiento reemplaza cada valor faltante por la mediana calculada utilizando los valores observados de la misma variable. De esta manera, se conserva el número total de observaciones de la base. Es decir, estamos haciendo una estimación sencilla para poder continuar con el análisis.</p>
+<p>verificamos que las variables numéricas que fueron remplazadas por la mediana y luego los valores faltantes de las categóricas por la moda</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="inspección-de-los-datos.html#cb15-1" tabindex="-1"></a><span class="co"># Imputación de variables numéricas con la mediana</span></span>
+<span id="cb15-2"><a href="inspección-de-los-datos.html#cb15-2" tabindex="-1"></a>datos[<span class="fu">sapply</span>(datos, is.numeric)] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(</span>
+<span id="cb15-3"><a href="inspección-de-los-datos.html#cb15-3" tabindex="-1"></a>  datos[<span class="fu">sapply</span>(datos, is.numeric)],</span>
+<span id="cb15-4"><a href="inspección-de-los-datos.html#cb15-4" tabindex="-1"></a>  <span class="cf">function</span>(x) <span class="fu">replace</span>(x, <span class="fu">is.na</span>(x), <span class="fu">median</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb15-5"><a href="inspección-de-los-datos.html#cb15-5" tabindex="-1"></a>)</span>
+<span id="cb15-6"><a href="inspección-de-los-datos.html#cb15-6" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="inspección-de-los-datos.html#cb15-7" tabindex="-1"></a><span class="co"># Función para calcular la moda</span></span>
+<span id="cb15-8"><a href="inspección-de-los-datos.html#cb15-8" tabindex="-1"></a>moda <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb15-9"><a href="inspección-de-los-datos.html#cb15-9" tabindex="-1"></a>  x <span class="ot">&lt;-</span> x[<span class="sc">!</span><span class="fu">is.na</span>(x)]</span>
+<span id="cb15-10"><a href="inspección-de-los-datos.html#cb15-10" tabindex="-1"></a>  ux <span class="ot">&lt;-</span> <span class="fu">unique</span>(x)</span>
+<span id="cb15-11"><a href="inspección-de-los-datos.html#cb15-11" tabindex="-1"></a>  ux[<span class="fu">which.max</span>(<span class="fu">tabulate</span>(<span class="fu">match</span>(x, ux)))]</span>
+<span id="cb15-12"><a href="inspección-de-los-datos.html#cb15-12" tabindex="-1"></a>}</span>
+<span id="cb15-13"><a href="inspección-de-los-datos.html#cb15-13" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="inspección-de-los-datos.html#cb15-14" tabindex="-1"></a><span class="co"># Imputación de variables categóricas con la moda</span></span>
+<span id="cb15-15"><a href="inspección-de-los-datos.html#cb15-15" tabindex="-1"></a>datos[<span class="fu">sapply</span>(datos, is.character)] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(</span>
+<span id="cb15-16"><a href="inspección-de-los-datos.html#cb15-16" tabindex="-1"></a>  datos[<span class="fu">sapply</span>(datos, is.character)],</span>
+<span id="cb15-17"><a href="inspección-de-los-datos.html#cb15-17" tabindex="-1"></a>  <span class="cf">function</span>(x) <span class="fu">replace</span>(x, <span class="fu">is.na</span>(x), <span class="fu">moda</span>(x))</span>
+<span id="cb15-18"><a href="inspección-de-los-datos.html#cb15-18" tabindex="-1"></a>)</span>
+<span id="cb15-19"><a href="inspección-de-los-datos.html#cb15-19" tabindex="-1"></a></span>
+<span id="cb15-20"><a href="inspección-de-los-datos.html#cb15-20" tabindex="-1"></a><span class="co"># Comprobar valores faltantes</span></span>
+<span id="cb15-21"><a href="inspección-de-los-datos.html#cb15-21" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(datos))</span></code></pre></div>
+<pre><code>##      Trip_Distance_km           Time_of_Day           Day_of_Week 
+##                     0                     0                     0 
+##       Passenger_Count    Traffic_Conditions               Weather 
+##                     0                     0                     0 
+##             Base_Fare           Per_Km_Rate       Per_Minute_Rate 
+##                     0                     0                     0 
+## Trip_Duration_Minutes            Trip_Price 
+##                     0                     0</code></pre>
+<p>Finalmente, se volvió a ejecutar:</p>
+<pre><code>colSums(is.na(datos))</code></pre>
+<p>con el objetivo de verificar la efectividad del procedimiento de imputación. Al obtener 0 en todas las variables, significa que no quedaron valores NA en la base de datos después de la imputación.</p>
+<p>Esto permite continuar con el análisis exploratorio sin perder observaciones debido a datos faltantes.</p>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="objetivos.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/rstudio/bookdown-demo/edit/master/%s",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": false,
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+</body>
+
+</html>

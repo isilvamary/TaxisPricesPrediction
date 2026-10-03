@@ -1,21 +1,168 @@
-# Introduction {#intro}
+# Marco teórico {#marco}
 
-You can label chapter and section titles using `{#label}` after them, e.g., we can reference Chapter \@ref(intro). If you do not manually label them, there will be automatic labels anyway, e.g., Chapter \@ref(methods).
+## Fundamento económico y operativo
 
-Figures and tables with captions will be placed in `figure` and `table` environments, respectively.
+### La estructura tarifaria del servicio de taxi
 
-```{r nice-fig, fig.cap='Here is a nice figure!', out.width='80%', fig.asp=.75, fig.align='center'}
-par(mar = c(4, 4, .1, .1))
-plot(pressure, type = 'b', pch = 19)
-```
+La tarificación del servicio de taxi responde históricamente a una **estructura bipartita**
+o de dos partes [@oi1971]: un cargo fijo de acceso al servicio, conocido como bajada de
+bandera o tarifa base, y un cargo variable proporcional al consumo del servicio. Formalmente,
+el precio de una carrera puede expresarse como
 
-Reference a figure by its code chunk label with the `fig:` prefix, e.g., see Figure \@ref(fig:nice-fig). Similarly, you can reference tables generated from `knitr::kable()`, e.g., see Table \@ref(tab:nice-tab).
+$$P = B + \tau_d \cdot d + \tau_t \cdot t$$
 
-```{r nice-tab, tidy=FALSE}
-knitr::kable(
-  head(iris, 20), caption = 'Here is a nice table!',
-  booktabs = TRUE
-)
-```
+donde $B$ es la tarifa base, $\tau_d$ la tarifa por kilómetro, $d$ la distancia recorrida,
+$\tau_t$ la tarifa por minuto y $t$ la duración del trayecto. El cargo fijo recupera los
+costos de disponibilidad del vehículo y del tiempo de espera, mientras que los componentes
+variables recuperan los costos de operación —combustible, desgaste— y el costo de oportunidad
+del tiempo del conductor.
 
-You can write citations, too. For example, we are using the **bookdown** package [@R-bookdown] in this sample book, which was built on top of R Markdown and **knitr** [@xie2015].
+La coexistencia de un componente por distancia y otro por tiempo no es redundante: responde
+al hecho de que la misma distancia puede recorrerse en tiempos muy distintos según las
+condiciones de circulación. En condiciones de flujo libre domina el cargo por distancia; en
+condiciones de congestión, el cargo por tiempo compensa al conductor por la pérdida de
+productividad. Esta es la razón por la cual, desde la teoría, **la congestión debería
+encarecer las carreras** aun sin ninguna intervención tarifaria adicional [@small2007].
+
+### Congestión, valor del tiempo y costo social
+
+La economía del transporte modela la congestión como una externalidad negativa: cada vehículo
+adicional incrementa el tiempo de viaje de todos los demás. El costo generalizado de un viaje
+integra el costo monetario y el valor monetario del tiempo empleado [@small2007]. Aplicado al
+servicio de taxi, este marco predice dos efectos simultáneos y de signo coincidente sobre el
+precio: un alargamiento de la duración del trayecto y, por tanto, del cargo por minuto
+acumulado. La magnitud empírica de este efecto depende críticamente del peso relativo de
+$\tau_t$ frente a $\tau_d$ en la estructura tarifaria vigente.
+
+### Precio dinámico y recargos
+
+Las plataformas de movilidad bajo demanda incorporaron un mecanismo adicional: el **precio
+dinámico** o *surge pricing*, consistente en multiplicar la tarifa por un factor mayor que la
+unidad cuando la demanda local supera la oferta de vehículos disponibles [@cachon2017]. Su
+función declarada es doble: racionar la demanda y atraer oferta hacia la zona con escasez. La
+evidencia empírica muestra que estos multiplicadores se activan de manera concentrada en el
+tiempo y el espacio, afectando a una fracción minoritaria de los viajes pero con
+incrementos de precio muy sustanciales [@chen2015]. Desde el punto de vista estadístico, esto
+implica que la distribución de precios resultante será **asimétrica a la derecha y con cola
+pesada**: la mayoría de las carreras se liquida a tarifa ordinaria y una minoría, a
+tarifa multiplicada.
+
+Esta predicción teórica tiene una consecuencia metodológica directa que atraviesa todo el
+presente avance: si una fracción pequeña de observaciones concentra valores extremos, las
+técnicas basadas en la media serán vulnerables a ellas y las conclusiones deberán validarse
+con procedimientos robustos.
+
+### Determinantes contextuales
+
+La literatura identifica, además, un conjunto de factores de contexto potencialmente
+asociados al precio:
+
+- **Franja horaria.** Las horas pico concentran demanda y congestión; la madrugada suele
+  asociarse a recargos nocturnos en las tarifas reguladas.
+- **Día de la semana.** Los patrones de movilidad laboral difieren de los de ocio, tanto en
+  volumen como en distancia típica de los desplazamientos.
+- **Clima.** La lluvia y la nieve reducen la velocidad de circulación e incrementan la demanda
+  de transporte, presionando el precio al alza por ambas vías [@brodeur2018].
+- **Ocupación del vehículo.** En tarifas reguladas el número de pasajeros no suele modificar
+  el precio, a diferencia de lo que ocurre en servicios compartidos.
+
+## Fundamento estadístico
+
+### Estadística descriptiva
+
+La caracterización de una variable cuantitativa se organiza en tres dimensiones:
+**tendencia central** (media aritmética, sensible a valores extremos; mediana, robusta por ser
+un estadístico de orden), **dispersión** (desviación estándar, en las unidades originales;
+rango intercuartílico, robusto; coeficiente de variación $CV = s/\bar{x}$, adimensional y
+comparable entre grupos) y **forma** (asimetría y curtosis, como momentos estandarizados de
+tercer y cuarto orden).
+
+La divergencia entre media y mediana constituye el primer diagnóstico de asimetría. En
+distribuciones con cola derecha pesada la media supera sistemáticamente a la mediana, y la
+brecha entre ambas cuantifica la influencia de los valores extremos.
+
+### Identificación de valores atípicos
+
+El criterio de Tukey define como atípico todo valor situado fuera del intervalo
+$[Q_1 - 1{,}5\,RIC;\ Q_3 + 1{,}5\,RIC]$, donde $RIC = Q_3 - Q_1$ [@tukey1977]. Su virtud es
+la robustez: los límites se construyen con cuartiles, que no se ven arrastrados por los
+propios valores extremos que se pretende detectar. Un valor atípico no es necesariamente un
+error: puede ser una observación legítima procedente de un régimen de operación distinto, y
+su tratamiento debe justificarse sustantivamente y no solo estadísticamente.
+
+### Datos faltantes
+
+@rubin1976 clasifica los mecanismos de ausencia en tres tipos: completamente aleatorios
+(MCAR), aleatorios condicionados a variables observadas (MAR) y no aleatorios (MNAR). Bajo
+MCAR la eliminación por lista produce estimaciones insesgadas, con la única penalización de
+una pérdida de potencia. Bajo los otros mecanismos introduce sesgo. La plausibilidad del
+supuesto MCAR puede evaluarse empíricamente comparando las observaciones completas con las
+incompletas en las variables efectivamente registradas: si no difieren sistemáticamente, la
+hipótesis MCAR resulta defendible.
+
+### Correlación
+
+El coeficiente de correlación de Pearson mide la intensidad de la asociación **lineal** entre
+dos variables cuantitativas:
+
+$$r = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum (x_i - \bar{x})^2 \sum (y_i - \bar{y})^2}}$$
+
+Su cuadrado, $r^2$, expresa la proporción de varianza compartida. La significación se contrasta
+mediante el estadístico $t = r\sqrt{(n-2)/(1-r^2)}$ con $n-2$ grados de libertad, y el
+intervalo de confianza se construye sobre la transformación $z$ de Fisher.
+
+El coeficiente de Spearman aplica la misma fórmula sobre los rangos, con lo que mide
+asociación **monótona** y resiste tanto la no linealidad como los valores extremos. La
+comparación entre ambos coeficientes es informativa por sí misma: una discrepancia apreciable
+señala que la relación no es lineal o que unos pocos puntos extremos están inflando la
+estimación paramétrica. Conviene recordar que la correlación cuantifica covariación, no
+causalidad.
+
+### Contraste de hipótesis
+
+El esquema de Neyman–Pearson formaliza la decisión entre $H_0$ y $H_1$ controlando la
+probabilidad de error tipo I en un nivel $\alpha$ prefijado [@fisher1925]. El valor $p$ es la
+probabilidad de observar un estadístico al menos tan extremo como el obtenido **bajo el
+supuesto de que $H_0$ es cierta**; no es la probabilidad de que $H_0$ sea verdadera. Por ello
+todo contraste debe acompañarse de su **tamaño del efecto**, que informa sobre la magnitud
+práctica del fenómeno con independencia del tamaño muestral [@cohen1988].
+
+### Pruebas empleadas en este avance
+
+**Supuestos.** La normalidad se evalúa con la prueba de Shapiro–Wilk [@shapiro1965] y con
+gráficos cuantil–cuantil. En muestras grandes esta prueba detecta desviaciones ínfimas y
+carentes de relevancia práctica, por lo que su resultado debe ponderarse junto con la
+inspección gráfica y con el **teorema central del límite**, que garantiza la normalidad
+asintótica de la media muestral. La homogeneidad de varianzas se contrasta mediante la prueba
+de Brown–Forsythe, variante de la de Levene que emplea desviaciones respecto de la mediana y
+resulta por ello robusta frente a la asimetría [@brown1974].
+
+**Comparación de dos medias.** La prueba $t$ de Welch [@welch1947] contrasta
+$H_0: \mu_1 = \mu_2$ sin exigir igualdad de varianzas, corrigiendo los grados de libertad
+mediante la aproximación de Satterthwaite. Su tamaño del efecto es la $d$ de Cohen. La
+alternativa no paramétrica es la prueba $U$ de Mann–Whitney–Wilcoxon [@mann1947].
+
+**Comparación de más de dos medias.** El análisis de varianza descompone la variabilidad total
+y contrasta la igualdad de medias con $F = CM_{factor}/CM_{error}$; el tamaño del efecto es
+$\eta^2 = SC_{factor}/SC_{total}$. Cuando las varianzas son desiguales se emplea la versión de
+Welch del ANOVA, y cuando la normalidad es dudosa, la prueba de Kruskal–Wallis
+[@kruskal1952], cuyo tamaño del efecto asociado es $\epsilon^2$. Ante un resultado
+significativo, la prueba HSD de Tukey [@tukey1949] identifica qué pares difieren controlando
+la tasa de error por familia.
+
+**Asociación entre variables categóricas.** La prueba $\chi^2$ de independencia compara
+frecuencias observadas y esperadas, $\chi^2 = \sum (O_{ij}-E_{ij})^2/E_{ij}$, y su intensidad
+se mide con la $V$ de Cramér [@cramer1946]. La aproximación asintótica exige frecuencias
+esperadas suficientes; cuando alguna cae por debajo de cinco se recurre a la **prueba exacta
+de Fisher**, que calcula la probabilidad bajo la distribución hipergeométrica sin aproximación
+alguna.
+
+**Remuestreo.** El *bootstrap* [@efron1979] estima la distribución muestral de un estadístico
+remuestreando con reemplazo los datos observados, sin invocar supuestos distribucionales.
+Resulta especialmente valioso cuando la variable es asimétrica, situación en la que los
+intervalos teóricos pueden estar mal calibrados.
+
+**Análisis de sensibilidad.** Repetir un contraste excluyendo las observaciones extremas
+permite determinar si una conclusión descansa sobre el conjunto de los datos o sobre unas
+pocas observaciones influyentes. Es un procedimiento elemental y, sin embargo, decisivo: en
+este avance resulta ser el que resuelve la contradicción más importante encontrada.

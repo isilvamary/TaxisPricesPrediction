@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 1 Marco teórico | Determinantes del precio de las carreras de taxi</title>
+  <meta name="description" content="Avance de investigación sobre los determinantes del precio de las carreras de taxi mediante estadística descriptiva e inferencial, sin modelos de regresión." />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 1 Marco teórico | Determinantes del precio de las carreras de taxi" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Avance de investigación sobre los determinantes del precio de las carreras de taxi mediante estadística descriptiva e inferencial, sin modelos de regresión." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 1 Marco teórico | Determinantes del precio de las carreras de taxi" />
+  
+  <meta name="twitter:description" content="Avance de investigación sobre los determinantes del precio de las carreras de taxi mediante estadística descriptiva e inferencial, sin modelos de regresión." />
+  
+
+<meta name="author" content="Escribe aquí tu nombre y el de tu institución" />
+
+
+<meta name="date" content="2026-02-10" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="metodologia.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="toc-logo"><strong>Precio de las carreras de taxi</strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Presentación</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#problema-de-investigaci%C3%B3n"><i class="fa fa-check"></i>Problema de investigación</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#preguntas-de-investigaci%C3%B3n"><i class="fa fa-check"></i>Preguntas de investigación</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#objetivos"><i class="fa fa-check"></i>Objetivos</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#hip%C3%B3tesis"><i class="fa fa-check"></i>Hipótesis</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#alcance-del-avance"><i class="fa fa-check"></i>Alcance del avance</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="marco.html"><a href="marco.html"><i class="fa fa-check"></i><b>1</b> Marco teórico</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="marco.html"><a href="marco.html#fundamento-econ%C3%B3mico-y-operativo"><i class="fa fa-check"></i><b>1.1</b> Fundamento económico y operativo</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="marco.html"><a href="marco.html#la-estructura-tarifaria-del-servicio-de-taxi"><i class="fa fa-check"></i><b>1.1.1</b> La estructura tarifaria del servicio de taxi</a></li>
+<li class="chapter" data-level="1.1.2" data-path="marco.html"><a href="marco.html#congesti%C3%B3n-valor-del-tiempo-y-costo-social"><i class="fa fa-check"></i><b>1.1.2</b> Congestión, valor del tiempo y costo social</a></li>
+<li class="chapter" data-level="1.1.3" data-path="marco.html"><a href="marco.html#precio-din%C3%A1mico-y-recargos"><i class="fa fa-check"></i><b>1.1.3</b> Precio dinámico y recargos</a></li>
+<li class="chapter" data-level="1.1.4" data-path="marco.html"><a href="marco.html#determinantes-contextuales"><i class="fa fa-check"></i><b>1.1.4</b> Determinantes contextuales</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="marco.html"><a href="marco.html#fundamento-estad%C3%ADstico"><i class="fa fa-check"></i><b>1.2</b> Fundamento estadístico</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="marco.html"><a href="marco.html#estad%C3%ADstica-descriptiva"><i class="fa fa-check"></i><b>1.2.1</b> Estadística descriptiva</a></li>
+<li class="chapter" data-level="1.2.2" data-path="marco.html"><a href="marco.html#identificaci%C3%B3n-de-valores-at%C3%ADpicos"><i class="fa fa-check"></i><b>1.2.2</b> Identificación de valores atípicos</a></li>
+<li class="chapter" data-level="1.2.3" data-path="marco.html"><a href="marco.html#datos-faltantes"><i class="fa fa-check"></i><b>1.2.3</b> Datos faltantes</a></li>
+<li class="chapter" data-level="1.2.4" data-path="marco.html"><a href="marco.html#correlaci%C3%B3n"><i class="fa fa-check"></i><b>1.2.4</b> Correlación</a></li>
+<li class="chapter" data-level="1.2.5" data-path="marco.html"><a href="marco.html#contraste-de-hip%C3%B3tesis"><i class="fa fa-check"></i><b>1.2.5</b> Contraste de hipótesis</a></li>
+<li class="chapter" data-level="1.2.6" data-path="marco.html"><a href="marco.html#pruebas-empleadas-en-este-avance"><i class="fa fa-check"></i><b>1.2.6</b> Pruebas empleadas en este avance</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="metodologia.html"><a href="metodologia.html"><i class="fa fa-check"></i><b>2</b> Metodología</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="metodologia.html"><a href="metodologia.html#tipo-y-dise%C3%B1o-de-estudio"><i class="fa fa-check"></i><b>2.1</b> Tipo y diseño de estudio</a></li>
+<li class="chapter" data-level="2.2" data-path="metodologia.html"><a href="metodologia.html#unidad-de-an%C3%A1lisis-y-fuente-de-datos"><i class="fa fa-check"></i><b>2.2</b> Unidad de análisis y fuente de datos</a></li>
+<li class="chapter" data-level="2.3" data-path="metodologia.html"><a href="metodologia.html#operacionalizaci%C3%B3n-de-las-variables"><i class="fa fa-check"></i><b>2.3</b> Operacionalización de las variables</a></li>
+<li class="chapter" data-level="2.4" data-path="metodologia.html"><a href="metodologia.html#tratamiento-de-los-datos-faltantes"><i class="fa fa-check"></i><b>2.4</b> Tratamiento de los datos faltantes</a></li>
+<li class="chapter" data-level="2.5" data-path="metodologia.html"><a href="metodologia.html#plan-de-an%C3%A1lisis-estad%C3%ADstico"><i class="fa fa-check"></i><b>2.5</b> Plan de análisis estadístico</a></li>
+<li class="chapter" data-level="2.6" data-path="metodologia.html"><a href="metodologia.html#criterios-de-decisi%C3%B3n"><i class="fa fa-check"></i><b>2.6</b> Criterios de decisión</a></li>
+<li class="chapter" data-level="2.7" data-path="metodologia.html"><a href="metodologia.html#herramientas-y-reproducibilidad"><i class="fa fa-check"></i><b>2.7</b> Herramientas y reproducibilidad</a></li>
+<li class="chapter" data-level="2.8" data-path="metodologia.html"><a href="metodologia.html#consideraciones-%C3%A9ticas"><i class="fa fa-check"></i><b>2.8</b> Consideraciones éticas</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="descriptivo.html"><a href="descriptivo.html"><i class="fa fa-check"></i><b>3</b> Análisis descriptivo</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="descriptivo.html"><a href="descriptivo.html#caracterizaci%C3%B3n-global-del-precio"><i class="fa fa-check"></i><b>3.1</b> Caracterización global del precio</a></li>
+<li class="chapter" data-level="3.2" data-path="descriptivo.html"><a href="descriptivo.html#valores-at%C3%ADpicos"><i class="fa fa-check"></i><b>3.2</b> Valores atípicos</a></li>
+<li class="chapter" data-level="3.3" data-path="descriptivo.html"><a href="descriptivo.html#las-variables-del-trayecto"><i class="fa fa-check"></i><b>3.3</b> Las variables del trayecto</a></li>
+<li class="chapter" data-level="3.4" data-path="descriptivo.html"><a href="descriptivo.html#el-precio-seg%C3%BAn-los-factores-de-contexto"><i class="fa fa-check"></i><b>3.4</b> El precio según los factores de contexto</a></li>
+<li class="chapter" data-level="3.5" data-path="descriptivo.html"><a href="descriptivo.html#relaci%C3%B3n-entre-el-precio-y-las-variables-del-trayecto"><i class="fa fa-check"></i><b>3.5</b> Relación entre el precio y las variables del trayecto</a></li>
+<li class="chapter" data-level="3.6" data-path="descriptivo.html"><a href="descriptivo.html#consistencia-con-la-estructura-tarifaria"><i class="fa fa-check"></i><b>3.6</b> Consistencia con la estructura tarifaria</a></li>
+<li class="chapter" data-level="3.7" data-path="descriptivo.html"><a href="descriptivo.html#s%C3%ADntesis-descriptiva"><i class="fa fa-check"></i><b>3.7</b> Síntesis descriptiva</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="inferencial.html"><a href="inferencial.html"><i class="fa fa-check"></i><b>4</b> Análisis inferencial</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="inferencial.html"><a href="inferencial.html#verificaci%C3%B3n-de-supuestos"><i class="fa fa-check"></i><b>4.1</b> Verificación de supuestos</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="inferencial.html"><a href="inferencial.html#normalidad"><i class="fa fa-check"></i><b>4.1.1</b> Normalidad</a></li>
+<li class="chapter" data-level="4.1.2" data-path="inferencial.html"><a href="inferencial.html#homogeneidad-de-varianzas"><i class="fa fa-check"></i><b>4.1.2</b> Homogeneidad de varianzas</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="inferencial.html"><a href="inferencial.html#hip%C3%B3tesis-1-y-2-asociaci%C3%B3n-del-precio-con-distancia-y-duraci%C3%B3n"><i class="fa fa-check"></i><b>4.2</b> Hipótesis 1 y 2: asociación del precio con distancia y duración</a></li>
+<li class="chapter" data-level="4.3" data-path="inferencial.html"><a href="inferencial.html#hip%C3%B3tesis-3-d%C3%ADa-h%C3%A1bil-frente-a-fin-de-semana"><i class="fa fa-check"></i><b>4.3</b> Hipótesis 3: día hábil frente a fin de semana</a></li>
+<li class="chapter" data-level="4.4" data-path="inferencial.html"><a href="inferencial.html#hip%C3%B3tesis-4-5-y-6-los-factores-de-contexto"><i class="fa fa-check"></i><b>4.4</b> Hipótesis 4, 5 y 6: los factores de contexto</a></li>
+<li class="chapter" data-level="4.5" data-path="inferencial.html"><a href="inferencial.html#sensibilidad"><i class="fa fa-check"></i><b>4.5</b> Análisis de sensibilidad</a></li>
+<li class="chapter" data-level="4.6" data-path="inferencial.html"><a href="inferencial.html#hip%C3%B3tesis-7-asociaci%C3%B3n-entre-el-recargo-y-las-condiciones-de-operaci%C3%B3n"><i class="fa fa-check"></i><b>4.6</b> Hipótesis 7: asociación entre el recargo y las condiciones de operación</a></li>
+<li class="chapter" data-level="4.7" data-path="inferencial.html"><a href="inferencial.html#independencia-entre-los-factores-de-contexto"><i class="fa fa-check"></i><b>4.7</b> Independencia entre los factores de contexto</a></li>
+<li class="chapter" data-level="4.8" data-path="inferencial.html"><a href="inferencial.html#s%C3%ADntesis-inferencial"><i class="fa fa-check"></i><b>4.8</b> Síntesis inferencial</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="discusion.html"><a href="discusion.html"><i class="fa fa-check"></i><b>5</b> Discusión y conclusiones del avance</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="discusion.html"><a href="discusion.html#discusi%C3%B3n-de-los-resultados"><i class="fa fa-check"></i><b>5.1</b> Discusión de los resultados</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="discusion.html"><a href="discusion.html#el-mecanismo-de-formaci%C3%B3n-del-precio"><i class="fa fa-check"></i><b>5.1.1</b> El mecanismo de formación del precio</a></li>
+<li class="chapter" data-level="5.1.2" data-path="discusion.html"><a href="discusion.html#la-ausencia-de-efectos-contextuales"><i class="fa fa-check"></i><b>5.1.2</b> La ausencia de efectos contextuales</a></li>
+<li class="chapter" data-level="5.1.3" data-path="discusion.html"><a href="discusion.html#la-fragilidad-de-la-significaci%C3%B3n-estad%C3%ADstica"><i class="fa fa-check"></i><b>5.1.3</b> La fragilidad de la significación estadística</a></li>
+<li class="chapter" data-level="5.1.4" data-path="discusion.html"><a href="discusion.html#los-casos-con-recargo"><i class="fa fa-check"></i><b>5.1.4</b> Los casos con recargo</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="discusion.html"><a href="discusion.html#conclusiones"><i class="fa fa-check"></i><b>5.2</b> Conclusiones</a></li>
+<li class="chapter" data-level="5.3" data-path="discusion.html"><a href="discusion.html#limitaciones"><i class="fa fa-check"></i><b>5.3</b> Limitaciones</a></li>
+<li class="chapter" data-level="5.4" data-path="discusion.html"><a href="discusion.html#l%C3%ADneas-de-trabajo-para-la-siguiente-fase"><i class="fa fa-check"></i><b>5.4</b> Líneas de trabajo para la siguiente fase</a></li>
+<li class="chapter" data-level="5.5" data-path="discusion.html"><a href="discusion.html#nota-de-reproducibilidad"><i class="fa fa-check"></i><b>5.5</b> Nota de reproducibilidad</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="referencias.html"><a href="referencias.html"><i class="fa fa-check"></i>Referencias</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Determinantes del precio de las carreras de taxi</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="marco" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">Capítulo 1</span> Marco teórico<a href="marco.html#marco" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="fundamento-económico-y-operativo" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Fundamento económico y operativo<a href="marco.html#fundamento-econ%C3%B3mico-y-operativo" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="la-estructura-tarifaria-del-servicio-de-taxi" class="section level3 hasAnchor" number="1.1.1">
+<h3><span class="header-section-number">1.1.1</span> La estructura tarifaria del servicio de taxi<a href="marco.html#la-estructura-tarifaria-del-servicio-de-taxi" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La tarificación del servicio de taxi responde históricamente a una <strong>estructura bipartita</strong>
+o de dos partes <span class="citation">(<a href="#ref-oi1971">Oi 1971</a>)</span>: un cargo fijo de acceso al servicio, conocido como bajada de
+bandera o tarifa base, y un cargo variable proporcional al consumo del servicio. Formalmente,
+el precio de una carrera puede expresarse como</p>
+<p><span class="math display">\[P = B + \tau_d \cdot d + \tau_t \cdot t\]</span></p>
+<p>donde <span class="math inline">\(B\)</span> es la tarifa base, <span class="math inline">\(\tau_d\)</span> la tarifa por kilómetro, <span class="math inline">\(d\)</span> la distancia recorrida,
+<span class="math inline">\(\tau_t\)</span> la tarifa por minuto y <span class="math inline">\(t\)</span> la duración del trayecto. El cargo fijo recupera los
+costos de disponibilidad del vehículo y del tiempo de espera, mientras que los componentes
+variables recuperan los costos de operación —combustible, desgaste— y el costo de oportunidad
+del tiempo del conductor.</p>
+<p>La coexistencia de un componente por distancia y otro por tiempo no es redundante: responde
+al hecho de que la misma distancia puede recorrerse en tiempos muy distintos según las
+condiciones de circulación. En condiciones de flujo libre domina el cargo por distancia; en
+condiciones de congestión, el cargo por tiempo compensa al conductor por la pérdida de
+productividad. Esta es la razón por la cual, desde la teoría, <strong>la congestión debería
+encarecer las carreras</strong> aun sin ninguna intervención tarifaria adicional <span class="citation">(<a href="#ref-small2007">Small and Verhoef 2007</a>)</span>.</p>
+</div>
+<div id="congestión-valor-del-tiempo-y-costo-social" class="section level3 hasAnchor" number="1.1.2">
+<h3><span class="header-section-number">1.1.2</span> Congestión, valor del tiempo y costo social<a href="marco.html#congesti%C3%B3n-valor-del-tiempo-y-costo-social" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La economía del transporte modela la congestión como una externalidad negativa: cada vehículo
+adicional incrementa el tiempo de viaje de todos los demás. El costo generalizado de un viaje
+integra el costo monetario y el valor monetario del tiempo empleado <span class="citation">(<a href="#ref-small2007">Small and Verhoef 2007</a>)</span>. Aplicado al
+servicio de taxi, este marco predice dos efectos simultáneos y de signo coincidente sobre el
+precio: un alargamiento de la duración del trayecto y, por tanto, del cargo por minuto
+acumulado. La magnitud empírica de este efecto depende críticamente del peso relativo de
+<span class="math inline">\(\tau_t\)</span> frente a <span class="math inline">\(\tau_d\)</span> en la estructura tarifaria vigente.</p>
+</div>
+<div id="precio-dinámico-y-recargos" class="section level3 hasAnchor" number="1.1.3">
+<h3><span class="header-section-number">1.1.3</span> Precio dinámico y recargos<a href="marco.html#precio-din%C3%A1mico-y-recargos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Las plataformas de movilidad bajo demanda incorporaron un mecanismo adicional: el <strong>precio
+dinámico</strong> o <em>surge pricing</em>, consistente en multiplicar la tarifa por un factor mayor que la
+unidad cuando la demanda local supera la oferta de vehículos disponibles <span class="citation">(<a href="#ref-cachon2017">Cachon, Daniels, and Lobel 2017</a>)</span>. Su
+función declarada es doble: racionar la demanda y atraer oferta hacia la zona con escasez. La
+evidencia empírica muestra que estos multiplicadores se activan de manera concentrada en el
+tiempo y el espacio, afectando a una fracción minoritaria de los viajes pero con
+incrementos de precio muy sustanciales <span class="citation">(<a href="#ref-chen2015">Chen, Mislove, and Wilson 2015</a>)</span>. Desde el punto de vista estadístico, esto
+implica que la distribución de precios resultante será <strong>asimétrica a la derecha y con cola
+pesada</strong>: la mayoría de las carreras se liquida a tarifa ordinaria y una minoría, a
+tarifa multiplicada.</p>
+<p>Esta predicción teórica tiene una consecuencia metodológica directa que atraviesa todo el
+presente avance: si una fracción pequeña de observaciones concentra valores extremos, las
+técnicas basadas en la media serán vulnerables a ellas y las conclusiones deberán validarse
+con procedimientos robustos.</p>
+</div>
+<div id="determinantes-contextuales" class="section level3 hasAnchor" number="1.1.4">
+<h3><span class="header-section-number">1.1.4</span> Determinantes contextuales<a href="marco.html#determinantes-contextuales" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La literatura identifica, además, un conjunto de factores de contexto potencialmente
+asociados al precio:</p>
+<ul>
+<li><strong>Franja horaria.</strong> Las horas pico concentran demanda y congestión; la madrugada suele
+asociarse a recargos nocturnos en las tarifas reguladas.</li>
+<li><strong>Día de la semana.</strong> Los patrones de movilidad laboral difieren de los de ocio, tanto en
+volumen como en distancia típica de los desplazamientos.</li>
+<li><strong>Clima.</strong> La lluvia y la nieve reducen la velocidad de circulación e incrementan la demanda
+de transporte, presionando el precio al alza por ambas vías <span class="citation">(<a href="#ref-brodeur2018">Brodeur and Nield 2018</a>)</span>.</li>
+<li><strong>Ocupación del vehículo.</strong> En tarifas reguladas el número de pasajeros no suele modificar
+el precio, a diferencia de lo que ocurre en servicios compartidos.</li>
+</ul>
+</div>
+</div>
+<div id="fundamento-estadístico" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> Fundamento estadístico<a href="marco.html#fundamento-estad%C3%ADstico" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="estadística-descriptiva" class="section level3 hasAnchor" number="1.2.1">
+<h3><span class="header-section-number">1.2.1</span> Estadística descriptiva<a href="marco.html#estad%C3%ADstica-descriptiva" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La caracterización de una variable cuantitativa se organiza en tres dimensiones:
+<strong>tendencia central</strong> (media aritmética, sensible a valores extremos; mediana, robusta por ser
+un estadístico de orden), <strong>dispersión</strong> (desviación estándar, en las unidades originales;
+rango intercuartílico, robusto; coeficiente de variación <span class="math inline">\(CV = s/\bar{x}\)</span>, adimensional y
+comparable entre grupos) y <strong>forma</strong> (asimetría y curtosis, como momentos estandarizados de
+tercer y cuarto orden).</p>
+<p>La divergencia entre media y mediana constituye el primer diagnóstico de asimetría. En
+distribuciones con cola derecha pesada la media supera sistemáticamente a la mediana, y la
+brecha entre ambas cuantifica la influencia de los valores extremos.</p>
+</div>
+<div id="identificación-de-valores-atípicos" class="section level3 hasAnchor" number="1.2.2">
+<h3><span class="header-section-number">1.2.2</span> Identificación de valores atípicos<a href="marco.html#identificaci%C3%B3n-de-valores-at%C3%ADpicos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>El criterio de Tukey define como atípico todo valor situado fuera del intervalo
+<span class="math inline">\([Q_1 - 1{,}5\,RIC;\ Q_3 + 1{,}5\,RIC]\)</span>, donde <span class="math inline">\(RIC = Q_3 - Q_1\)</span> <span class="citation">(<a href="#ref-tukey1977">Tukey 1977</a>)</span>. Su virtud es
+la robustez: los límites se construyen con cuartiles, que no se ven arrastrados por los
+propios valores extremos que se pretende detectar. Un valor atípico no es necesariamente un
+error: puede ser una observación legítima procedente de un régimen de operación distinto, y
+su tratamiento debe justificarse sustantivamente y no solo estadísticamente.</p>
+</div>
+<div id="datos-faltantes" class="section level3 hasAnchor" number="1.2.3">
+<h3><span class="header-section-number">1.2.3</span> Datos faltantes<a href="marco.html#datos-faltantes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="citation">Rubin (<a href="#ref-rubin1976">1976</a>)</span> clasifica los mecanismos de ausencia en tres tipos: completamente aleatorios
+(MCAR), aleatorios condicionados a variables observadas (MAR) y no aleatorios (MNAR). Bajo
+MCAR la eliminación por lista produce estimaciones insesgadas, con la única penalización de
+una pérdida de potencia. Bajo los otros mecanismos introduce sesgo. La plausibilidad del
+supuesto MCAR puede evaluarse empíricamente comparando las observaciones completas con las
+incompletas en las variables efectivamente registradas: si no difieren sistemáticamente, la
+hipótesis MCAR resulta defendible.</p>
+</div>
+<div id="correlación" class="section level3 hasAnchor" number="1.2.4">
+<h3><span class="header-section-number">1.2.4</span> Correlación<a href="marco.html#correlaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>El coeficiente de correlación de Pearson mide la intensidad de la asociación <strong>lineal</strong> entre
+dos variables cuantitativas:</p>
+<p><span class="math display">\[r = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum (x_i - \bar{x})^2 \sum (y_i - \bar{y})^2}}\]</span></p>
+<p>Su cuadrado, <span class="math inline">\(r^2\)</span>, expresa la proporción de varianza compartida. La significación se contrasta
+mediante el estadístico <span class="math inline">\(t = r\sqrt{(n-2)/(1-r^2)}\)</span> con <span class="math inline">\(n-2\)</span> grados de libertad, y el
+intervalo de confianza se construye sobre la transformación <span class="math inline">\(z\)</span> de Fisher.</p>
+<p>El coeficiente de Spearman aplica la misma fórmula sobre los rangos, con lo que mide
+asociación <strong>monótona</strong> y resiste tanto la no linealidad como los valores extremos. La
+comparación entre ambos coeficientes es informativa por sí misma: una discrepancia apreciable
+señala que la relación no es lineal o que unos pocos puntos extremos están inflando la
+estimación paramétrica. Conviene recordar que la correlación cuantifica covariación, no
+causalidad.</p>
+</div>
+<div id="contraste-de-hipótesis" class="section level3 hasAnchor" number="1.2.5">
+<h3><span class="header-section-number">1.2.5</span> Contraste de hipótesis<a href="marco.html#contraste-de-hip%C3%B3tesis" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>El esquema de Neyman–Pearson formaliza la decisión entre <span class="math inline">\(H_0\)</span> y <span class="math inline">\(H_1\)</span> controlando la
+probabilidad de error tipo I en un nivel <span class="math inline">\(\alpha\)</span> prefijado <span class="citation">(<a href="#ref-fisher1925">Fisher 1925</a>)</span>. El valor <span class="math inline">\(p\)</span> es la
+probabilidad de observar un estadístico al menos tan extremo como el obtenido <strong>bajo el
+supuesto de que <span class="math inline">\(H_0\)</span> es cierta</strong>; no es la probabilidad de que <span class="math inline">\(H_0\)</span> sea verdadera. Por ello
+todo contraste debe acompañarse de su <strong>tamaño del efecto</strong>, que informa sobre la magnitud
+práctica del fenómeno con independencia del tamaño muestral <span class="citation">(<a href="#ref-cohen1988">Cohen 1988</a>)</span>.</p>
+</div>
+<div id="pruebas-empleadas-en-este-avance" class="section level3 hasAnchor" number="1.2.6">
+<h3><span class="header-section-number">1.2.6</span> Pruebas empleadas en este avance<a href="marco.html#pruebas-empleadas-en-este-avance" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Supuestos.</strong> La normalidad se evalúa con la prueba de Shapiro–Wilk <span class="citation">(<a href="#ref-shapiro1965">Shapiro and Wilk 1965</a>)</span> y con
+gráficos cuantil–cuantil. En muestras grandes esta prueba detecta desviaciones ínfimas y
+carentes de relevancia práctica, por lo que su resultado debe ponderarse junto con la
+inspección gráfica y con el <strong>teorema central del límite</strong>, que garantiza la normalidad
+asintótica de la media muestral. La homogeneidad de varianzas se contrasta mediante la prueba
+de Brown–Forsythe, variante de la de Levene que emplea desviaciones respecto de la mediana y
+resulta por ello robusta frente a la asimetría <span class="citation">(<a href="#ref-brown1974">Brown and Forsythe 1974</a>)</span>.</p>
+<p><strong>Comparación de dos medias.</strong> La prueba <span class="math inline">\(t\)</span> de Welch <span class="citation">(<a href="#ref-welch1947">Welch 1947</a>)</span> contrasta
+<span class="math inline">\(H_0: \mu_1 = \mu_2\)</span> sin exigir igualdad de varianzas, corrigiendo los grados de libertad
+mediante la aproximación de Satterthwaite. Su tamaño del efecto es la <span class="math inline">\(d\)</span> de Cohen. La
+alternativa no paramétrica es la prueba <span class="math inline">\(U\)</span> de Mann–Whitney–Wilcoxon <span class="citation">(<a href="#ref-mann1947">Mann and Whitney 1947</a>)</span>.</p>
+<p><strong>Comparación de más de dos medias.</strong> El análisis de varianza descompone la variabilidad total
+y contrasta la igualdad de medias con <span class="math inline">\(F = CM_{factor}/CM_{error}\)</span>; el tamaño del efecto es
+<span class="math inline">\(\eta^2 = SC_{factor}/SC_{total}\)</span>. Cuando las varianzas son desiguales se emplea la versión de
+Welch del ANOVA, y cuando la normalidad es dudosa, la prueba de Kruskal–Wallis
+<span class="citation">(<a href="#ref-kruskal1952">Kruskal and Wallis 1952</a>)</span>, cuyo tamaño del efecto asociado es <span class="math inline">\(\epsilon^2\)</span>. Ante un resultado
+significativo, la prueba HSD de Tukey <span class="citation">(<a href="#ref-tukey1949">Tukey 1949</a>)</span> identifica qué pares difieren controlando
+la tasa de error por familia.</p>
+<p><strong>Asociación entre variables categóricas.</strong> La prueba <span class="math inline">\(\chi^2\)</span> de independencia compara
+frecuencias observadas y esperadas, <span class="math inline">\(\chi^2 = \sum (O_{ij}-E_{ij})^2/E_{ij}\)</span>, y su intensidad
+se mide con la <span class="math inline">\(V\)</span> de Cramér <span class="citation">(<a href="#ref-cramer1946">Cramér 1946</a>)</span>. La aproximación asintótica exige frecuencias
+esperadas suficientes; cuando alguna cae por debajo de cinco se recurre a la <strong>prueba exacta
+de Fisher</strong>, que calcula la probabilidad bajo la distribución hipergeométrica sin aproximación
+alguna.</p>
+<p><strong>Remuestreo.</strong> El <em>bootstrap</em> <span class="citation">(<a href="#ref-efron1979">Efron 1979</a>)</span> estima la distribución muestral de un estadístico
+remuestreando con reemplazo los datos observados, sin invocar supuestos distribucionales.
+Resulta especialmente valioso cuando la variable es asimétrica, situación en la que los
+intervalos teóricos pueden estar mal calibrados.</p>
+<p><strong>Análisis de sensibilidad.</strong> Repetir un contraste excluyendo las observaciones extremas
+permite determinar si una conclusión descansa sobre el conjunto de los datos o sobre unas
+pocas observaciones influyentes. Es un procedimiento elemental y, sin embargo, decisivo: en
+este avance resulta ser el que resuelve la contradicción más importante encontrada.</p>
+
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-brodeur2018" class="csl-entry">
+Brodeur, Abel, and Kerry Nield. 2018. <span>“An Empirical Analysis of Taxi, <span>L</span>yft and <span>U</span>ber Rides: Evidence from Weather Shocks in <span>NYC</span>.”</span> <em>Journal of Economic Behavior &amp; Organization</em> 152: 1–16.
+</div>
+<div id="ref-brown1974" class="csl-entry">
+Brown, Morton B., and Alan B. Forsythe. 1974. <span>“Robust Tests for the Equality of Variances.”</span> <em>Journal of the American Statistical Association</em> 69 (346): 364–67.
+</div>
+<div id="ref-cachon2017" class="csl-entry">
+Cachon, Gérard P., Kaitlin M. Daniels, and Ruben Lobel. 2017. <span>“The Role of Surge Pricing on a Service Platform with Self-Scheduling Capacity.”</span> <em>Manufacturing &amp; Service Operations Management</em> 19 (3): 368–84.
+</div>
+<div id="ref-chen2015" class="csl-entry">
+Chen, Le, Alan Mislove, and Christo Wilson. 2015. <span>“Peeking Beneath the Hood of <span>U</span>ber.”</span> In <em>Proceedings of the 2015 Internet Measurement Conference</em>, 495–508. ACM.
+</div>
+<div id="ref-cohen1988" class="csl-entry">
+Cohen, Jacob. 1988. <em>Statistical Power Analysis for the Behavioral Sciences</em>. 2nd ed. Hillsdale, NJ: Lawrence Erlbaum Associates.
+</div>
+<div id="ref-cramer1946" class="csl-entry">
+Cramér, Harald. 1946. <em>Mathematical Methods of Statistics</em>. Princeton: Princeton University Press.
+</div>
+<div id="ref-efron1979" class="csl-entry">
+Efron, Bradley. 1979. <span>“Bootstrap Methods: Another Look at the Jackknife.”</span> <em>The Annals of Statistics</em> 7 (1): 1–26.
+</div>
+<div id="ref-fisher1925" class="csl-entry">
+Fisher, Ronald A. 1925. <em>Statistical Methods for Research Workers</em>. Edinburgh: Oliver; Boyd.
+</div>
+<div id="ref-kruskal1952" class="csl-entry">
+Kruskal, William H., and W. Allen Wallis. 1952. <span>“Use of Ranks in One-Criterion Variance Analysis.”</span> <em>Journal of the American Statistical Association</em> 47 (260): 583–621.
+</div>
+<div id="ref-mann1947" class="csl-entry">
+Mann, H. B., and D. R. Whitney. 1947. <span>“On a Test of Whether One of Two Random Variables Is Stochastically Larger Than the Other.”</span> <em>The Annals of Mathematical Statistics</em> 18 (1): 50–60.
+</div>
+<div id="ref-oi1971" class="csl-entry">
+Oi, Walter Y. 1971. <span>“A <span>D</span>isneyland Dilemma: Two-Part Tariffs for a <span>M</span>ickey <span>M</span>ouse Monopoly.”</span> <em>The Quarterly Journal of Economics</em> 85 (1): 77–96.
+</div>
+<div id="ref-rubin1976" class="csl-entry">
+Rubin, Donald B. 1976. <span>“Inference and Missing Data.”</span> <em>Biometrika</em> 63 (3): 581–92.
+</div>
+<div id="ref-shapiro1965" class="csl-entry">
+Shapiro, S. S., and M. B. Wilk. 1965. <span>“An Analysis of Variance Test for Normality (Complete Samples).”</span> <em>Biometrika</em> 52 (3-4): 591–611.
+</div>
+<div id="ref-small2007" class="csl-entry">
+Small, Kenneth A., and Erik T. Verhoef. 2007. <em>The Economics of Urban Transportation</em>. London: Routledge.
+</div>
+<div id="ref-tukey1949" class="csl-entry">
+Tukey, John W. 1949. <span>“Comparing Individual Means in the Analysis of Variance.”</span> <em>Biometrics</em> 5 (2): 99–114.
+</div>
+<div id="ref-tukey1977" class="csl-entry">
+———. 1977. <em>Exploratory Data Analysis</em>. Reading, MA: Addison-Wesley.
+</div>
+<div id="ref-welch1947" class="csl-entry">
+Welch, B. L. 1947. <span>“The Generalization of <span>S</span>tudent’s Problem When Several Different Population Variances Are Involved.”</span> <em>Biometrika</em> 34 (1-2): 28–35.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="metodologia.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": false,
+    "twitter": false,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": false
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": null,
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "section",
+    "scroll_highlight": true
+  },
+  "toolbar": {
+    "position": "fixed"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
